@@ -5,5 +5,6 @@ public class Denoize {
 		System.out.println("Bonjour Paul");
 		System.out.println("Bonjour Bastien");
 		System.out.println("Bonjour Lucas");
+		System.out.println("bonjour Emma");
 	}
 }
