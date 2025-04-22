@@ -4,5 +4,6 @@ public class Denoize {
 		System.out.println("Hello denoiZe !");	
 		System.out.println("Bonjour Paul");
 		System.out.println("Bonjour Lucas");
+		System.out.println("bonjour Emma");
 	}
 }
