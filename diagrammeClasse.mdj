@@ -381,7 +381,7 @@
 											"top": 211,
 											"width": 276.376953125,
 											"height": 13,
-											"text": "-imageActuelle: Image",
+											"text": "-imageActuelle: Img",
 											"horizontalAlignment": 0
 										},
 										{
@@ -398,7 +398,7 @@
 											"top": 226,
 											"width": 276.376953125,
 											"height": 13,
-											"text": "-imageOriginale: Image",
+											"text": "-imageOriginale: Img",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1217,7 +1217,7 @@
 											"top": 560,
 											"width": 682.53173828125,
 											"height": 13,
-											"text": "+imageDen(Image imageBruitee, String typeSeuil, String fonctionSeuillage, int taillePatch, boolean modeLocal): Image",
+											"text": "+imageDen(Image imageBruitee, String typeSeuil, String fonctionSeuillage, int taillePatch, boolean modeLocal): Img",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1412,7 +1412,7 @@
 											"top": 760,
 											"width": 240.9951171875,
 											"height": 13,
-											"text": "+noising(Image x0, double sigma): Image",
+											"text": "+noising(Img x0, double sigma): Img",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1607,7 +1607,7 @@
 											"top": 368,
 											"width": 388.400390625,
 											"height": 13,
-											"text": "+mse(Image originale, Image debruitee): double",
+											"text": "+mse(Img originale, Img debruitee): double",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1624,7 +1624,7 @@
 											"top": 383,
 											"width": 388.400390625,
 											"height": 13,
-											"text": "+psnr(Image originale, Image debruitee): double",
+											"text": "+psnr(Img originale, Img debruitee): double",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1641,7 +1641,7 @@
 											"top": 398,
 											"width": 388.400390625,
 											"height": 13,
-											"text": "+calculerQualite(Image originale, Image debruitee): ResultatQualite",
+											"text": "+calculerQualite(Img originale, Img debruitee): ResultatQualite",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1836,7 +1836,7 @@
 											"top": 712,
 											"width": 370.30322265625,
 											"height": 13,
-											"text": "+extractPatchs(Image Xs, int s): ResultatsPatch",
+											"text": "+extractPatchs(Img Xs, int s): ResultatsPatch",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1853,7 +1853,7 @@
 											"top": 727,
 											"width": 370.30322265625,
 											"height": 13,
-											"text": "+reconstructionPatchs(ResultatPatch yPatchs, int l, int c): Image",
+											"text": "+reconstructionPatchs(ResultatPatch yPatchs, int l, int c): Img",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1870,7 +1870,7 @@
 											"top": 742,
 											"width": 370.30322265625,
 											"height": 13,
-											"text": "+decoupageImage(Image x, int w, int n): List<Fenetre>",
+											"text": "+decoupageImage(Img x, int w, int n): List<Fenetre>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2381,7 +2381,7 @@
 											"top": 774,
 											"width": 298.8095703125,
 											"height": 13,
-											"text": "+seuilV(Image imageBruitee, double sigma): double",
+											"text": "+seuilV(Img imageBruitee, double sigma): double",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2398,7 +2398,7 @@
 											"top": 789,
 											"width": 298.8095703125,
 											"height": 13,
-											"text": "+seuilB(Image imageBruitee, double sigma): double",
+											"text": "+seuilB(Img imageBruitee, double sigma): double",
 											"horizontalAlignment": 0
 										}
 									],
@@ -2578,7 +2578,7 @@
 											"top": 926,
 											"width": 238.09423828125,
 											"height": 13,
-											"text": "-image: Image",
+											"text": "-image: Img",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2629,7 +2629,7 @@
 											"top": 964,
 											"width": 238.09423828125,
 											"height": 13,
-											"text": "+Fenetre(Image image, Position position)",
+											"text": "+Fenetre(Img image, Position position)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2646,7 +2646,7 @@
 											"top": 979,
 											"width": 238.09423828125,
 											"height": 13,
-											"text": "+getImage(): Image",
+											"text": "+getImage(): Img",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2771,7 +2771,7 @@
 											"top": 1047,
 											"width": 225.80517578125,
 											"height": 13,
-											"text": "Image"
+											"text": "Img"
 										},
 										{
 											"_type": "LabelView",
@@ -2911,7 +2911,7 @@
 											"top": 1123,
 											"width": 225.80517578125,
 											"height": 13,
-											"text": "+Image(int hauteur, int largeur)",
+											"text": "+Img(int hauteur, int largeur)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2928,7 +2928,7 @@
 											"top": 1138,
 											"width": 225.80517578125,
 											"height": 13,
-											"text": "+Image(double[][] pixels)",
+											"text": "+Img(double[][] pixels)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3030,7 +3030,7 @@
 											"top": 1228,
 											"width": 225.80517578125,
 											"height": 13,
-											"text": "+clone(): Image",
+											"text": "+clone(): Img",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3051,8 +3051,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -768,
-									"top": -72,
+									"left": -792,
+									"top": -40,
 									"width": 10,
 									"height": 10
 								},
@@ -3067,8 +3067,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -768,
-									"top": -72,
+									"left": -792,
+									"top": -40,
 									"width": 10,
 									"height": 10
 								}
@@ -12115,7 +12115,9 @@
 							},
 							"name": "imageActuelle",
 							"visibility": "private",
-							"type": "Image"
+							"type": {
+								"$ref": "AAAAAAGWYa2KNhG7Cxk="
+							}
 						},
 						{
 							"_type": "UMLAttribute",
@@ -12125,7 +12127,9 @@
 							},
 							"name": "imageOriginale",
 							"visibility": "private",
-							"type": "Image"
+							"type": {
+								"$ref": "AAAAAAGWYa2KNhG7Cxk="
+							}
 						}
 					],
 					"operations": [
@@ -12804,8 +12808,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZqyHw+mOhk="
 									},
-									"name": "Image imageBruitee",
-									"type": ""
+									"name": "Image imageBruitee"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12813,8 +12816,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZqyHw+mOhk="
 									},
-									"name": "String typeSeuil",
-									"type": ""
+									"name": "String typeSeuil"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12822,8 +12824,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZqyHw+mOhk="
 									},
-									"name": "String fonctionSeuillage",
-									"type": ""
+									"name": "String fonctionSeuillage"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12831,8 +12832,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZqyHw+mOhk="
 									},
-									"name": "int taillePatch",
-									"type": ""
+									"name": "int taillePatch"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12840,8 +12840,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZqyHw+mOhk="
 									},
-									"name": "boolean modeLocal",
-									"type": ""
+									"name": "boolean modeLocal"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12849,7 +12848,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZqyHw+mOhk="
 									},
-									"type": "Image",
+									"type": "Img",
 									"direction": "return"
 								}
 							]
@@ -12893,7 +12892,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZxUAA/jqNk="
 									},
-									"name": "Image x0"
+									"name": "Img x0"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12909,7 +12908,9 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZxUAA/jqNk="
 									},
-									"type": "Image",
+									"type": {
+										"$ref": "AAAAAAGWYa2KNhG7Cxk="
+									},
 									"direction": "return"
 								}
 							]
@@ -12968,8 +12969,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZ25ZxAkqI0="
 									},
-									"name": "Image originale",
-									"type": ""
+									"name": "Img originale"
 								},
 								{
 									"_type": "UMLParameter",
@@ -12977,8 +12977,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZ25ZxAkqI0="
 									},
-									"name": "Image debruitee",
-									"type": ""
+									"name": "Img debruitee"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13005,8 +13004,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZ85yRAxIzs="
 									},
-									"name": "Image originale",
-									"type": ""
+									"name": "Img originale"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13014,8 +13012,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYZ85yRAxIzs="
 									},
-									"name": "Image debruitee",
-									"type": ""
+									"name": "Img debruitee"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13042,8 +13039,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaDZ4BBn7kA="
 									},
-									"name": "Image originale",
-									"type": ""
+									"name": "Img originale"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13051,8 +13047,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaDZ4BBn7kA="
 									},
-									"name": "Image debruitee",
-									"type": ""
+									"name": "Img debruitee"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13060,7 +13055,9 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaDZ4BBn7kA="
 									},
-									"type": "ResultatQualite",
+									"type": {
+										"$ref": "AAAAAAGWYaYGmRCsCeM="
+									},
 									"direction": "return"
 								}
 							]
@@ -13143,8 +13140,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaF33xB1P1Q="
 									},
-									"name": "Image Xs",
-									"type": ""
+									"name": "Img Xs"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13152,8 +13148,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaF33xB1P1Q="
 									},
-									"name": "int s",
-									"type": ""
+									"name": "int s"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13180,8 +13175,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaJ/zhCCIEg="
 									},
-									"name": "ResultatPatch yPatchs",
-									"type": ""
+									"name": "ResultatPatch yPatchs"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13189,8 +13183,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaJ/zhCCIEg="
 									},
-									"name": "int l",
-									"type": ""
+									"name": "int l"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13198,8 +13191,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaJ/zhCCIEg="
 									},
-									"name": "int c",
-									"type": ""
+									"name": "int c"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13207,7 +13199,9 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaJ/zhCCIEg="
 									},
-									"type": "Image",
+									"type": {
+										"$ref": "AAAAAAGWYa2KNhG7Cxk="
+									},
 									"direction": "return"
 								}
 							]
@@ -13226,8 +13220,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaOQOBCRGq0="
 									},
-									"name": "Image x",
-									"type": ""
+									"name": "Img x"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13235,8 +13228,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaOQOBCRGq0="
 									},
-									"name": "int w",
-									"type": ""
+									"name": "int w"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13244,8 +13236,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYaOQOBCRGq0="
 									},
-									"name": "int n",
-									"type": ""
+									"name": "int n"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13482,8 +13473,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYanrNhFIa4I="
 									},
-									"name": "Image imageBruitee",
-									"type": ""
+									"name": "Img imageBruitee"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13491,8 +13481,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYanrNhFIa4I="
 									},
-									"name": "double sigma",
-									"type": ""
+									"name": "double sigma"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13519,8 +13508,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYapyihFVDM4="
 									},
-									"name": "Image imageBruitee",
-									"type": ""
+									"name": "Img imageBruitee"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13528,8 +13516,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYapyihFVDM4="
 									},
-									"name": "double sigma",
-									"type": ""
+									"name": "double sigma"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13622,7 +13609,7 @@
 							},
 							"name": "image",
 							"visibility": "private",
-							"type": "Image"
+							"type": "Img"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -13650,8 +13637,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYawIShGb2Vk="
 									},
-									"name": "Image image",
-									"type": ""
+									"name": "Img image"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13659,8 +13645,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYawIShGb2Vk="
 									},
-									"name": "Position position",
-									"type": ""
+									"name": "Position position"
 								}
 							]
 						},
@@ -13678,7 +13663,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYayarxGmTEY="
 									},
-									"type": "Image",
+									"type": "Img",
 									"direction": "return"
 								}
 							]
@@ -13710,7 +13695,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Image",
+					"name": "Img",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -13719,7 +13704,8 @@
 								"$ref": "AAAAAAGWYa2KNhG7Cxk="
 							},
 							"name": "pixels double[][]",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -13749,7 +13735,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGWYa2KNhG7Cxk="
 							},
-							"name": "Image",
+							"name": "Img",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13757,8 +13743,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYa7ychH6t8g="
 									},
-									"name": "int hauteur",
-									"type": ""
+									"name": "int hauteur"
 								},
 								{
 									"_type": "UMLParameter",
@@ -13766,8 +13751,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYa7ychH6t8g="
 									},
-									"name": "int largeur",
-									"type": ""
+									"name": "int largeur"
 								}
 							]
 						},
@@ -13777,7 +13761,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGWYa2KNhG7Cxk="
 							},
-							"name": "Image",
+							"name": "Img",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -14041,7 +14025,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGWYbsstRJ8mdA="
 									},
-									"name": "ResultatVecteur v"
+									"name": "ResultatVecteur v",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -15138,7 +15123,8 @@
 								"$ref": "AAAAAAGWYdo/jxT/BKs="
 							},
 							"name": "pixels double[][]",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -15324,7 +15310,8 @@
 								"$ref": "AAAAAAGWYd1y5xWpXs8="
 							},
 							"name": "valeurs double[]",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					],
 					"operations": [
