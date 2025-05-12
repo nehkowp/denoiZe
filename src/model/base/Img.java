@@ -57,12 +57,13 @@ public class Img {
 		return this.pixels[x][y];
 	}
 	
+	public void setPixel(int x, int y, double valeur) {
+		this.pixels[x][y] = valeur;
+	}
 	
 	public void saveImg(String filename) throws IOException {
 		BufferedImage image = new BufferedImage(this.largeur, this.hauteur, BufferedImage.TYPE_BYTE_GRAY);
 
-
-		
 		 for (int i = 0; i <  this.hauteur; i++) {
 	            for (int j = 0; j <  this.largeur; j++) {
 	            	int pixelValue = (int) Math.min(255, Math.max(0, Math.round(this.getPixel(i, j))));
@@ -70,13 +71,7 @@ public class Img {
 	            }
 	        }
 		
-		
-		
 		String format = filename.substring(filename.lastIndexOf('.') + 1);
         ImageIO.write(image, format, new File(filename));
 	}
-	
-	
-	
-	
 }
