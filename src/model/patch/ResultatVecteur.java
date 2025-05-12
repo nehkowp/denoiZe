@@ -14,7 +14,8 @@ public class ResultatVecteur {
 	}
 	
 	public void ajouterVecteur(Vecteur vecteur, Position position) {
-		
+		this.getPositions().add(position);
+		this.getVecteurs().add(vecteur);
 	}
 
 	public List<Vecteur> getVecteurs() {
@@ -23,6 +24,14 @@ public class ResultatVecteur {
 
 	public List<Position> getPositions() {
 		return positions;
+	}
+	
+	public int taille() {
+		return this.getVecteurs().size();
+	}
+	
+	public double[][] versMatrice() { //a faire
+		return new double[1][1];
 	}
 
 }
