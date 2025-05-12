@@ -1,5 +1,7 @@
 package model.base;
 
+import exception.VecteurException;
+
 public class Vecteur {
 	private double[] valeurs;
 	
@@ -27,11 +29,27 @@ public class Vecteur {
 		return this.valeurs.length;
 	}
 	
-	public Vecteur soustraire(Vecteur autre) { //a faire
-		return new Vecteur(autre.getValeurs());
+	public Vecteur soustraire(Vecteur autre) { 
+		if (this.taille() == autre.taille()) {
+			Vecteur res = new Vecteur(this.taille());
+			for(int i = 0; i<this.taille(); i++) {
+				res.getValeurs()[i] = this.getValeur(i) - autre.getValeur(i);
+			}
+			return res;
+		} else {
+			throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
+		}
 	}
 	
-	public Vecteur ajouter(Vecteur autre) { // a faire
-		return new Vecteur(autre.getValeurs());
+	public Vecteur ajouter(Vecteur autre) { 
+		if (this.taille() == autre.taille()) {
+			Vecteur res = new Vecteur(this.taille());
+			for(int i = 0; i<this.taille(); i++) {
+				res.getValeurs()[i] = this.getValeur(i) + autre.getValeur(i);
+			}
+			return res;
+		} else {
+			throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
+		}
 	}
 }
