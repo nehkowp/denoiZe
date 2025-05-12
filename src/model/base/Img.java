@@ -19,7 +19,6 @@ public class Img {
 		this.largeur = image.getWidth();
 		this.pixels = new double[hauteur][largeur];
 		
-		
 		WritableRaster raster = image.getRaster();
 		for(int i = 0; i < hauteur; i++) {
 			for(int j = 0; j < largeur; j++) {
@@ -29,16 +28,15 @@ public class Img {
 	}
 	
 	public Img(double generatedPixels[][]){
-	  this.hauteur = generatedPixels.length;
-      this.largeur = generatedPixels[0].length;
-	  this.pixels = new double[hauteur][largeur];
-
-		
-	  for (int i = 0; i <  this.hauteur; i++) {
-            for (int j = 0; j <  this.largeur; j++) {
-                this.pixels[i][j] = generatedPixels[i][j];
-            }
-        }
+		this.hauteur = generatedPixels.length;
+	    this.largeur = generatedPixels[0].length;
+		this.pixels = new double[hauteur][largeur];
+	
+		for (int i = 0; i <  this.hauteur; i++) {
+			for (int j = 0; j <  this.largeur; j++) {
+				this.pixels[i][j] = generatedPixels[i][j];
+			}
+		}
 	}
 	
 	public int getHauteur() {
@@ -59,6 +57,10 @@ public class Img {
 	
 	public void setPixel(int x, int y, double valeur) {
 		this.pixels[x][y] = valeur;
+	}
+	
+	public Img clone() {
+		return new Img(this.getPixels());
 	}
 	
 	public void saveImg(String filename) throws IOException {
