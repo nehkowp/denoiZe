@@ -5,21 +5,20 @@ import model.base.Img;
 public class ProcesseurSeuillage {
 	
 	/*les private ca va degager*/
-	private double sigma ; /*ecart type du bruit*/
-	private int L ; /*nombre de pixels de l'image*/
-	private double sigmaX; /*ecart type estimé du signal*/
-	private double sigmaXb; /*ecart type estimée du signal observé*/
-	private double[] alpha; /*coef de la representation du patch vextorisé bruité Vk*/
-	private double lambda; /*parametre de seuillage*/
 	
+	/*private double sigma ; /*ecart type du bruit*/
+	/*private int L ; /*nombre de pixels de l'image*/
+	/*private double sigmaX; /*ecart type estimé du signal*/
+	private double sigmaXb; /*ecart type estimée du signal observé*/
+	/*private double[] alpha; /*coef de la representation du patch vextorisé bruité Vk*/
+	/*private double lambda; /*parametre de seuillage*/
 	/* qu'est ce que j'ai besoin de recuperer ?*/
-	/* sigma L  alpha*/
-	/* qu'est ce que je dois calculer ? */
-	/* sigmaX sigmaXb sont des ecart type*/
-	/* on calcule alpha il faut recup moyenne et vecteurs de la base orthonormé*/
+	
 	
 	public double seuilV(Img Xb , double sigma) {
-		return sigma * Math.sqrt(2 * Math.log(L)) ;
+		int h = Xb.getHauteur();
+		int l = Xb.getLargeur();
+		return sigma * Math.sqrt(2 * Math.log( h*l )) ;
 	}
 	
 	
@@ -42,6 +41,7 @@ public class ProcesseurSeuillage {
 	
 	
 	public double[] seuillageDoux(double lambda, double[] alpha) {
+				
 		for (int i=0; i<alpha.length; i++) {
 			if ( alpha[i] > lambda ) {
 				alpha[i] -= lambda;
