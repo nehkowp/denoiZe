@@ -33,5 +33,6 @@ public class ResultatVecteur {
 	public double[][] versMatrice() { //a faire
 		return new double[1][1];
 	}
+	
 
 }
