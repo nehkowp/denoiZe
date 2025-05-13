@@ -12,7 +12,14 @@ public class ResultatMoyCov {
 		this.gamma = gamma;
 		this.mV = mV;
 		this.vc = vc;
+		
+		public void moyCov(Matrice v) {
+			int s2 = v.length ;
+			int m = v[0].length ;
+			
+		}
 	}
+	
 
 	public Vecteur getVecteurMoyen() {
 		return mV;
