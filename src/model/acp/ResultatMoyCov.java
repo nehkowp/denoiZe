@@ -13,11 +13,6 @@ public class ResultatMoyCov {
 		this.mV = mV;
 		this.vc = vc;
 		
-		public void moyCov(Matrice v) {
-			int s2 = v.length ;
-			int m = v[0].length ;
-			
-		}
 	}
 	
 
