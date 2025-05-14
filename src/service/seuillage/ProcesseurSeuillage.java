@@ -6,12 +6,12 @@ public class ProcesseurSeuillage {
 	
 	/*les private ca va degager*/
 	
-	/*private double sigma ; /*ecart type du bruit*/
-	/*private int L ; /*nombre de pixels de l'image*/
-	/*private double sigmaX; /*ecart type estimé du signal*/
+	/*private double sigma ; *//*ecart type du bruit*/
+	/*private int L ; *//*nombre de pixels de l'image*/
+	/*private double sigmaX; *//*ecart type estimé du signal*/
 	private double sigmaXb; /*ecart type estimée du signal observé*/
-	/*private double[] alpha; /*coef de la representation du patch vextorisé bruité Vk*/
-	/*private double lambda; /*parametre de seuillage*/
+	/*private double[] alpha; *//*coef de la representation du patch vextorisé bruité Vk*/
+	/*private double lambda; *//*parametre de seuillage*/
 	/* qu'est ce que j'ai besoin de recuperer ?*/
 	
 	
