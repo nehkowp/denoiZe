@@ -30,9 +30,22 @@ public class ResultatVecteur {
 		return this.getVecteurs().size();
 	}
 	
-	public double[][] versMatrice() { //a faire
-		return new double[1][1];
-	}
-	
+	public double[][] versMatrice() {
+	    if (this.getVecteurs().isEmpty()) {
+	        return new double[0][0]; 
+	    }
 
+	    int n = this.getVecteurs().get(0).getValeurs().length; 
+	    int M = this.getVecteurs().size(); 
+
+	    double[][] matrice = new double[n][M];
+
+	    for (int j = 0; j < M; j++) {
+	        for (int i = 0; i < n; i++) {
+	            matrice[i][j] = this.vecteurs.get(j).getValeurs()[i];
+	        }
+	    }
+
+	    return matrice;
+	}
 }
