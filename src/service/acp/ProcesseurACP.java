@@ -5,10 +5,6 @@ import model.patch.ResultatVecteur;
 import model.acp.ResultatACP;
 import model.acp.ResultatMoyCov;
 
-import model.acp.ResultatMoyCov;
-import model.base.Matrice;
-import model.base.Vecteur;
-import model.patch.ResultatVecteur;
 
 public class ProcesseurACP {
 
@@ -29,22 +25,22 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         mV = mV.diviser(M);
         
         // calcul vecteurs centrés vc
-        for (int i = 0; i < s2; i++) {
-            for (int k = 0; k < m; k++) {
-                vc[i][k] = v[i][k] - mV[i][0];
-            }
+        for (int k = 0; k < M; k++) {
+            Vecteur centre = v.get(k).soustraire(mV);
+            vc.set(k, centre);
         }
         
         // calcul matrice covariance gamma
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < m; j++) {
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < M; j++) {
                 double sum = 0;
                 for (int k = 0; k < s2; k++) {
                     sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
                 }
-                gamma.setValeur(i, j, sum / m);
+                gamma.setValeur(i, j, sum / M);
             }
         }
+        return new ResultatMoyCov (mV, gamma, vc);
 	}
 	
 	public void acp(ResultatVecteur v) {
@@ -59,20 +55,6 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
 		
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
