@@ -29,9 +29,8 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         
         // calcul vecteurs centrés vc
         for (int k = 0; k < M; k++) {
-        	Vecteur centre = new Vecteur(s2);
         	Vecteur V_k = v.getVecteurs().get(k);
-        	centre = V_k.soustraire(mV);
+        	Vecteur centre = V_k.soustraire(mV);
         	Position coordonne = new Position(k,k);
         	vc.ajouterVecteur(centre, coordonne);
             //Vecteur centre = v.get(k).soustraire(mV);
