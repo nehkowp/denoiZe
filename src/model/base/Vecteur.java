@@ -64,4 +64,16 @@ public class Vecteur {
 			return res;
 		}
 	}
+	
+	public double multiplier(Vecteur autre) {
+		if (this.taille() == autre.taille()) {
+			double res = 0;
+			for(int i = 0; i<this.taille(); i++) {
+				res = res + this.getValeur(i) * autre.getValeur(i);
+			}
+			return res;
+		} else {
+			throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
+		}
+	}
 }
