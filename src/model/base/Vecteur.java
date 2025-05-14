@@ -52,4 +52,7 @@ public class Vecteur {
 			throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
 		}
 	}
+	public Vecteur diviser(double scalaire) {
+		return new Vecteur(1);
+	}
 }

@@ -1,24 +1,27 @@
 package service.acp;
 
+import model.acp.ResultatMoyCov;
+import model.base.Matrice;
+import model.base.Vecteur;
+import model.patch.ResultatVecteur;
+
 public class ProcesseurACP {
 
-public void moyCov(ResultatVecteur v) { // on initialise v la matrice des patchs
-		int s2 = v.length ; // dimension de patchs (s^2)
-		int m = v[0].length ; // nombre de patchs
+public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice des patchs
+		int s2 = v.getVecteurs().get(0).taille() ; // dimension de patchs (s^2)
+		int M = v.taille() ; // nombre de patchs
 		
 		// initialisations
-        Vecteur mV = new double[s2][1];
-        ResultatVecteur vc = new double[s2][m];
-        Matrice gamma = new double[s2][s2];
+        Vecteur mV = new Vecteur(s2);
+        Matrice gamma = new Matrice(M,M);
+        ResultatVecteur vc = new ResultatVecteur();
+        
         
         // calcul vect moyen mV
-        for (int i = 0; i < s2; i++) {
-            double sum = 0;
-            for (int k = 0; k < m; k++) {
-                sum += v[i][k];
-            }
-            mV[i][0] = sum / m;
+        for (int i = 0; i < M; i++) { 
+            mV = mV.ajouter(v.getVecteurs().get(i));
         }
+        mV = mV.diviser(M);
         
         // calcul vecteurs centrés vc
         for (int i = 0; i < s2; i++) {
@@ -42,4 +45,46 @@ public void moyCov(ResultatVecteur v) { // on initialise v la matrice des patchs
 	public void acp(ResultatVecteur v) {
 		
 	}
+	
+	
+	
+	public List<Vecteur> proj(ResultatVecteur u,ResultatVecteur Vc) {
+		
+		
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
