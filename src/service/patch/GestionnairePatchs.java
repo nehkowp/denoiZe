@@ -22,8 +22,8 @@ public class GestionnairePatchs {
  		ResultatPatch resPatch = new ResultatPatch();
  		
  		
- 		for(int i = 0; i < (imgPixels.length)-s; i++) {
- 			for(int j = 0; j < (imgPixels[0].length)-s; j++) {
+ 		for(int i = 0; i <= (imgPixels.length)-s; i++) {
+ 			for(int j = 0; j <= (imgPixels[0].length)-s; j++) {
  				double[][] patchPixels = new double[s][s];
  				Patch patch = new Patch(patchPixels);
  				for(int x = 0; x < s; x++) {
