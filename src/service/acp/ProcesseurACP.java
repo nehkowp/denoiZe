@@ -1,4 +1,9 @@
 package service.acp;
+import model.base.Matrice;
+import model.base.Vecteur;
+import model.patch.ResultatVecteur;
+import model.acp.ResultatACP;
+import model.acp.ResultatMoyCov;
 
 import model.acp.ResultatMoyCov;
 import model.base.Matrice;
@@ -31,13 +36,13 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         }
         
         // calcul matrice covariance gamma
-        for (int i = 0; i < s2; i++) {
-            for (int j = 0; j < s2; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < m; j++) {
                 double sum = 0;
-                for (int k = 0; k < m; k++) {
-                    sum += vc[i][k] * vc[j][k];
+                for (int k = 0; k < s2; k++) {
+                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
                 }
-                gamma[i][j] = sum / m;
+                gamma.setValeur(i, j, sum / m);
             }
         }
 	}
