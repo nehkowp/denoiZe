@@ -52,7 +52,16 @@ public class Vecteur {
 			throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
 		}
 	}
+	
 	public Vecteur diviser(double scalaire) {
-		return new Vecteur(1);
+		if (scalaire == 0) {
+			throw new VecteurException("Division par 0 impossible");
+		} else {
+			Vecteur res = new Vecteur(this.taille());
+			for(int i = 0; i<this.taille(); i++) {
+				res.getValeurs()[i] = this.getValeur(i) / scalaire;
+			}
+			return res;
+		}
 	}
 }
