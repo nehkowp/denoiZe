@@ -34,26 +34,16 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         	Vecteur centre = V_k.soustraire(mV);
         	Position coordonne = new Position(k,k);
         	vc.ajouterVecteur(centre, coordonne);
-            //Vecteur centre = v.get(k).soustraire(mV);
-            //vc.set(k, centre);
         }
         
         // calcul matrice covariance gamma
         for (int k = 0; k<M; k++) {
-        	gamma.Addition(vc.getVecteurs().get(k).multiplier(vc.getVecteurs().get(k)));
+        	gamma.ajouter(vc.getVecteurs().get(k).multiplier(vc.getVecteurs().get(k)));
         }
         double invM = 1 / (double) M;
-        gamma.scalaire(invM);
+        gamma.multiplierParScalaire(invM);
         
-        /*for (int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
-                double sum = 0;
-                for (int k = 0; k < s2; k++) {
-                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
-                }
-                gamma.setValeur(i, j, sum / M);
-            }
-        }*/
+        
         return new ResultatMoyCov(mV, gamma, vc);
 	}
 	
