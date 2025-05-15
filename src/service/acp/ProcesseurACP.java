@@ -1,8 +1,9 @@
 package service.acp;
 import model.base.Matrice;
+import model.base.Position;
 import model.base.Vecteur;
 import model.patch.ResultatVecteur;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import model.acp.ResultatACP;
@@ -29,8 +30,12 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         
         // calcul vecteurs centrés vc
         for (int k = 0; k < M; k++) {
-//            Vecteur centre = v.get(k).soustraire(mV);
-//            vc.set(k, centre);
+        	Vecteur V_k = v.getVecteurs().get(k);
+        	Vecteur centre = V_k.soustraire(mV);
+        	Position coordonne = new Position(k,k);
+        	vc.ajouterVecteur(centre, coordonne);
+            //Vecteur centre = v.get(k).soustraire(mV);
+            //vc.set(k, centre);
         }
         
         // calcul matrice covariance gamma
@@ -51,13 +56,27 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
 	}
 	
 	
-	
-	public List<Vecteur> proj(ResultatVecteur u,ResultatVecteur Vc) {
-		return null;
+	public List<Vecteur> proj(ResultatVecteur U,ResultatVecteur Vc) {
+		int s2 = Vc.getVecteurs().get(0).taille();
+		int M = Vc.taille();
+		List<Vecteur> alpha = new ArrayList<>();
+
 		
-		
-		
+		for (int k=0; k < M; k++) {
+			Vecteur alpha_k = new Vecteur(s2);
+			Vecteur Vci = Vc.getVecteurs().get(k);
+			
+			for (int i=0; i<s2 ; i++) {
+				Vecteur uiPrime = U.getVecteurs().get(i);
+				double contribution = uiPrime.multiplier(Vci);
+				alpha_k.setValeur(i,contribution);
+			}
+			
+			alpha.add(alpha_k);
+		}
+		return alpha;
 	}
+
 }
 
 
