@@ -5,8 +5,11 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.acp.ResultatACP;
+import model.acp.ResultatMoyCov;
 import model.base.Img;
 import model.base.Pixel;
+import model.base.Vecteur;
 import model.patch.Fenetre;
 import model.patch.ParametresFenetre;
 import model.patch.ResultatPatch;
@@ -39,7 +42,7 @@ public class DebruiteurImage {
     
     
     //modeLocal True --> Local & False --> Global
-    public Img imageDen(Img xB, String typeSeuil, String fonctionSeuillage, int taillePatch, boolean modeLocal) {
+    public Img imageDen(Img xB ,String typeSeuil, String fonctionSeuillage,  double sigma ,int taillePatch, boolean modeLocal) {
     	Img xR = null;
     	if(modeLocal) {
     		//LOCAL
@@ -67,11 +70,23 @@ public class DebruiteurImage {
     		List<Fenetre> newFenetresList = new ArrayList<Fenetre>();
     		
     		for(Fenetre f : imagettesList) {
+    			
     			ResultatPatch resPatchs = this.gestionnairePatchs.extractPatchs(f.getImage(), taillePatch);
         		ResultatVecteur resVecteur = this.gestionnairePatchs.vectorPatchs(resPatchs);
         		
         		// Traitement ACP + Seuillage 
+        		System.out.println("Début ACP");
+        		ResultatACP resACP= this.processeurACP.acp(resVecteur);
+        		System.out.println(resACP);
+//        		
+//
+//        		List<Vecteur> listeVecteurCoefs = this.processeurACP.proj(ResultatVecteur.transformerMatriceVecteursPropresEnResultatVecteur(resACP.getVecteursPropres()),resMoyCov.getVecteursCenters());
+//        		
+//        		
+//
+//        		//ResultatPatch resPatchReconstruits= this.gestionnairePatchs.deVectorPatchs(resPatchs);
 
+        		
         		Fenetre nf = new Fenetre(this.gestionnairePatchs.reconstructionPatchs(resPatchs, f.getImage().getHauteur(), f.getImage().getLargeur()), f.getPosition());
                 newFenetresList.add(nf);
     		}
@@ -143,18 +158,18 @@ public class DebruiteurImage {
 
     public static void main(String[] args) throws IOException {
         String[] imageNames = {
-            "ali_gray.jpg",
-            "crocodilo_gray.jpg",
-            "darkvador_gray.jpg",
-            "gekko_gray.jpg",
-            "harrypotter_gray.png",
-            "leclerc_gray.png",
-            "lena_gray.png",
-            "mbappe_gray.jpg",
-            "moto_gray.jpeg",
-            "nyancat_gray.png",
-            "steve_gray.jpg",
-            "wemby_gray.png"
+            "ali_gray.jpg"
+//            "crocodilo_gray.jpg",
+//            "darkvador_gray.jpg",
+//            "gekko_gray.jpg",
+//            "harrypotter_gray.png",
+//            "leclerc_gray.png",
+//            "lena_gray.png",
+//            "mbappe_gray.jpg",
+//            "moto_gray.jpeg",
+//            "nyancat_gray.png",
+//            "steve_gray.jpg",
+//            "wemby_gray.png"
         };
 
         for (String imageName : imageNames) {
@@ -176,8 +191,8 @@ public class DebruiteurImage {
 //			}
 
             DebruiteurImage dImg = new DebruiteurImage();
-//            Img xR1 = dImg.imageDen(x0, null, null, TAILLE_PATCH_GLOBAL, false);
-            Img xR2 = dImg.imageDen(x0, null, null, TAILLE_PATCH_LOCAL, true);
+//            Img xR1 = dImg.imageDen(x0, null, null, 20.0 ,TAILLE_PATCH_GLOBAL, false);
+            Img xR2 = dImg.imageDen(x0, null, null, 20.0 , TAILLE_PATCH_LOCAL, true);
 
 //            xR1.saveImg("data/xR/" + imageName);
             xR2.saveImg("data/xR/" + imageName);

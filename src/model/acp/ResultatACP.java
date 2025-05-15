@@ -61,5 +61,61 @@ public class ResultatACP {
     public Vecteur getVecteurMoyen() {
         return vecteurMoyen;
     }
+    
+    
+    /**
+     * @brief Affiche une représentation lisible du résultat de l'ACP.
+     * @author Paul
+     * @return Une chaîne formatée contenant les résultats de l'ACP.
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("======= RÉSULTAT DE L'ANALYSE EN COMPOSANTES PRINCIPALES =======\n\n");
+        
+        // Affichage des valeurs propres
+        sb.append("-- VALEURS PROPRES (INERTIES) --\n");
+        double sommeValeursPropres = 0;
+        for (double vp : valeursPropres) {
+            sommeValeursPropres += vp;
+        }
+        
+        for (int i = 0; i < valeursPropres.length; i++) {
+            double pourcentage = (valeursPropres[i] / sommeValeursPropres) * 100;
+            sb.append(String.format("Axe %d: %.4f (%.2f%% de l'inertie totale)\n", 
+                                   i + 1, valeursPropres[i], pourcentage));
+        }
+        sb.append(String.format("Inertie totale: %.4f\n\n", sommeValeursPropres));
+        
+        // Affichage du vecteur moyen
+        sb.append("-- VECTEUR MOYEN --\n");
+        for (int i = 0; i < vecteurMoyen.taille(); i++) {
+            sb.append(String.format("Dimension %d: %.4f\n", i + 1, vecteurMoyen.getValeur(i)));
+        }
+        sb.append("\n");
+        
+        // Affichage des vecteurs propres (limité aux 3 premiers pour la lisibilité)
+        sb.append("-- VECTEURS PROPRES (AXES PRINCIPAUX) --\n");
+        int nbVecteursAffichés = Math.min(3, vecteursPropres.getNbLignes());
+        
+        for (int i = 0; i < nbVecteursAffichés; i++) {
+            sb.append(String.format("Vecteur propre %d (axe principal):\n", i + 1));
+            for (int j = 0; j < vecteursPropres.getNbColonnes(); j++) {
+                sb.append(String.format("   Dimension %d: %.4f\n", j + 1, vecteursPropres.getValeur(i, j)));
+            }
+            sb.append("\n");
+        }
+        
+        if (vecteursPropres.getNbLignes() > nbVecteursAffichés) {
+            sb.append("... (affichage limité aux 3 premiers vecteurs propres)\n");
+        }
+        
+        sb.append("=================================================================");
+        
+        return sb.toString();
+    }
+    
+    
+    
 }
 

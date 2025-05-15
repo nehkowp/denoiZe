@@ -7,6 +7,8 @@ package model.patch;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import model.base.Matrice;
 import model.base.Position;
 import model.base.Vecteur;
 
@@ -30,6 +32,13 @@ public class ResultatVecteur {
         this.positions = new ArrayList<>();
         this.vecteurs = new ArrayList<>();
     }
+    
+    public ResultatVecteur(List<Vecteur> vecteurs) {
+        this.positions = new ArrayList<>();
+    	this.vecteurs = vecteurs;
+    }
+    
+    
 
     /**
      * @brief Ajoute un vecteur et sa position associée.
@@ -93,4 +102,23 @@ public class ResultatVecteur {
 
         return matrice;
     }
+    
+    public static ResultatVecteur transformerMatriceVecteursPropresEnResultatVecteur(Matrice vecteursPropres) {
+        List<Vecteur> listeVecteurs = new ArrayList<>();
+        
+
+        int nombreVecteurs = vecteursPropres.getNbColonnes();
+        
+        for (int i = 0; i < nombreVecteurs; i++) {
+            double[] vecteurPropre = vecteursPropres.getColonne(i); 
+            
+            Vecteur v = new Vecteur(vecteurPropre);
+            
+            listeVecteurs.add(v);
+        }
+        
+        // Créer un ResultatVecteur sans positions
+        return new ResultatVecteur(listeVecteurs);
+    }
+    
 }
