@@ -5,6 +5,7 @@ import model.base.Vecteur;
 import model.patch.ResultatVecteur;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.acp.ResultatACP;
 import model.acp.ResultatMoyCov;
 import org.apache.commons.math3.linear.*;
@@ -33,24 +34,17 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         	Vecteur centre = V_k.soustraire(mV);
         	Position coordonne = new Position(k,k);
         	vc.ajouterVecteur(centre, coordonne);
-            //Vecteur centre = v.get(k).soustraire(mV);
-            //vc.set(k, centre);
         }
         
         // calcul matrice covariance gamma
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
-                double sum = 0;
-                for (int k = 0; k < s2; k++) {
-                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
-                }
-                gamma.setValeur(i, j, sum / M);
-            }
+        for (int k = 0; k<M; k++) {
+        	gamma.ajouter(vc.getVecteurs().get(k).multiplier(vc.getVecteurs().get(k)));
         }
+        double invM = 1 / (double) M;
+        gamma.multiplierParScalaire(invM);
         
         
-        
-        return new ResultatMoyCov (mV, gamma, vc);
+        return new ResultatMoyCov(mV, gamma, vc);
 	}
 	
 	public ResultatACP acp(ResultatVecteur v) {
@@ -109,11 +103,11 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
 	}
 	
 	
-	
 	public List<Vecteur> proj(ResultatVecteur U,ResultatVecteur Vc) {
 		int s2 = Vc.getVecteurs().get(0).taille();
 		int M = Vc.taille();
 		List<Vecteur> alpha = new ArrayList<>();
+
 		
 		for (int k=0; k < M; k++) {
 			Vecteur alpha_k = new Vecteur(s2);
@@ -121,7 +115,7 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
 			
 			for (int i=0; i<s2 ; i++) {
 				Vecteur uiPrime = U.getVecteurs().get(i);
-				double contribution = uiPrime.multiplier(Vci);
+				double contribution = uiPrime.produitscalaire(Vci);
 				alpha_k.setValeur(i,contribution);
 			}
 			

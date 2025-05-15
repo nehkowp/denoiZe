@@ -1,15 +1,17 @@
 package model.patch;
 
+import model.base.Pixel;
+
 public class Patch {
-	private double[][] pixels;
+	private Pixel[][] pixels;
 	private int taille;
 	
-	public Patch(double[][] pixels) {
+	public Patch(Pixel[][] pixels) {
 		this.taille = pixels.length;
 		this.pixels = pixels;
 	}
 
-	public double[][] getPixels() {
+	public Pixel[][] getPixels() {
 		return pixels;
 	}
 

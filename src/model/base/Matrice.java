@@ -1,6 +1,7 @@
 package model.base;
 
 import exception.MatriceException;
+import exception.VecteurException;
 
 public class Matrice {
 	private double[][] valeurs;
@@ -66,9 +67,9 @@ public class Matrice {
 				res.setValeur(i, somme);
 			}
 			return res;
-		    } else {
-		    	throw new MatriceException("Le nombre de colonnes de la matrice doit être égal au nombre d'éléments du vecteur.");
-		    } 
+		} else {
+		    throw new MatriceException("Le nombre de colonnes de la matrice doit être égal au nombre d'éléments du vecteur.");
+		} 
 	}
 	
 	public Matrice transposer() { 
@@ -79,5 +80,29 @@ public class Matrice {
 	   	   }
 	    }
 	    return res;
+	}
+	
+	public Matrice ajouter(Matrice autre) { 
+		if ((this.valeurs[0].length == autre.valeurs[0].length) && (this.valeurs.length == autre.valeurs.length)) {
+			Matrice res = new Matrice(this.valeurs.length, this.valeurs[0].length);
+			for(int i = 0; i<this.valeurs.length; i++) {
+				for(int j = 0; j<this.valeurs[0].length; j++) {
+					res.setValeur(i, j, this.getValeur(i, j) + autre.getValeur(i, j));
+				}
+			}
+			return res;
+		} else {
+			throw new VecteurException("Les deux matrices ne sont pas de taille éguale");
+		}
+	}
+	
+	public Matrice multiplierParScalaire(double scalaire) {
+		Matrice res = new Matrice(this.getLignes(),this.getColonnes());
+		for(int i = 0; i<this.getLignes(); i++) {
+			for(int j = 0; j<this.getColonnes(); j++) {
+				res.setValeur(i, j, this.getValeur(i, j) * scalaire);
+			}
+		}
+		return res;
 	}
 }

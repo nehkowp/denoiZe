@@ -1,5 +1,6 @@
 package model.base;
 
+import exception.MatriceException;
 import exception.VecteurException;
 
 public class Vecteur {
@@ -65,7 +66,24 @@ public class Vecteur {
 		}
 	}
 	
-	public double multiplier(Vecteur autre) {
+	
+	public Matrice multiplier(Vecteur autre) {
+		if (this.taille() == autre.taille()) {
+			Matrice res = new Matrice(this.taille(), this.taille());
+			double somme;
+			for (int i = 0; i < this.taille(); i++) {
+				for (int j = 0; j < this.taille(); j++) {
+					somme  = this.getValeur(i) * autre.getValeur(j);
+					res.setValeur(i, j, somme);
+				}
+			}
+		    return res;
+		} else {
+			throw new MatriceException("Les deux vecteurs ne sont pas de taille éguale");
+		} 
+	}
+	
+	public double produitscalaire(Vecteur autre) {
 		if (this.taille() == autre.taille()) {
 			double res = 0;
 			for(int i = 0; i<this.taille(); i++) {
