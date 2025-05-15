@@ -5,15 +5,19 @@
 
 package service.acp;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.EigenDecomposition;
+import org.apache.commons.math3.linear.RealMatrix;
+
+import model.acp.ResultatACP;
+import model.acp.ResultatMoyCov;
 import model.base.Matrice;
 import model.base.Position;
 import model.base.Vecteur;
 import model.patch.ResultatVecteur;
-import model.acp.ResultatACP;
-import model.acp.ResultatMoyCov;
-import org.apache.commons.math3.linear.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @class ProcesseurACP
@@ -32,30 +36,53 @@ public class ProcesseurACP {
         int s2 = v.getVecteurs().get(0).taille(); // Dimension des vecteurs
         int M = v.taille(); // Nombre de vecteurs
 
-        Vecteur mV = new Vecteur(s2);
-        Matrice gamma = new Matrice(M, M);
-        ResultatVecteur vc = new ResultatVecteur();
-
-        // Calcul du vecteur moyen
+        // Conversion vers format Apache Commons Math pour calcul optimisé
+        double[][] dataArray = new double[M][s2];
         for (int i = 0; i < M; i++) {
-            mV = mV.ajouter(v.getVecteurs().get(i));
+            Vecteur vect = v.getVecteurs().get(i);
+            for (int j = 0; j < s2; j++) {
+                dataArray[i][j] = vect.getValeur(j);
+            }
         }
-        mV = mV.diviser(M);
+        RealMatrix data = new Array2DRowRealMatrix(dataArray);
+        
+        // Calcul du vecteur moyen
+        Vecteur mV = new Vecteur(s2);
+        for (int j = 0; j < s2; j++) {
+            double meanValue = 0;
+            for (int i = 0; i < M; i++) {
+                meanValue += data.getEntry(i, j);
+            }
+            mV.setValeur(j, meanValue / M);
+        }
 
-        // Calcul des vecteurs centrés
-        for (int k = 0; k < M; k++) {
-            Vecteur V_k = v.getVecteurs().get(k);
+        // Création des vecteurs centrés et calcul optimisé de la covariance
+        ResultatVecteur vc = new ResultatVecteur();
+        RealMatrix centeredData = new Array2DRowRealMatrix(M, s2);
+        
+        for (int i = 0; i < M; i++) {
+            Vecteur V_k = v.getVecteurs().get(i);
             Vecteur centre = V_k.soustraire(mV);
-            Position coordonne = new Position(k, k);
+            Position coordonne = new Position(i, i);
             vc.ajouterVecteur(centre, coordonne);
+            
+            // Remplir la matrice centrée pour le calcul de covariance
+            for (int j = 0; j < s2; j++) {
+                centeredData.setEntry(i, j, centre.getValeur(j));
+            }
         }
-
-        // Calcul de la matrice de covariance
-        for (int k = 0; k < M; k++) {
-            gamma.ajouter(vc.getVecteurs().get(k).multiplier(vc.getVecteurs().get(k)));
+        
+        // Calcul optimisé de la covariance avec Apache Commons Math
+        RealMatrix covMatrix = centeredData.transpose().multiply(centeredData);
+        covMatrix = covMatrix.scalarMultiply(1.0 / M);
+        
+        // Conversion du résultat vers Matrice
+        Matrice gamma = new Matrice(s2, s2);
+        for (int i = 0; i < s2; i++) {
+            for (int j = 0; j < s2; j++) {
+                gamma.setValeur(i, j, covMatrix.getEntry(i, j));
+            }
         }
-        double invM = 1 / (double) M;
-        gamma.multiplierParScalaire(invM);
 
         return new ResultatMoyCov(mV, gamma, vc);
     }
@@ -67,54 +94,58 @@ public class ProcesseurACP {
      * @return Un objet ResultatACP contenant les valeurs propres, les vecteurs propres et le vecteur moyen.
      */
     public ResultatACP acp(ResultatVecteur v) {
-        ResultatMoyCov res = moyCov(v);
+    	System.out.println("1");
+    	ResultatMoyCov res = moyCov(v);
         Vecteur mV = res.getVecteurMoyen();
         Matrice gamma = res.getMatriceCovariance();
 
-        int M = gamma.getLignes();
-
+        int s2 = mV.taille();
+        System.out.println("2");
         // Conversion de la matrice de covariance vers RealMatrix (Apache Commons Math)
-        double[][] gammaData = new double[M][M];
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
+        double[][] gammaData = new double[s2][s2];
+        for (int i = 0; i < s2; i++) {
+            for (int j = 0; j < s2; j++) {
                 gammaData[i][j] = gamma.getValeur(i, j);
             }
         }
+        System.out.println("3");
         RealMatrix gammaMatrix = new Array2DRowRealMatrix(gammaData);
 
         // Décomposition pour obtenir valeurs propres et vecteurs propres
         EigenDecomposition eig = new EigenDecomposition(gammaMatrix);
 
+        // Récupération et tri des valeurs propres et vecteurs propres
         double[] valeursPropres = eig.getRealEigenvalues();
-        double[][] vecteursPropresData = new double[M][M];
-        for (int i = 0; i < M; i++) {
-            double[] vPropre = eig.getEigenvector(i).toArray();
-            for (int j = 0; j < M; j++) {
-                vecteursPropresData[j][i] = vPropre[j];
+        RealMatrix vecteursPropresMatrix = eig.getV();
+        
+        // Tri des valeurs propres et réorganisation des vecteurs propres
+        double[][] vecteursPropresData = new double[s2][s2];
+        System.out.println("4");
+        // Créer des paires (valeur propre, indice) pour le tri
+        ArrayList<Pair> pairs = new ArrayList<>();
+        for (int i = 0; i < s2; i++) {
+            pairs.add(new Pair(valeursPropres[i], i));
+        }
+        
+        // Tri par ordre décroissant des valeurs propres
+        pairs.sort((a, b) -> -Double.compare((double)a.first, (double)b.first));
+        System.out.println("5");
+        // Réorganisation des données
+        double[] sortedEigenValues = new double[s2];
+        for (int i = 0; i < s2; i++) {
+            Pair pair = pairs.get(i);
+            int originalIndex = (int)pair.second;
+            sortedEigenValues[i] = (double)pair.first;
+            
+            // Copie du vecteur propre dans l'ordre trié
+            for (int j = 0; j < s2; j++) {
+                vecteursPropresData[j][i] = vecteursPropresMatrix.getEntry(j, originalIndex);
             }
         }
-
-        // Tri décroissant des valeurs propres et réorganisation des vecteurs propres
-        for (int i = 0; i < M - 1; i++) {
-            for (int j = i + 1; j < M; j++) {
-                if (valeursPropres[j] > valeursPropres[i]) {
-                    // Échange des valeurs propres
-                    double tempVal = valeursPropres[i];
-                    valeursPropres[i] = valeursPropres[j];
-                    valeursPropres[j] = tempVal;
-                    // Échange des vecteurs propres correspondants
-                    for (int k = 0; k < M; k++) {
-                        double tempVec = vecteursPropresData[k][i];
-                        vecteursPropresData[k][i] = vecteursPropresData[k][j];
-                        vecteursPropresData[k][j] = tempVec;
-                    }
-                }
-            }
-        }
-
+        System.out.println("6");
         Matrice vecteursPropres = new Matrice(vecteursPropresData);
 
-        return new ResultatACP(valeursPropres, vecteursPropres, mV);
+        return new ResultatACP(sortedEigenValues, vecteursPropres, mV);
     }
 
     /**
@@ -127,20 +158,53 @@ public class ProcesseurACP {
     public List<Vecteur> proj(ResultatVecteur U, ResultatVecteur Vc) {
         int s2 = Vc.getVecteurs().get(0).taille();
         int M = Vc.taille();
+        
+        double[][] uData = new double[s2][s2];
+        double[][] vcData = new double[M][s2];
+        
+        for (int i = 0; i < s2; i++) {
+            Vecteur ui = U.getVecteurs().get(i);
+            for (int j = 0; j < s2; j++) {
+                uData[j][i] = ui.getValeur(j);
+            }
+        }
+        
+        for (int i = 0; i < M; i++) {
+            Vecteur vci = Vc.getVecteurs().get(i);
+            for (int j = 0; j < s2; j++) {
+                vcData[i][j] = vci.getValeur(j);
+            }
+        }
+        
+        RealMatrix uMatrix = new Array2DRowRealMatrix(uData);
+        RealMatrix vcMatrix = new Array2DRowRealMatrix(vcData);
+        
+        RealMatrix projections = vcMatrix.multiply(uMatrix);
+        
         List<Vecteur> alpha = new ArrayList<>();
-
         for (int k = 0; k < M; k++) {
             Vecteur alpha_k = new Vecteur(s2);
-            Vecteur Vci = Vc.getVecteurs().get(k);
-
             for (int i = 0; i < s2; i++) {
-                Vecteur uiPrime = U.getVecteurs().get(i);
-                double contribution = uiPrime.produitscalaire(Vci);
-                alpha_k.setValeur(i, contribution);
+                alpha_k.setValeur(i, projections.getEntry(k, i));
             }
-
             alpha.add(alpha_k);
         }
+        
         return alpha;
+    }
+    
+    /**
+     * @class Pair
+     * @brief Classe utilitaire pour le tri des valeurs propres
+     * @author Lucas 
+     */
+    private class Pair {
+        public Object first;
+        public Object second;
+        
+        public Pair(Object first, Object second) {
+            this.first = first;
+            this.second = second;
+        }
     }
 }

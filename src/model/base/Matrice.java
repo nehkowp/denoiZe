@@ -72,7 +72,7 @@ public class Matrice {
      * @author Emma
      * @return Nombre de lignes.
      */
-    public int getLignes() {
+    public int getNbLignes() {
         return lignes;
     }
 
@@ -81,10 +81,28 @@ public class Matrice {
      * @author Emma
      * @return Nombre de colonnes.
      */
-    public int getColonnes() {
+    public int getNbColonnes() {
         return colonnes;
     }
 
+    
+    /**
+     * @brief Récupère la colonne.
+     * @author Paul
+     * @param indexC Index de la colonne
+     * @return La colonne dans un tableau de double.
+     */
+    public double[] getColonne(int indexC) {
+        double[] colonne= new double[colonnes];
+    	
+        for(int i = 0; i < lignes;i++) {
+        	colonne[i] = valeurs[i][indexC];
+        }
+        
+        return colonne;
+    }
+    
+    
     /**
      * @brief Multiplie cette matrice par une autre matrice.
      * @author Emma
