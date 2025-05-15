@@ -5,6 +5,7 @@ import model.base.Vecteur;
 import model.patch.ResultatVecteur;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.acp.ResultatACP;
 import model.acp.ResultatMoyCov;
 
@@ -42,7 +43,7 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
             for (int j = 0; j < M; j++) {
                 double sum = 0;
                 for (int k = 0; k < s2; k++) {
-                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
+//                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
                 }
                 gamma.setValeur(i, j, sum / M);
             }
@@ -55,11 +56,11 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
 	}
 	
 	
-	
 	public List<Vecteur> proj(ResultatVecteur U,ResultatVecteur Vc) {
 		int s2 = Vc.getVecteurs().get(0).taille();
 		int M = Vc.taille();
 		List<Vecteur> alpha = new ArrayList<>();
+
 		
 		for (int k=0; k < M; k++) {
 			Vecteur alpha_k = new Vecteur(s2);

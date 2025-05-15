@@ -11,7 +11,7 @@ public class EvaluationrQualite {
 		
 		for (int i = 0; i < nbLigne ; i++) {
 			for (int j = 0; j < nbColonne ; j++) {
-				double diff = (X0.getPixel(i, j) - Xr.getPixel(i, j));
+				double diff = (X0.getPixel(i, j).getValeur() - Xr.getPixel(i, j).getValeur());
 				mse += ( diff * diff );
 			}
 		}
