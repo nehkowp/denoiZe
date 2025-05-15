@@ -40,11 +40,12 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         
         // calcul matrice covariance gamma
         for (int k = 0; k<M; k++) {
-        	gamma += vc.getVecteurs().get(k) 
-        	
+        	gamma.Addition(vc.getVecteurs().get(k).multiplier(vc.getVecteurs().get(k)));
         }
+        double invM = 1 / (double) M;
+        gamma.scalaire(invM);
         
-        for (int i = 0; i < M; i++) {
+        /*for (int i = 0; i < M; i++) {
             for (int j = 0; j < M; j++) {
                 double sum = 0;
                 for (int k = 0; k < s2; k++) {
@@ -52,8 +53,8 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
                 }
                 gamma.setValeur(i, j, sum / M);
             }
-        }
-        return new ResultatMoyCov (mV, gamma, vc);
+        }*/
+        return new ResultatMoyCov(mV, gamma, vc);
 	}
 	
 	public void acp(ResultatVecteur v) {
