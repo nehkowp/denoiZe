@@ -2,6 +2,9 @@ package service.acp;
 import model.base.Matrice;
 import model.base.Vecteur;
 import model.patch.ResultatVecteur;
+
+import java.util.List;
+
 import model.acp.ResultatACP;
 import model.acp.ResultatMoyCov;
 
@@ -26,8 +29,8 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
         
         // calcul vecteurs centrés vc
         for (int k = 0; k < M; k++) {
-            Vecteur centre = v.get(k).soustraire(mV);
-            vc.set(k, centre);
+//            Vecteur centre = v.get(k).soustraire(mV);
+//            vc.set(k, centre);
         }
         
         // calcul matrice covariance gamma
@@ -35,7 +38,7 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
             for (int j = 0; j < M; j++) {
                 double sum = 0;
                 for (int k = 0; k < s2; k++) {
-                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
+//                    sum += vc.get(k).getValeur(i) * vc.get(k).getValeur(j);
                 }
                 gamma.setValeur(i, j, sum / M);
             }
@@ -50,6 +53,7 @@ public ResultatMoyCov moyCov(ResultatVecteur v) { // on initialise v la matrice 
 	
 	
 	public List<Vecteur> proj(ResultatVecteur u,ResultatVecteur Vc) {
+		return null;
 		
 		
 		

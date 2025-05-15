@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.base.Img;
+import model.base.Pixel;
 import model.patch.Fenetre;
+import model.patch.ParametresFenetre;
 import model.patch.ResultatPatch;
 import model.patch.ResultatVecteur;
 import service.acp.ProcesseurACP;
@@ -24,7 +26,7 @@ public class DebruiteurImage {
     private EvaluationrQualite evaluationQualite;
     private final static int TAILLE_PATCH_GLOBAL = 7;
     private final static int TAILLE_PATCH_LOCAL = 17;
-    
+    private final static int TAILLE_FENETRE_DEFAUT = 80;
 
     public DebruiteurImage() {
         this.bruiteurImage = new BruiteurImage();
@@ -32,6 +34,7 @@ public class DebruiteurImage {
         this.processeurACP = new ProcesseurACP();
         this.processeurSeuillage = new ProcesseurSeuillage();
         this.evaluationQualite = new EvaluationrQualite();
+        
     }
     
     
@@ -40,9 +43,27 @@ public class DebruiteurImage {
     	Img xR = null;
     	if(modeLocal) {
     		//LOCAL
-    		
+    		ParametresFenetre pF = ParametresFenetre.calculerParametresFenetre(xB.getLargeur(), xB.getHauteur(), TAILLE_FENETRE_DEFAUT); 
 
-    		List<Fenetre> imagettesList = this.gestionnairePatchs.decoupageImage(xB, xB.getLargeur()/2, 4);
+    		 // Affichage détaillé de tous les paramètres
+    	    System.out.println("---------- DÉTAILS DES PARAMÈTRES DE FENÊTRES ----------");
+    	    System.out.println("Dimensions de l'image : " + xB.getLargeur() + "×" + xB.getHauteur() + " pixels");
+    	    System.out.println("PGCD des dimensions : " + ParametresFenetre.pgcd(xB.getLargeur(), xB.getHauteur()));
+    	    System.out.println();
+    	    System.out.println("Taille de fenêtre : " + pF.getTailleFenetreCalculee() + "×" + pF.getTailleFenetreCalculee() + " pixels");
+
+    	    
+    	    System.out.println("Nombre de fenêtres horizontales : " + pF.getNombreFenetresX());
+    	    System.out.println("Nombre de fenêtres verticales : " + pF.getNombreFenetresY());
+    	    System.out.println("Nombre total de fenêtres : " + pF.getNombreFenetresTotal());
+    	    System.out.println();
+    	    
+    	    System.out.println("Chevauchement combiné en X : " + pF.getChevauchementCombineX() + " pixels");
+    	    System.out.println("Chevauchement combiné en Y : " + pF.getChevauchementCombineY() + " pixels");
+    	    System.out.println();
+    		
+    		
+    		List<Fenetre> imagettesList = this.gestionnairePatchs.decoupageImage(xB,pF);
     		
     		List<Fenetre> newFenetresList = new ArrayList<Fenetre>();
     		
@@ -56,9 +77,17 @@ public class DebruiteurImage {
                 newFenetresList.add(nf);
     		}
     		
-     		double[][] xRPixels = new double[xB.getHauteur()][xB.getLargeur()];
+     		Pixel[][] xRPixels = new Pixel[xB.getHauteur()][xB.getLargeur()];
+     		
+     		for (int i = 0; i < xB.getHauteur(); i++) {
+     		    for (int j = 0; j < xB.getLargeur(); j++) {
+     		        xRPixels[i][j] = new Pixel(0); // Valeur par défaut
+     		    }
+     		}
+     		
+     		
     		for(Fenetre nf : newFenetresList) {
-    			double[][] nfPixels = nf.getImage().getPixels();
+    			Pixel[][] nfPixels = nf.getImage().getPixels();
     			for(int i = 0; i < nfPixels.length ;i++) {
         			for(int j = 0; j < nfPixels[0].length;j++) {
         				xRPixels[i+nf.getPosition().getI()][j+nf.getPosition().getJ()] = nfPixels[i][j];
@@ -122,11 +151,11 @@ public class DebruiteurImage {
 //			}
 
             DebruiteurImage dImg = new DebruiteurImage();
-            Img xR1 = dImg.imageDen(x0, null, null, TAILLE_PATCH_GLOBAL, false);
-//            Img xR2 = dImg.imageDen(x0, null, null, TAILLE_PATCH_LOCAL, true);
+//            Img xR1 = dImg.imageDen(x0, null, null, TAILLE_PATCH_GLOBAL, false);
+            Img xR2 = dImg.imageDen(x0, null, null, TAILLE_PATCH_LOCAL, true);
 
-            xR1.saveImg("data/xR/" + imageName);
-//            xR2.saveImg("data/xR/" + imageName);
+//            xR1.saveImg("data/xR/" + imageName);
+            xR2.saveImg("data/xR/" + imageName);
 
 
 

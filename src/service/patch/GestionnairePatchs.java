@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 import model.base.Img;
+import model.base.Pixel;
 import model.base.Position;
 import model.base.Vecteur;
 import model.patch.Fenetre;
+import model.patch.ParametresFenetre;
 import model.patch.Patch;
 import model.patch.ResultatPatch;
 import model.patch.ResultatPatch.PairePatchPosition;
@@ -18,13 +20,13 @@ import model.patch.ResultatVecteur;
 public class GestionnairePatchs {
 	
  	public ResultatPatch extractPatchs(Img Xs, int s) {
- 		double[][] imgPixels = Xs.getPixels();
+ 		Pixel[][] imgPixels = Xs.getPixels();
  		ResultatPatch resPatch = new ResultatPatch();
  		
  		
  		for(int i = 0; i <= (imgPixels.length)-s; i++) {
  			for(int j = 0; j <= (imgPixels[0].length)-s; j++) {
- 				double[][] patchPixels = new double[s][s];
+ 				Pixel[][] patchPixels = new Pixel[s][s];
  				Patch patch = new Patch(patchPixels);
  				for(int x = 0; x < s; x++) {
  		 			for(int y = 0; y < s; y++) {
@@ -39,7 +41,14 @@ public class GestionnairePatchs {
  	}
 
  	public Img reconstructionPatchs(ResultatPatch yPatchs, int l, int c) {
- 		double[][] imgReconstuitePixels = new double[l][c];
+ 		Pixel[][] imgReconstuitePixels = new Pixel[l][c];
+ 		
+ 		for (int i = 0; i < l; i++) {
+ 		    for (int j = 0; j < c; j++) {
+ 		    	imgReconstuitePixels[i][j] = new Pixel(0); // Valeur par défaut (noir)
+ 		    }
+ 		}
+ 		
  		for(PairePatchPosition p : yPatchs) {
  			Position pPosition = p.getPosition();
  			Patch pPatch = p.getPatch();
@@ -61,7 +70,7 @@ public class GestionnairePatchs {
  			int pos = 0;
  			for(int x = 0; x < pPatch.getTaille(); x++) {
 		 		for(int y = 0; y < pPatch.getTaille(); y++) {
-		 			valeurs[pos] = pPatch.getPixels()[x][y];
+		 			valeurs[pos] = pPatch.getPixels()[x][y].getValeur();
 		 			pos++;
 		 			}
 		 		}
@@ -73,28 +82,67 @@ public class GestionnairePatchs {
     	return resVect;
     }
     
- 	public List<Fenetre> decoupageImage(Img x, int w,int n){
- 		
+ 	public List<Fenetre> decoupageImage(Img x, ParametresFenetre pF){
  		
  		List<Fenetre> fenetresList = new ArrayList<Fenetre>();
-		Random randomNumbers = new Random();
-		
-		while(n > 0) {
+ 		
+ 		
+ 		int chevauchementX = (int) Math.ceil(pF.getChevauchementCombineX() / (pF.getNombreFenetresX()-1));
+ 		int chevauchementY = (int) Math.ceil(pF.getChevauchementCombineY() / (pF.getNombreFenetresY()-1));
+ 		
+ 		int chevauchementXAcc = 0;
+ 		int posX=0;
+ 		int posY=0;
+ 		
+ 		//indexFenetre commence à 1 /!\
+ 		for(int indexFenetreX = 0; indexFenetreX < pF.getNombreFenetresX(); indexFenetreX++) {
 			
-			int rL = randomNumbers.nextInt(x.getPixels().length-w);
-	 		int rC = randomNumbers.nextInt(x.getPixels()[0].length-w);
-			double[][] fenetrePixels = new double[w][w];
+ 			
+ 			if(indexFenetreX+1 == pF.getNombreFenetresX() ){ // Si dernière fenêtre horizontale ajustez posX
+ 				System.out.println("Dernière Fenêtre X");
+				posX = pF.getChevauchementCombineX() - (chevauchementX * (indexFenetreX));
+			}else{
+				posX = (pF.getTailleFenetreCalculee()*indexFenetreX)-chevauchementXAcc;
+			}
+ 				
+ 			
+ 			int chevauchementYAcc = 0;
+				
+ 			for(int indexFenetreY = 0; indexFenetreY < pF.getNombreFenetresY(); indexFenetreY++) {
+ 				
+ 				if(indexFenetreY+1 == pF.getNombreFenetresY()){ // Si dernière fenêtre horizontale ajustez posY
+ 					System.out.println("Dernière Fenêtre Y");
+ 					posY = pF.getChevauchementCombineY() - (chevauchementY * (indexFenetreY));
+ 				}else{
+ 					posY = (pF.getTailleFenetreCalculee()*indexFenetreY)-chevauchementYAcc;
+ 				}
+ 				
+ 				Pixel[][] fPixels = new Pixel[pF.getTailleFenetreCalculee()][pF.getTailleFenetreCalculee()];
+ 				
+ 				
+ 				System.out.println(posX);
+ 				System.out.println(posY);		
+ 				
+ 	     		for (int i = 0; i < pF.getTailleFenetreCalculee(); i++) {
+ 	     		    for (int j = 0; j < pF.getTailleFenetreCalculee(); j++) {
+ 	     		    	fPixels[i][j] = x.getPixel(posX+i,posY+j);
+ 	     		    }
+ 	     		}
+ 				
+ 	     		
+ 	     		Img fImage = new Img(fPixels);
+ 				Fenetre f = new Fenetre(fImage, new Position(posX,posY));
+ 				
+ 	     		chevauchementYAcc = chevauchementYAcc + chevauchementY;
+ 				
+ 				fenetresList.add(f);
+ 				
+ 			}
+	     	chevauchementXAcc = chevauchementXAcc + chevauchementX;
 
-	 		for(int i = rL; i < rL+w ; i++) {
-		 		for(int j = rC; j < rC+w ;j++) {
-		 			fenetrePixels[i-rL][j-rC] =  x.getPixel(i, j);
-		 		}
-		 	}
-	 		
-	 		fenetresList.add(new Fenetre(new Img(fenetrePixels) , new Position(rL,rC)));
-	 	
-			n--;
-		}
+ 		}
+ 				
+ 			
 		
  		
 		return fenetresList;
