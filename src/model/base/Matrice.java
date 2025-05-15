@@ -105,4 +105,16 @@ public class Matrice {
 		}
 		return res;
 	}
+	
+	public double SommeDiagonale() {
+		if (this.getLignes() == this.getColonnes()) {
+			double res = 0;
+			for(int i = 0; i<this.getLignes(); i++) {
+				res = res + this.getValeur(i, i);
+			}
+			return res;
+		} else {
+			throw new MatriceException("La matrice n'est pas carré");
+		}
+	}
 }
