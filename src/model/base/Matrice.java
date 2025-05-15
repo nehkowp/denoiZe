@@ -66,9 +66,9 @@ public class Matrice {
 				res.setValeur(i, somme);
 			}
 			return res;
-		    } else {
-		    	throw new MatriceException("Le nombre de colonnes de la matrice doit être égal au nombre d'éléments du vecteur.");
-		    } 
+		} else {
+		    throw new MatriceException("Le nombre de colonnes de la matrice doit être égal au nombre d'éléments du vecteur.");
+		} 
 	}
 	
 	public Matrice transposer() { 
