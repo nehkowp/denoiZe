@@ -2,7 +2,6 @@ package service.patch;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import model.base.Img;
 import model.base.Pixel;
@@ -24,7 +23,7 @@ public class GestionnairePatchs {
  		ResultatPatch resPatch = new ResultatPatch();
  		
  		
- 		for(int i = 0; i <= (imgPixels.length)-s; i++) {
+ 		for(int i = 0; i <= (imgPixels.length)-s; i++) { // CHANGER i++ sinon trop de chevauchement + mauvaise perf$
  			for(int j = 0; j <= (imgPixels[0].length)-s; j++) {
  				Pixel[][] patchPixels = new Pixel[s][s];
  				Patch patch = new Patch(patchPixels);
@@ -49,11 +48,22 @@ public class GestionnairePatchs {
  		    }
  		}
  		
- 		for(PairePatchPosition p : yPatchs) {
- 			Position pPosition = p.getPosition();
- 			Patch pPatch = p.getPatch();
- 			imgReconstuitePixels[pPosition.getI()][pPosition.getJ()] = pPatch.getPixels()[0][0];
- 		}
+ 		 for(PairePatchPosition p : yPatchs) {
+ 	        Position pPosition = p.getPosition();
+ 	        Patch pPatch = p.getPatch();
+ 	        
+ 	        for (int i = 0; i < pPatch.getTaille(); i++) {
+ 	            for (int j = 0; j < pPatch.getTaille(); j++) {
+ 	                int posY = pPosition.getI() + i;
+ 	                int posX = pPosition.getJ() + j;
+ 	                
+ 	                if (posY < l && posX < c) {
+ 	                    imgReconstuitePixels[posY][posX] = pPatch.getPixels()[i][j];
+ 	                }
+ 	            }
+ 	        }
+ 	    }
+ 		 
  		Img imgReconstruite = new Img(imgReconstuitePixels);
     	return imgReconstruite;
 
@@ -91,18 +101,21 @@ public class GestionnairePatchs {
  		int chevauchementY = (int) Math.ceil(pF.getChevauchementCombineY() / (pF.getNombreFenetresY()-1));
  		
  		int chevauchementXAcc = 0;
+ 		
  		int posX=0;
  		int posY=0;
  		
+ 	    int dernierePositionX = x.getLargeur() - pF.getTailleFenetreCalculee();
+ 	    int dernierePositionY = x.getHauteur() - pF.getTailleFenetreCalculee();
+ 	    
  		//indexFenetre commence à 1 /!\
  		for(int indexFenetreX = 0; indexFenetreX < pF.getNombreFenetresX(); indexFenetreX++) {
 			
  			
  			if(indexFenetreX+1 == pF.getNombreFenetresX() ){ // Si dernière fenêtre horizontale ajustez posX
- 				System.out.println("Dernière Fenêtre X");
-				posX = pF.getChevauchementCombineX() - (chevauchementX * (indexFenetreX));
+ 				posX = dernierePositionX;
 			}else{
-				posX = (pF.getTailleFenetreCalculee()*indexFenetreX)-chevauchementXAcc;
+				posX = (pF.getTailleFenetreCalculee()*indexFenetreX+1)-chevauchementXAcc;
 			}
  				
  			
@@ -111,27 +124,27 @@ public class GestionnairePatchs {
  			for(int indexFenetreY = 0; indexFenetreY < pF.getNombreFenetresY(); indexFenetreY++) {
  				
  				if(indexFenetreY+1 == pF.getNombreFenetresY()){ // Si dernière fenêtre horizontale ajustez posY
- 					System.out.println("Dernière Fenêtre Y");
- 					posY = pF.getChevauchementCombineY() - (chevauchementY * (indexFenetreY));
+ 					posY = dernierePositionY;
  				}else{
- 					posY = (pF.getTailleFenetreCalculee()*indexFenetreY)-chevauchementYAcc;
+ 					posY = (pF.getTailleFenetreCalculee()*indexFenetreY+1)-chevauchementYAcc;
  				}
  				
  				Pixel[][] fPixels = new Pixel[pF.getTailleFenetreCalculee()][pF.getTailleFenetreCalculee()];
  				
  				
- 				System.out.println(posX);
- 				System.out.println(posY);		
  				
  	     		for (int i = 0; i < pF.getTailleFenetreCalculee(); i++) {
  	     		    for (int j = 0; j < pF.getTailleFenetreCalculee(); j++) {
- 	     		    	fPixels[i][j] = x.getPixel(posX+i,posY+j);
+ 	     		    	
+ 	     		    	fPixels[i][j] = x.getPixel(posY+i,posX+j);
+ 	     		    	fPixels[i][j].setNbChevauchement(fPixels[i][j].getNbChevauchement() + 1);
+ 	     		    	
  	     		    }
  	     		}
  				
  	     		
  	     		Img fImage = new Img(fPixels);
- 				Fenetre f = new Fenetre(fImage, new Position(posX,posY));
+ 				Fenetre f = new Fenetre(fImage, new Position(posY,posX));
  				
  	     		chevauchementYAcc = chevauchementYAcc + chevauchementY;
  				

@@ -22,29 +22,19 @@ public class ParametresFenetre {
         ParametresFenetre params = new ParametresFenetre();
        
         
-        int pgcdValeur = pgcd(largeurImage,hauteurImage);
-        if(pgcdValeur == 1) {
+    	params.nombreFenetresX = (int) Math.ceil(largeurImage/tailleFenetre)+1;
+    	params.nombreFenetresY = (int) Math.ceil(hauteurImage/tailleFenetre)+1;
+    	
+    	int restePixelsLargeur = largeurImage % tailleFenetre;
+    	int restePixelsHauteur = hauteurImage % tailleFenetre;
+    	
+    	params.chevauchementCombineX = tailleFenetre-restePixelsLargeur;
+    	params.chevauchementCombineY = tailleFenetre-restePixelsHauteur;
+    	params.tailleFenetreCalculee = tailleFenetre;
+    	params.nombreFenetresTotal = params.nombreFenetresX * params.nombreFenetresY;
+        
         	
-        	params.nombreFenetresX = (int) Math.ceil(largeurImage/tailleFenetre);
-        	params.nombreFenetresY = (int) Math.ceil(hauteurImage/tailleFenetre);
-        	
-        	int restePixelsLargeur = largeurImage % tailleFenetre;
-        	int restePixelsHauteur = hauteurImage % tailleFenetre;
-        	
-        	params.chevauchementCombineX = tailleFenetre-restePixelsLargeur;
-        	params.chevauchementCombineY = tailleFenetre-restePixelsHauteur;
-        	params.tailleFenetreCalculee = tailleFenetre;
-        	params.nombreFenetresTotal = params.nombreFenetresX * params.nombreFenetresY;
-        	
-
-        }else {
-        	params.chevauchementCombineX = 0;
-        	params.chevauchementCombineY = 0;
-        	params.tailleFenetreCalculee = pgcdValeur;
-        	params.nombreFenetresX = hauteurImage / pgcdValeur;
-        	params.nombreFenetresY = largeurImage / pgcdValeur;
-            params.nombreFenetresTotal = params.nombreFenetresX * params.nombreFenetresY;
-        }
+        
      
         
         
@@ -52,11 +42,6 @@ public class ParametresFenetre {
     }
 
     
-    public static int pgcd(int a, int b) {
-	   if (b==0) return a;
-	   return pgcd(b,a%b);
-	}
-	
 	
     
 }
