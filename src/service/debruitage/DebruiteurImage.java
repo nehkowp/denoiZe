@@ -26,7 +26,7 @@ public class DebruiteurImage {
     private EvaluationrQualite evaluationQualite;
     private final static int TAILLE_PATCH_GLOBAL = 7;
     private final static int TAILLE_PATCH_LOCAL = 17;
-    private final static int TAILLE_FENETRE_DEFAUT = 80;
+    private final static int TAILLE_FENETRE_DEFAUT = 250;
 
     public DebruiteurImage() {
         this.bruiteurImage = new BruiteurImage();
@@ -48,7 +48,6 @@ public class DebruiteurImage {
     		 // Affichage détaillé de tous les paramètres
     	    System.out.println("---------- DÉTAILS DES PARAMÈTRES DE FENÊTRES ----------");
     	    System.out.println("Dimensions de l'image : " + xB.getLargeur() + "×" + xB.getHauteur() + " pixels");
-    	    System.out.println("PGCD des dimensions : " + ParametresFenetre.pgcd(xB.getLargeur(), xB.getHauteur()));
     	    System.out.println();
     	    System.out.println("Taille de fenêtre : " + pF.getTailleFenetreCalculee() + "×" + pF.getTailleFenetreCalculee() + " pixels");
 
@@ -90,10 +89,36 @@ public class DebruiteurImage {
     			Pixel[][] nfPixels = nf.getImage().getPixels();
     			for(int i = 0; i < nfPixels.length ;i++) {
         			for(int j = 0; j < nfPixels[0].length;j++) {
-        				xRPixels[i+nf.getPosition().getI()][j+nf.getPosition().getJ()] = nfPixels[i][j];
+        				xRPixels[i+nf.getPosition().getI()][j+nf.getPosition().getJ()].setValeur(
+        						xRPixels[i+nf.getPosition().getI()][j+nf.getPosition().getJ()].getValeur() 
+        						+
+        						nfPixels[i][j].getValeur()
+        				);
+        				xRPixels[i+nf.getPosition().getI()][j+nf.getPosition().getJ()].setNbChevauchement(
+        					    xRPixels[i+nf.getPosition().getI()][j+nf.getPosition().getJ()].getNbChevauchement() + 1);
         			}
     			}
     		}
+    		
+    		for(int i = 0; i < xRPixels.length ;i++) {
+    			for(int j = 0; j < xRPixels[0].length;j++) {
+    				
+    				if (xRPixels[i][j].getNbChevauchement() > 0) {
+    					
+    					double valeurAvant = xRPixels[i][j].getValeur();
+    		            int nbChevauchement = xRPixels[i][j].getNbChevauchement();
+    		            
+    		            double valeurNormalisee = valeurAvant / (double) nbChevauchement;
+    		            int valeurFinale = (int) Math.min(255, Math.max(0, Math.round(valeurNormalisee)));
+    		            
+    		            xRPixels[i][j].setValeur(valeurFinale);
+    		        }
+    				
+    			}
+    			
+			}
+    		
+    		
     		
     		xR = new Img(xRPixels);
     		
