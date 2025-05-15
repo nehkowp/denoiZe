@@ -1,19 +1,9 @@
 package service.seuillage;
 
 import model.base.Img;
+import model.base.Matrice;
 
 public class ProcesseurSeuillage {
-	
-	/*les private ca va degager*/
-	
-	/*private double sigma ; /*ecart type du bruit*/
-	/*private int L ; /*nombre de pixels de l'image*/
-	/*private double sigmaX; /*ecart type estimé du signal*/
-	private double sigmaXb; /*ecart type estimée du signal observé*/
-	/*private double[] alpha; /*coef de la representation du patch vextorisé bruité Vk*/
-	/*private double lambda; /*parametre de seuillage*/
-	/* qu'est ce que j'ai besoin de recuperer ?*/
-	
 	
 	public double seuilV(Img Xb , double sigma) {
 		int h = Xb.getHauteur();
@@ -22,7 +12,8 @@ public class ProcesseurSeuillage {
 	}
 	
 	
-	public double seuilB(Img Xb , double sigma) {
+	public double seuilB(Img Xb , double sigma, Matrice gamma) {
+		double sigmaXb = gamma.SommeDiagonale(); //on recupere la variance de l'image Xb sans tout recalculé
 		double sigmaCarre = sigma * sigma ;
 		double sigmaXbCarre = sigmaXb * sigmaXb ;
 		double sigmaX = Math.sqrt( Math.abs(sigmaXbCarre - sigmaCarre));
