@@ -23,8 +23,8 @@ public class GestionnairePatchs {
  		ResultatPatch resPatch = new ResultatPatch();
  		
  		
- 		for(int i = 0; i <= (imgPixels.length)-s; i++) { // CHANGER i++ sinon trop de chevauchement + mauvaise perf$
- 			for(int j = 0; j <= (imgPixels[0].length)-s; j++) {
+ 		for(int i = 0; i <= (imgPixels.length)-s; i = i + s) { // CHANGER i++ sinon trop de chevauchement + mauvaise perf$
+ 			for(int j = 0; j <= (imgPixels[0].length)-s; j = j + s) {
  				Pixel[][] patchPixels = new Pixel[s][s];
  				Patch patch = new Patch(patchPixels);
  				for(int x = 0; x < s; x++) {
