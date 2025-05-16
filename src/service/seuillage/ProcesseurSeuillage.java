@@ -45,6 +45,17 @@ public class ProcesseurSeuillage {
         double sigmaX = Math.max(0.001, Math.sqrt(Math.abs(sigmaXb - sigmaCarre)));
         return sigmaCarre / (double) sigmaX;
     }
+    
+    //@author Emma proposition de correction ???
+    /*public double seuilB(Img Xb, double sigma, Matrice gamma) {
+        double sigmaXb = gamma.SommeDiagonale() / gamma.getNbLignes();  // Variance moyenne des coefficients
+        double sigmaCarre = sigma * sigma;
+        
+        // S'assurer que la variance du signal est positive
+        double sigmaX = Math.max(0.001, Math.sqrt(Math.max(0, sigmaXb - sigmaCarre)));
+        
+        return sigmaCarre / sigmaX;
+    }*/
 
     /**
      * @brief Applique la fonction de seuillage dur sur un vecteur de coefficients.
@@ -54,11 +65,13 @@ public class ProcesseurSeuillage {
      * @return Le tableau de coefficients après seuillage dur.
      */
     public double[] seuillageDur(double lambda, double[] alpha) {
-    	double[] resultat = new double[alpha.length];
+        double[] resultat = new double[alpha.length];
 
         for (int i = 0; i < alpha.length; i++) {
             if (Math.abs(alpha[i]) <= lambda) {
-            	resultat[i] = 0;
+                resultat[i] = 0;
+            } else {
+                resultat[i] = alpha[i]; 
             }
         }
         return resultat;
@@ -72,15 +85,15 @@ public class ProcesseurSeuillage {
      * @return Le tableau de coefficients après seuillage doux.
      */
     public double[] seuillageDoux(double lambda, double[] alpha) {
-    	double[] resultat = new double[alpha.length];
+        double[] resultat = new double[alpha.length];
         
         for (int i = 0; i < alpha.length; i++) {
             if (alpha[i] > lambda) {
-            	resultat[i] -= lambda;
-            } else if (alpha[i] <= -lambda) {
-            	resultat[i] += lambda;
+                resultat[i] = alpha[i] - lambda; 
+            } else if (alpha[i] < -lambda) { 
+                resultat[i] = alpha[i] + lambda; 
             } else {
-            	resultat[i] = 0;
+                resultat[i] = 0;
             }
         }
         return resultat;
