@@ -41,7 +41,7 @@ public class GestionnairePatchs {
 	        }
 	    }
 
-	    // 🔧 Couvrir la bordure inférieure si nécessaire
+	    // Couvrir la bordure inférieure si nécessaire
 	    if ((h - s) % pas != 0) {
 	        int i = h - s;
 	        for (int j = 0; j <= w - s; j += pas) {
@@ -49,7 +49,7 @@ public class GestionnairePatchs {
 	        }
 	    }
 
-	    // 🔧 Couvrir la bordure droite si nécessaire
+	    // Couvrir la bordure droite si nécessaire
 	    if ((w - s) % pas != 0) {
 	        int j = w - s;
 	        for (int i = 0; i <= h - s; i += pas) {
@@ -57,7 +57,7 @@ public class GestionnairePatchs {
 	        }
 	    }
 
-	    // 🔧 Coin inférieur droit (si nécessaire)
+	    // Coin inférieur droit (si nécessaire)
 	    if ((h - s) % pas != 0 && (w - s) % pas != 0) {
 	        ajouterPatch(resPatch, imgPixels, h - s, w - s, s);
 	    }
