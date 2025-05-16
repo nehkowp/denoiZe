@@ -42,7 +42,7 @@ public class ProcesseurSeuillage {
         double sigmaXb = gamma.SommeDiagonale();  //on recupere la variance de l'image Xb sans tout recalculé
         double sigmaCarre = sigma * sigma;
         double sigmaXbCarre = sigmaXb * sigmaXb;
-        double sigmaX = Math.sqrt(Math.abs(sigmaXbCarre - sigmaCarre));
+        double sigmaX = Math.max(0.001, Math.sqrt(Math.abs(sigmaXb - sigmaCarre)));
         return sigmaCarre / (double) sigmaX;
     }
 
@@ -54,12 +54,14 @@ public class ProcesseurSeuillage {
      * @return Le tableau de coefficients après seuillage dur.
      */
     public double[] seuillageDur(double lambda, double[] alpha) {
+    	double[] resultat = new double[alpha.length];
+
         for (int i = 0; i < alpha.length; i++) {
             if (Math.abs(alpha[i]) <= lambda) {
-                alpha[i] = 0;
+            	resultat[i] = 0;
             }
         }
-        return alpha;
+        return resultat;
     }
 
     /**
@@ -70,16 +72,18 @@ public class ProcesseurSeuillage {
      * @return Le tableau de coefficients après seuillage doux.
      */
     public double[] seuillageDoux(double lambda, double[] alpha) {
+    	double[] resultat = new double[alpha.length];
+        
         for (int i = 0; i < alpha.length; i++) {
             if (alpha[i] > lambda) {
-                alpha[i] -= lambda;
+            	resultat[i] -= lambda;
             } else if (alpha[i] <= -lambda) {
-                alpha[i] += lambda;
+            	resultat[i] += lambda;
             } else {
-                alpha[i] = 0;
+            	resultat[i] = 0;
             }
         }
-        return alpha;
+        return resultat;
     }
     
     public ResultatVecteur seuillage(ResultatVecteur alphaProj, String typeSeuil, String fonctionSeuillage, double sigma, Img xB, Matrice gamma) {

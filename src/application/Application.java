@@ -5,7 +5,13 @@
 
 package application;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+import model.base.Img;
 import ui.ParametresDebruitage;
 
 /**
@@ -24,13 +30,45 @@ public class Application {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=== Configuration des paramètres de débruitage par ACP ===");
+        
+        String[] imagesDisponibles = listerFichiersImages("data/x0");
 
-        int taillePatch = demanderPatch(scanner, "Entrez la taille des patches (17, 21, 23): ", new int[]{17, 21, 23});
-        int tailleFenetre = demanderEntier(scanner, "Entrez la taille de la fenêtre de recherche (doit être > 200): ", 200);
+	     // Si aucune image n'est trouvée
+	     if (imagesDisponibles.length == 0) {
+	         System.out.println("Aucune image disponible dans le dossier. Le programme va s'arrêter.");
+	         scanner.close();
+	         return; 
+	     }
+     
+        // Afficher les images disponibles :
+	    for(String imageN : imagesDisponibles) {
+	    	System.out.print(imageN + " / ");
+	    }
+	    System.out.println();
+	     
+        String imageName = demanderChoix(scanner, "Choisissez une image non bruitée x0 présente dans le dossier x0 : ", imagesDisponibles);
+        
+        
+        Img x0 = null;
+        try {
+            x0 = new Img("data/x0/" + imageName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         double sigma = demanderDouble(scanner, "Entrez l'écart-type du bruit sigma (doit être > 0): ", 0);
         String typeSeuil = demanderChoix(scanner, "Choisissez le type de seuil (VisuShrink / BayesShrink): ", new String[]{"VisuShrink", "BayesShrink"});
         String fonctionSeuillage = demanderChoix(scanner, "Choisissez la fonction de seuillage (Dur / Doux): ", new String[]{"Dur", "Doux"});
         boolean modeLocal = demanderBool(scanner, "Activer le mode local ? (true/false): ");
+        int taillePatch = 0;
+        int tailleFenetre = 0;
+        
+        if(modeLocal) {
+            taillePatch = demanderPatch(scanner, "Entrez la taille des patches (17, 21, 23): ", new int[]{17, 21, 23});
+            tailleFenetre = demanderEntier(scanner, "Entrez la taille de la fenêtre de recherche (doit être inférieure à "+Math.max(x0.getHauteur(), x0.getLargeur())/2+": ", Math.max(x0.getHauteur(), x0.getLargeur())/2);
+        }else {
+        	  taillePatch = demanderPatch(scanner, "Entrez la taille des patches (5, 7, 9): ", new int[]{5, 7, 9});
+        }
 
         // Création de l'objet ParametresDebruitage
         ParametresDebruitage params = new ParametresDebruitage(taillePatch, tailleFenetre, sigma, typeSeuil, fonctionSeuillage, modeLocal);
@@ -169,4 +207,53 @@ public class Application {
         System.out.println("Fonction de seuillage: " + params.getFonctionSeuillage());
         System.out.println("Mode local activé: " + (params.isModeLocal() ? "Oui" : "Non"));
     }
+    
+    /**
+     * Récupère tous les noms de fichiers d'images dans le dossier spécifié.
+     * @param folderPath Le chemin du dossier à parcourir
+     * @return Un tableau de String contenant les noms des fichiers (sans le chemin)
+     */
+    private static String[] listerFichiersImages(String folderPath) {
+        File folder = new File(folderPath);
+        
+        // Vérifier si le dossier existe et si c'est bien un dossier
+        if (!folder.exists() || !folder.isDirectory()) {
+            System.out.println("Erreur: Le dossier " + folderPath + " n'existe pas ou n'est pas un dossier.");
+            return new String[0];
+        }
+        
+        // Récupérer tous les fichiers du dossier
+        File[] files = folder.listFiles();
+        
+        if (files == null || files.length == 0) {
+            System.out.println("Aucun fichier trouvé dans le dossier " + folderPath);
+            return new String[0];
+        }
+        
+        // Filtrer pour ne garder que les fichiers (pas les sous-dossiers)
+        // et potentiellement uniquement les images (en fonction de l'extension)
+        List<String> imageNames = new ArrayList<>();
+        
+        for (File file : files) {
+            if (file.isFile()) {
+                
+                 String name = file.getName().toLowerCase();
+                 if (name.endsWith(".jpg") || name.endsWith(".jpeg") || 
+                     name.endsWith(".png") || name.endsWith(".gif") || 
+                     name.endsWith(".bmp") || name.endsWith(".tiff")) {
+                     imageNames.add(file.getName());
+                 }
+            }
+        }
+        
+        return imageNames.toArray(new String[0]);
+    }
+    
+    
+    
 }
+
+
+
+
+
