@@ -26,63 +26,102 @@ public class GestionnairePatchs {
      * @param recouvrement Niveau de recouvrement (1 = pas de recouvrement, 2 = 50%, 4 = 75%, etc.)
      * @return ResultatPatch contenant les patchs extraits et leurs positions
      */
-    public ResultatPatch extractPatchsAvecRecouvrement(Img Xs, int s, int recouvrement) {
-        Pixel[][] imgPixels = Xs.getPixels();
-        ResultatPatch resPatch = new ResultatPatch();
-        
-        // Calcul du pas selon le niveau de recouvrement
-        int pas = Math.max(1, s / recouvrement);
-        
-        for(int i = 0; i <= (imgPixels.length)-s; i = i + pas) {
-            for(int j = 0; j <= (imgPixels[0].length)-s; j = j + pas) {
-                Pixel[][] patchPixels = new Pixel[s][s];
-                Patch patch = new Patch(patchPixels);
-                for(int x = 0; x < s; x++) {
-                    for(int y = 0; y < s; y++) {
-                        patch.getPixels()[x][y] = imgPixels[i+x][j+y];
-                    }
-                }
-                resPatch.ajouterPatch(patch, new Position(i, j));
-            }
-        }
-        
-        return resPatch;
-    }
+	public ResultatPatch extractPatchsAvecRecouvrement(Img Xs, int s, int recouvrement) {
+	    Pixel[][] imgPixels = Xs.getPixels();
+	    ResultatPatch resPatch = new ResultatPatch();
+
+	    int h = imgPixels.length;
+	    int w = imgPixels[0].length;
+
+	    int pas = Math.max(1, s / recouvrement);
+
+	    for (int i = 0; i <= h - s; i += pas) {
+	        for (int j = 0; j <= w - s; j += pas) {
+	            ajouterPatch(resPatch, imgPixels, i, j, s);
+	        }
+	    }
+
+	    // 🔧 Couvrir la bordure inférieure si nécessaire
+	    if ((h - s) % pas != 0) {
+	        int i = h - s;
+	        for (int j = 0; j <= w - s; j += pas) {
+	            ajouterPatch(resPatch, imgPixels, i, j, s);
+	        }
+	    }
+
+	    // 🔧 Couvrir la bordure droite si nécessaire
+	    if ((w - s) % pas != 0) {
+	        int j = w - s;
+	        for (int i = 0; i <= h - s; i += pas) {
+	            ajouterPatch(resPatch, imgPixels, i, j, s);
+	        }
+	    }
+
+	    // 🔧 Coin inférieur droit (si nécessaire)
+	    if ((h - s) % pas != 0 && (w - s) % pas != 0) {
+	        ajouterPatch(resPatch, imgPixels, h - s, w - s, s);
+	    }
+
+	    return resPatch;
+	}
+
+	private void ajouterPatch(ResultatPatch resPatch, Pixel[][] imgPixels, int i, int j, int s) {
+	    Pixel[][] patchPixels = new Pixel[s][s];
+	    for (int x = 0; x < s; x++) {
+	        for (int y = 0; y < s; y++) {
+	            patchPixels[x][y] = imgPixels[i + x][j + y];
+	        }
+	    }
+	    Patch patch = new Patch(patchPixels);
+	    resPatch.ajouterPatch(patch, new Position(i, j));
+	}
+
 	
     public ResultatPatch extractPatchs(Img Xs, int s) {
         // Utiliser un recouvrement de 2 (50%) par défaut
         return extractPatchsAvecRecouvrement(Xs, s, 2);
     }
 
- 	public Img reconstructionPatchs(ResultatPatch yPatchs, int l, int c) {
- 		Pixel[][] imgReconstuitePixels = new Pixel[l][c];
- 		
- 		for (int i = 0; i < l; i++) {
- 		    for (int j = 0; j < c; j++) {
- 		    	imgReconstuitePixels[i][j] = new Pixel(0); // Valeur par défaut (noir)
- 		    }
- 		}
- 		
- 		 for(PairePatchPosition p : yPatchs) {
- 	        Position pPosition = p.getPosition();
- 	        Patch pPatch = p.getPatch();
- 	        
- 	        for (int i = 0; i < pPatch.getTaille(); i++) {
- 	            for (int j = 0; j < pPatch.getTaille(); j++) {
- 	                int posY = pPosition.getI() + i;
- 	                int posX = pPosition.getJ() + j;
- 	                
- 	                if (posY < l && posX < c) {
- 	                    imgReconstuitePixels[posY][posX] = pPatch.getPixels()[i][j];
- 	                }
- 	            }
- 	        }
- 	    }
- 		 
- 		Img imgReconstruite = new Img(imgReconstuitePixels);
-    	return imgReconstruite;
+    public Img reconstructionPatchs(ResultatPatch yPatchs, int l, int c, Img xB) {
+        double[][] sommePixels = new double[l][c];
+        int[][] compteur = new int[l][c];
 
+        for (PairePatchPosition p : yPatchs) {
+            Position pPosition = p.getPosition();
+            Patch pPatch = p.getPatch();
+
+            for (int i = 0; i < pPatch.getTaille(); i++) {
+                for (int j = 0; j < pPatch.getTaille(); j++) {
+                    int posY = pPosition.getI() + i;
+                    int posX = pPosition.getJ() + j;
+
+                    if (posY < l && posX < c) {
+                        double valPatch = pPatch.getPixels()[i][j].getValeur();
+                        valPatch = Math.min(240, Math.max(15, valPatch));
+                        sommePixels[posY][posX] += valPatch;
+                        compteur[posY][posX]++;
+                    }
+                }
+            }
+        }
+
+        Pixel[][] imgReconstitueePixels = new Pixel[l][c];
+        for (int i = 0; i < l; i++) {
+            for (int j = 0; j < c; j++) {
+                double val;
+                if (compteur[i][j] > 0) {
+                    val = (int) Math.round(sommePixels[i][j] / compteur[i][j]);
+                } else {
+                    val = xB.getPixel(i, j).getValeur();  // fallback si jamais couvert
+                	//val = 255;
+                }
+                imgReconstitueePixels[i][j] = new Pixel(val);
+            }
+        }
+
+        return new Img(imgReconstitueePixels);
     }
+
 
  	public ResultatVecteur vectorPatchs(ResultatPatch yPatchs) {
  		ResultatVecteur resVect = new ResultatVecteur();
@@ -107,7 +146,7 @@ public class GestionnairePatchs {
     	return resVect;
     }
     
- 	public List<Fenetre> decoupageImage(Img x, ParametresFenetre pF){
+public List<Fenetre> decoupageImage(Img x, ParametresFenetre pF){
  		
  		List<Fenetre> fenetresList = new ArrayList<Fenetre>();
  		
