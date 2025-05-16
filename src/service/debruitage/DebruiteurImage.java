@@ -75,9 +75,9 @@ public class DebruiteurImage {
         		ResultatVecteur resVecteur = this.gestionnairePatchs.vectorPatchs(resPatchs);
         		
         		// Traitement ACP + Seuillage 
-        		System.out.println("Début ACP");
-        		ResultatACP resACP= this.processeurACP.acp(resVecteur);
-        		System.out.println(resACP);
+        		//System.out.println("Début ACP");
+        		//ResultatACP resACP= this.processeurACP.acp(resVecteur);
+        		//System.out.println(resACP);
 //        		
 //
 //        		List<Vecteur> listeVecteurCoefs = this.processeurACP.proj(ResultatVecteur.transformerMatriceVecteursPropresEnResultatVecteur(resACP.getVecteursPropres()),resMoyCov.getVecteursCenters());
@@ -87,7 +87,7 @@ public class DebruiteurImage {
 //        		//ResultatPatch resPatchReconstruits= this.gestionnairePatchs.deVectorPatchs(resPatchs);
 
         		
-        		Fenetre nf = new Fenetre(this.gestionnairePatchs.reconstructionPatchs(resPatchs, f.getImage().getHauteur(), f.getImage().getLargeur()), f.getPosition());
+        		Fenetre nf = new Fenetre(this.gestionnairePatchs.reconstructionPatchs(resPatchs, f.getImage().getHauteur(), f.getImage().getLargeur(), xB), f.getPosition());
                 newFenetresList.add(nf);
     		}
     		
@@ -147,10 +147,9 @@ public class DebruiteurImage {
     		
     		// Traitement ACP + Seuillage 
     		
-            xR = this.gestionnairePatchs.reconstructionPatchs(resPatchs, xB.getHauteur(), xB.getLargeur());
+    		xR = this.gestionnairePatchs.reconstructionPatchs(resPatchs, xB.getHauteur(), xB.getLargeur(), xB);
 
     	}
-    	
     	
     	return xR;   	
     }
@@ -158,11 +157,11 @@ public class DebruiteurImage {
 
     public static void main(String[] args) throws IOException {
         String[] imageNames = {
-            "ali_gray.jpg"
+           "ali_gray.jpg"
 //            "crocodilo_gray.jpg",
 //            "darkvador_gray.jpg",
 //            "gekko_gray.jpg",
-//            "harrypotter_gray.png",
+//        	  "harrypotter_gray.png"
 //            "leclerc_gray.png",
 //            "lena_gray.png",
 //            "mbappe_gray.jpg",
