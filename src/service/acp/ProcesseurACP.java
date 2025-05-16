@@ -207,4 +207,34 @@ public class ProcesseurACP {
             this.second = second;
         }
     }
+    
+    /**
+     * @brief Reconstruit les vecteurs débruités dans l'espace original à partir des coefficients seuillés.
+     * @param alphaSeuil RésultatVecteur contenant les vecteurs de coefficients seuillés.
+     * @param U Matrice des vecteurs propres (colonnes).
+     * @param mV Vecteur moyen calculé lors de l'ACP.
+     * @return ResultatVecteur contenant les vecteurs reconstruits dans l'espace d'origine.
+     */
+    public ResultatVecteur reconstructionDepuisCoefficients(ResultatVecteur alphaSeuil, Matrice U, Vecteur mV) {
+        ResultatVecteur resultatReconstruit = new ResultatVecteur();
+        int s2 = U.getNbColonnes();
+
+        for (int k = 0; k < alphaSeuil.taille(); k++) {
+            double[] alpha_k = alphaSeuil.getVecteurs().get(k).getValeurs();
+            double[] reconstruit = new double[s2];
+
+            for (int i = 0; i < s2; i++) {
+                double somme = 0;
+                for (int j = 0; j < s2; j++) {
+                    somme += U.getValeur(i, j) * alpha_k[j];
+                }
+                reconstruit[i] = somme + mV.getValeur(i);
+            }
+
+            resultatReconstruit.ajouterVecteur(new model.base.Vecteur(reconstruit), alphaSeuil.getPositions().get(k));
+        }
+
+        return resultatReconstruit;
+    }
+
 }
