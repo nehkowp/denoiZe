@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.base.Img;
+import model.base.Matrice;
 import model.base.Pixel;
 import model.base.Position;
 import model.base.Vecteur;
@@ -18,26 +19,40 @@ import model.patch.ResultatVecteur;
 
 public class GestionnairePatchs {
 	
- 	public ResultatPatch extractPatchs(Img Xs, int s) {
- 		Pixel[][] imgPixels = Xs.getPixels();
- 		ResultatPatch resPatch = new ResultatPatch();
- 		
- 		
- 		for(int i = 0; i <= (imgPixels.length)-s; i = i + s) { // CHANGER i++ sinon trop de chevauchement + mauvaise perf$
- 			for(int j = 0; j <= (imgPixels[0].length)-s; j = j + s) {
- 				Pixel[][] patchPixels = new Pixel[s][s];
- 				Patch patch = new Patch(patchPixels);
- 				for(int x = 0; x < s; x++) {
- 		 			for(int y = 0; y < s; y++) {
- 		 				patch.getPixels()[x][y] = imgPixels[i+x][j+y];
- 		 			}
- 		 		}
- 				resPatch.ajouterPatch(patch,new Position(i, j));
- 	 		}
- 		}
- 		
- 		return resPatch;
- 	}
+	/**
+     * Extrait des patchs de l'image avec une option de recouvrement.
+     * @param Xs Image source
+     * @param s Taille des patchs 
+     * @param recouvrement Niveau de recouvrement (1 = pas de recouvrement, 2 = 50%, 4 = 75%, etc.)
+     * @return ResultatPatch contenant les patchs extraits et leurs positions
+     */
+    public ResultatPatch extractPatchsAvecRecouvrement(Img Xs, int s, int recouvrement) {
+        Pixel[][] imgPixels = Xs.getPixels();
+        ResultatPatch resPatch = new ResultatPatch();
+        
+        // Calcul du pas selon le niveau de recouvrement
+        int pas = Math.max(1, s / recouvrement);
+        
+        for(int i = 0; i <= (imgPixels.length)-s; i = i + pas) {
+            for(int j = 0; j <= (imgPixels[0].length)-s; j = j + pas) {
+                Pixel[][] patchPixels = new Pixel[s][s];
+                Patch patch = new Patch(patchPixels);
+                for(int x = 0; x < s; x++) {
+                    for(int y = 0; y < s; y++) {
+                        patch.getPixels()[x][y] = imgPixels[i+x][j+y];
+                    }
+                }
+                resPatch.ajouterPatch(patch, new Position(i, j));
+            }
+        }
+        
+        return resPatch;
+    }
+	
+    public ResultatPatch extractPatchs(Img Xs, int s) {
+        // Utiliser un recouvrement de 2 (50%) par défaut
+        return extractPatchsAvecRecouvrement(Xs, s, 2);
+    }
 
  	public Img reconstructionPatchs(ResultatPatch yPatchs, int l, int c) {
  		Pixel[][] imgReconstuitePixels = new Pixel[l][c];
@@ -160,6 +175,43 @@ public class GestionnairePatchs {
  		
 		return fenetresList;
 	}
+
+ 	public ResultatPatch transformerVecteursEnResultatPatch(ResultatVecteur vecteursReconstruits) {
+ 	    ResultatPatch resultatPatch = new ResultatPatch();
+ 	    int taillePatch = (int) Math.sqrt(vecteursReconstruits.getVecteurs().get(0).taille());
+
+ 	    for (int k = 0; k < vecteursReconstruits.taille(); k++) {
+ 	        double[] valeurs = vecteursReconstruits.getVecteurs().get(k).getValeurs();
+ 	        Pixel[][] patchPixels = new Pixel[taillePatch][taillePatch];
+
+ 	        for (int i = 0; i < taillePatch; i++) {
+ 	            for (int j = 0; j < taillePatch; j++) {
+ 	                int index = i * taillePatch + j;
+ 	                int valeur = (int) Math.min(255, Math.max(0, Math.round(valeurs[index])));
+ 	                patchPixels[i][j] = new Pixel(valeur);
+ 	            }
+ 	        }
+
+ 	        Patch patch = new Patch(patchPixels);
+ 	        resultatPatch.ajouterPatch(patch, vecteursReconstruits.getPositions().get(k));
+ 	    }
+
+ 	    return resultatPatch;
+ 	}
+
+ 	public ResultatVecteur matriceToResultatVecteur(Matrice matrice) {
+ 	    ResultatVecteur resultat = new ResultatVecteur();
+ 	    int nbColonnes = matrice.getNbColonnes();
+
+ 	    for (int j = 0; j < nbColonnes; j++) {
+ 	        double[] valeurs = new double[matrice.getNbLignes()];
+ 	        for (int i = 0; i < matrice.getNbLignes(); i++) {
+ 	            valeurs[i] = matrice.getValeur(i, j);
+ 	        }
+ 	        resultat.ajouterVecteur(new Vecteur(valeurs), null);  // position peut être null ici
+ 	    }
+ 	    return resultat;
+ 	}
 
 
 		

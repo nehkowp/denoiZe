@@ -7,6 +7,8 @@ package service.seuillage;
 
 import model.base.Img;
 import model.base.Matrice;
+import model.base.Vecteur;
+import model.patch.ResultatVecteur;
 
 /**
  * @class ProcesseurSeuillage
@@ -79,4 +81,39 @@ public class ProcesseurSeuillage {
         }
         return alpha;
     }
+    
+    public ResultatVecteur seuillage(ResultatVecteur alphaProj, String typeSeuil, String fonctionSeuillage, double sigma, Img xB, Matrice gamma) {
+        double lambda = 0.0;
+
+        // Calcul du seuil selon le type
+        if (typeSeuil.equalsIgnoreCase("VisuShrink")) {
+            lambda = seuilV(xB, sigma);
+        } else if (typeSeuil.equalsIgnoreCase("BayesShrink")) {
+            lambda = seuilB(xB, sigma, gamma);
+        } else {
+            throw new IllegalArgumentException("Type de seuil non reconnu : " + typeSeuil);
+        }
+
+        // Appliquer le seuillage sur tous les vecteurs alpha
+        ResultatVecteur resSeuil = new ResultatVecteur();
+
+        for (int i = 0; i < alphaProj.taille(); i++) {
+            double[] alphaValues = alphaProj.getVecteurs().get(i).getValeurs();
+
+            // Appliquer la fonction de seuillage choisie
+            if (fonctionSeuillage.equalsIgnoreCase("Dur")) {
+                alphaValues = seuillageDur(lambda, alphaValues.clone()); // clone pour ne pas modifier l'original
+            } else if (fonctionSeuillage.equalsIgnoreCase("Doux")) {
+                alphaValues = seuillageDoux(lambda, alphaValues.clone());
+            } else {
+                throw new IllegalArgumentException("Fonction de seuillage non reconnue : " + fonctionSeuillage);
+            }
+
+            // Ajout du vecteur seuillé dans le résultat
+            resSeuil.ajouterVecteur(new Vecteur(alphaValues), alphaProj.getPositions().get(i));
+        }
+
+        return resSeuil;
+    }
+
 }
