@@ -63,7 +63,7 @@ public class DebruiteurImage {
         
         // Étape 5: Seuillage des coefficients projetés
         ResultatVecteur vecteursSeuil = processeurSeuillage.seuillage(vecteursProjRV, typeSeuil, fonctionSeuillage, 
-                                                                    sigma, xB, resACP.getVecteursPropres());
+                                                                    sigma, xB, resMoyCov.getMatriceCovariance());
         
         // Étape 6: Reconstruction des vecteurs à partir de leurs coefficients seuillés
         ResultatVecteur vecteursReconstruits = processeurACP.reconstructionDepuisCoefficients(
@@ -126,7 +126,7 @@ public class DebruiteurImage {
             }
             
             ResultatVecteur vecteursSeuil = processeurSeuillage.seuillage(
-                vecteursProjRV, typeSeuil, fonctionSeuillage, sigma, f.getImage(), resACP.getVecteursPropres());
+                vecteursProjRV, typeSeuil, fonctionSeuillage, sigma, f.getImage(), resMoyCov.getMatriceCovariance());
             
             ResultatVecteur vecteursReconstruits = processeurACP.reconstructionDepuisCoefficients(
                 vecteursSeuil, resACP.getVecteursPropres(), resACP.getVecteurMoyen());
