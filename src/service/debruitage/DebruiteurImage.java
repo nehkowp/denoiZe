@@ -1,8 +1,5 @@
 package service.debruitage;
 
-import java.io.IOException;
-import java.util.Random;
-import java.util.ArrayList;
 import java.util.List;
 
 import model.acp.ResultatACP;
@@ -27,8 +24,6 @@ public class DebruiteurImage {
     private ProcesseurACP processeurACP;
     private ProcesseurSeuillage processeurSeuillage;
     private EvaluationrQualite evaluationQualite;
-    private final static int TAILLE_PATCH_GLOBAL = 7;
-    private final static int TAILLE_PATCH_LOCAL = 17;
     private final static int TAILLE_FENETRE_DEFAUT = 250;
 
     public DebruiteurImage() {
