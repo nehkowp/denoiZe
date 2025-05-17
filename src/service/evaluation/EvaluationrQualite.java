@@ -45,10 +45,12 @@ public class EvaluationrQualite {
      */
     public double psnr(Img X0, Img Xr) {
         double mse = mse(X0, Xr);
-        double inv_mse = 255 * 255 / mse; 
-        double psnr = 10 * Math.log10(inv_mse);
-        return psnr;
+        if (mse == 0) {
+            return Double.POSITIVE_INFINITY; // Images identiques
+        }
+        return 10 * Math.log10((255 * 255) / mse);
     }
+
 }
 
 
