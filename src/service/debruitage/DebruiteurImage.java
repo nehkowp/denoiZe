@@ -262,25 +262,7 @@ public class DebruiteurImage {
 		Img imgResult = modeLocal ? debruiterLocal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch)
 				: debruiterGlobal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch);
 
-		//Évaluer les résultats
-		double mseValue = evaluationQualite.mse(xB, imgResult);
-		double psnrValue = evaluationQualite.psnr(xB, imgResult);
-
-		System.out.println("\n📊 ÉVALUATION DE LA QUALITÉ 📊");
-		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-		System.out.println("📉 MSE  : " + String.format("%.2f", mseValue));
-		System.out.println("📈 PSNR : " + String.format("%.2f", psnrValue) + " dB");
-
-		if (psnrValue < 20) {
-			System.out.println("🔴 Qualité faible - Débruitage limité");
-		} else if (psnrValue < 25) {
-			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
-		} else if (psnrValue < 30) {
-			System.out.println("🟢 Bonne qualité - Débruitage efficace");
-		} else {
-			System.out.println("🔵 Excellente qualité - Débruitage optimal");
-		}
-		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+		
 
 		return imgResult;
 	}

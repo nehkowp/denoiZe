@@ -38,13 +38,22 @@ public class ProcesseurSeuillage {
      * @param gamma Matrice contenant des informations sur la covariance des coefficients.
      * @return La valeur du seuil calculée.
      */
-    public double seuilB(Img Xb , double sigma, Matrice gamma) {
-        double sigmaXb = gamma.SommeDiagonale();  //on recupere la variance de l'image Xb sans tout recalculé
-        double sigmaCarre = sigma * sigma;
-        double sigmaXbCarre = sigmaXb * sigmaXb;
-        double sigmaX = Math.max(0.001, Math.sqrt(Math.abs(sigmaXb - sigmaCarre)));
-        return sigmaCarre / (double) sigmaX;
+    public double seuilB(double[] alpha, double sigma) {
+        double varianceBruit = sigma * sigma;
+
+        double mean = 0.0;
+        for (double v : alpha) mean += v;
+        mean /= alpha.length;
+
+        double varY = 0.0;
+        for (double v : alpha) varY += (v - mean) * (v - mean);
+        varY /= alpha.length;
+
+        double varianceSignal = Math.max(varY - varianceBruit, 1e-6);
+
+        return varianceBruit / Math.sqrt(varianceSignal);
     }
+
     
 
     /**
@@ -90,41 +99,39 @@ public class ProcesseurSeuillage {
     }
     
     public ResultatVecteur seuillage(ResultatVecteur alphaProj, String typeSeuil, String fonctionSeuillage, double sigma, Img xB, Matrice gamma) {
-        double lambda = 0.0;
+        double lambdaGlobal = 0.0;
+        boolean isBayes = false;
 
-        // Calcul du seuil selon le type
         if (typeSeuil.equalsIgnoreCase("VisuShrink")) {
-            lambda = seuilV(xB, sigma);
-            System.out.println("💠 Seuillage VisuShrink: λ = " + String.format("%.4f", lambda));
+            lambdaGlobal = seuilV(xB, sigma);
+            System.out.println("💠 Seuillage VisuShrink: λ = " + String.format("%.4f", lambdaGlobal));
         } else if (typeSeuil.equalsIgnoreCase("BayesShrink")) {
-            lambda = seuilB(xB, sigma, gamma);
-            System.out.println("💠 Seuillage BayesShrink: λ = " + String.format("%.4f", lambda));
+            isBayes = true; // on utilisera seuilB(alpha_i, sigma) dans la boucle
+            System.out.println("💠 Seuillage BayesShrink adaptatif par vecteur");
         } else {
             throw new IllegalArgumentException("Type de seuil non reconnu : " + typeSeuil);
         }
 
-        // Appliquer le seuillage sur tous les vecteurs alpha
         ResultatVecteur resSeuil = new ResultatVecteur();
 
         for (int i = 0; i < alphaProj.taille(); i++) {
             double[] alphaValues = alphaProj.getVecteurs().get(i).getValeurs();
+            double lambda = isBayes ? seuilB(alphaValues, sigma) : lambdaGlobal;
 
-            // Appliquer la fonction de seuillage choisie
             if (fonctionSeuillage.equalsIgnoreCase("Dur")) {
-                alphaValues = seuillageDur(lambda, alphaValues.clone()); // clone pour ne pas modifier l'original
+                alphaValues = seuillageDur(lambda, alphaValues.clone());
             } else if (fonctionSeuillage.equalsIgnoreCase("Doux")) {
                 alphaValues = seuillageDoux(lambda, alphaValues.clone());
             } else {
                 throw new IllegalArgumentException("Fonction de seuillage non reconnue : " + fonctionSeuillage);
             }
 
-            // Ajout du vecteur seuillé dans le résultat
             resSeuil.ajouterVecteur(new Vecteur(alphaValues), alphaProj.getPositions().get(i));
         }
-        
 
         return resSeuil;
     }
+
 
    
     
