@@ -152,18 +152,6 @@ public class Application {
          Img xRLocal = dImg.imageDen(xB, "VisuShrink", "Doux", sigma, 7, true);
          xRLocal.saveImg("data/xR/local_" + imageName);
 
-         // Évaluation qualité GLOBAL
-         double mseGlobal = eval.mse(x0, xRGlobal);
-         double psnrGlobal = eval.psnr(x0, xRGlobal);
-
-         // Évaluation qualité LOCAL
-         double mseLocal = eval.mse(x0, xRLocal);
-         double psnrLocal = eval.psnr(x0, xRLocal);
-
-         // Affichage des résultats
-         System.out.println("===== Résultats Débruitage =====");
-         System.out.println("Global - MSE : " + mseGlobal + ", PSNR : " + psnrGlobal + " dB");
-         System.out.println("Local  - MSE : " + mseLocal + ", PSNR : " + psnrLocal + " dB");
          
     }
     

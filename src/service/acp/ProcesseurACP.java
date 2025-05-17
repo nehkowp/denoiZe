@@ -94,13 +94,11 @@ public class ProcesseurACP {
      * @return Un objet ResultatACP contenant les valeurs propres, les vecteurs propres et le vecteur moyen.
      */
     public ResultatACP acp(ResultatVecteur v) {
-    	System.out.println("1");
     	ResultatMoyCov res = moyCov(v);
         Vecteur mV = res.getVecteurMoyen();
         Matrice gamma = res.getMatriceCovariance();
 
         int s2 = mV.taille();
-        System.out.println("2");
         // Conversion de la matrice de covariance vers RealMatrix (Apache Commons Math)
         double[][] gammaData = new double[s2][s2];
         for (int i = 0; i < s2; i++) {
@@ -108,7 +106,6 @@ public class ProcesseurACP {
                 gammaData[i][j] = gamma.getValeur(i, j);
             }
         }
-        System.out.println("3");
         RealMatrix gammaMatrix = new Array2DRowRealMatrix(gammaData);
 
         // Décomposition pour obtenir valeurs propres et vecteurs propres
@@ -120,7 +117,6 @@ public class ProcesseurACP {
         
         // Tri des valeurs propres et réorganisation des vecteurs propres
         double[][] vecteursPropresData = new double[s2][s2];
-        System.out.println("4");
         // Créer des paires (valeur propre, indice) pour le tri
         ArrayList<Pair> pairs = new ArrayList<>();
         for (int i = 0; i < s2; i++) {
@@ -129,7 +125,6 @@ public class ProcesseurACP {
         
         // Tri par ordre décroissant des valeurs propres
         pairs.sort((a, b) -> -Double.compare((double)a.first, (double)b.first));
-        System.out.println("5");
         // Réorganisation des données
         double[] sortedEigenValues = new double[s2];
         for (int i = 0; i < s2; i++) {
@@ -142,7 +137,6 @@ public class ProcesseurACP {
                 vecteursPropresData[j][i] = vecteursPropresMatrix.getEntry(j, originalIndex);
             }
         }
-        System.out.println("6");
         Matrice vecteursPropres = new Matrice(vecteursPropresData);
 
         return new ResultatACP(sortedEigenValues, vecteursPropres, mV);
@@ -217,7 +211,6 @@ public class ProcesseurACP {
     public ResultatVecteur reconstructionDepuisCoefficients(ResultatVecteur alphaSeuil, Matrice U, Vecteur mV) {
         ResultatVecteur resultatReconstruit = new ResultatVecteur();
         int s2 = U.getNbColonnes();
-        System.out.println("POSITIONS DEBUG - reconstructionDepuisCoefficients:");
         for (int k = 0; k < alphaSeuil.taille(); k++) {
             double[] alpha_k = alphaSeuil.getVecteurs().get(k).getValeurs();
             double[] reconstruit = new double[s2];
@@ -229,7 +222,6 @@ public class ProcesseurACP {
                 }
                 reconstruit[i] = somme + mV.getValeur(i);
             }
-//            System.out.println("Position alphaSeuil[" + k + "]: (" + alphaSeuil.getPositions().get(k).getI() + "," + alphaSeuil.getPositions().get(k).getJ() + ")");
             resultatReconstruit.ajouterVecteur(new model.base.Vecteur(reconstruit), alphaSeuil.getPositions().get(k));
         }
 
