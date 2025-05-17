@@ -46,16 +46,6 @@ public class ProcesseurSeuillage {
         return sigmaCarre / (double) sigmaX;
     }
     
-    //@author Emma proposition de correction ???
-    /*public double seuilB(Img Xb, double sigma, Matrice gamma) {
-        double sigmaXb = gamma.SommeDiagonale() / gamma.getNbLignes();  // Variance moyenne des coefficients
-        double sigmaCarre = sigma * sigma;
-        
-        // S'assurer que la variance du signal est positive
-        double sigmaX = Math.max(0.001, Math.sqrt(Math.max(0, sigmaXb - sigmaCarre)));
-        
-        return sigmaCarre / sigmaX;
-    }*/
 
     /**
      * @brief Applique la fonction de seuillage dur sur un vecteur de coefficients.
@@ -105,8 +95,10 @@ public class ProcesseurSeuillage {
         // Calcul du seuil selon le type
         if (typeSeuil.equalsIgnoreCase("VisuShrink")) {
             lambda = seuilV(xB, sigma);
+            System.out.println("💠 Seuillage VisuShrink: λ = " + String.format("%.4f", lambda));
         } else if (typeSeuil.equalsIgnoreCase("BayesShrink")) {
             lambda = seuilB(xB, sigma, gamma);
+            System.out.println("💠 Seuillage BayesShrink: λ = " + String.format("%.4f", lambda));
         } else {
             throw new IllegalArgumentException("Type de seuil non reconnu : " + typeSeuil);
         }
@@ -129,8 +121,11 @@ public class ProcesseurSeuillage {
             // Ajout du vecteur seuillé dans le résultat
             resSeuil.ajouterVecteur(new Vecteur(alphaValues), alphaProj.getPositions().get(i));
         }
+        
 
         return resSeuil;
     }
 
+   
+    
 }
