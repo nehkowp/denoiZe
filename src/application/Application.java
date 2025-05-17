@@ -149,7 +149,7 @@ public class Application {
          xRGlobal.saveImg("data/xR/global_" + imageName);
 
          // Débruitage LOCAL
-         Img xRLocal = dImg.imageDen(xB, "VisuShrink", "Dur", sigma, 7, true);
+         Img xRLocal = dImg.imageDen(xB, "VisuShrink", "Doux", sigma, 7, true);
          xRLocal.saveImg("data/xR/local_" + imageName);
 
          // Évaluation qualité GLOBAL

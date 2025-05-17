@@ -155,44 +155,43 @@ public class ProcesseurACP {
      * @param Vc RésultatVecteur contenant les vecteurs centrés.
      * @return Liste des vecteurs alpha correspondant aux coefficients projetés.
      */
-    public List<Vecteur> proj(ResultatVecteur U, ResultatVecteur Vc) {
-        int s2 = Vc.getVecteurs().get(0).taille();
-        int M = Vc.taille();
-        
-        double[][] uData = new double[s2][s2];
-        double[][] vcData = new double[M][s2];
-        
-        for (int i = 0; i < s2; i++) {
-            Vecteur ui = U.getVecteurs().get(i);
-            for (int j = 0; j < s2; j++) {
-                uData[j][i] = ui.getValeur(j);
-            }
+   public ResultatVecteur proj(ResultatVecteur U, ResultatVecteur Vc) {
+    int s2 = Vc.getVecteurs().get(0).taille();
+    int M = Vc.taille();
+    
+    double[][] uData = new double[s2][s2];
+    double[][] vcData = new double[M][s2];
+    
+    for (int i = 0; i < s2; i++) {
+        Vecteur ui = U.getVecteurs().get(i);
+        for (int j = 0; j < s2; j++) {
+            uData[j][i] = ui.getValeur(j);
         }
-        
-        for (int i = 0; i < M; i++) {
-            Vecteur vci = Vc.getVecteurs().get(i);
-            for (int j = 0; j < s2; j++) {
-                vcData[i][j] = vci.getValeur(j);
-            }
-        }
-        
-        RealMatrix uMatrix = new Array2DRowRealMatrix(uData);
-        RealMatrix vcMatrix = new Array2DRowRealMatrix(vcData);
-        
-        RealMatrix projections = vcMatrix.multiply(uMatrix);
-        
-        List<Vecteur> alpha = new ArrayList<>();
-        for (int k = 0; k < M; k++) {
-            Vecteur alpha_k = new Vecteur(s2);
-            for (int i = 0; i < s2; i++) {
-                alpha_k.setValeur(i, projections.getEntry(k, i));
-            }
-            alpha.add(alpha_k);
-        }
-        
-        return alpha;
     }
     
+    for (int i = 0; i < M; i++) {
+        Vecteur vci = Vc.getVecteurs().get(i);
+        for (int j = 0; j < s2; j++) {
+            vcData[i][j] = vci.getValeur(j);
+        }
+    }
+    
+    RealMatrix uMatrix = new Array2DRowRealMatrix(uData);
+    RealMatrix vcMatrix = new Array2DRowRealMatrix(vcData);
+    
+    RealMatrix projections = vcMatrix.multiply(uMatrix);
+    
+    ResultatVecteur alpha = new ResultatVecteur();
+    for (int k = 0; k < M; k++) {
+        Vecteur alpha_k = new Vecteur(s2);
+        for (int i = 0; i < s2; i++) {
+            alpha_k.setValeur(i, projections.getEntry(k, i));
+        }
+        alpha.ajouterVecteur(alpha_k, Vc.getPositions().get(k));
+    }
+    
+    return alpha;
+}
     /**
      * @class Pair
      * @brief Classe utilitaire pour le tri des valeurs propres
@@ -218,7 +217,7 @@ public class ProcesseurACP {
     public ResultatVecteur reconstructionDepuisCoefficients(ResultatVecteur alphaSeuil, Matrice U, Vecteur mV) {
         ResultatVecteur resultatReconstruit = new ResultatVecteur();
         int s2 = U.getNbColonnes();
-
+        System.out.println("POSITIONS DEBUG - reconstructionDepuisCoefficients:");
         for (int k = 0; k < alphaSeuil.taille(); k++) {
             double[] alpha_k = alphaSeuil.getVecteurs().get(k).getValeurs();
             double[] reconstruit = new double[s2];
@@ -230,7 +229,7 @@ public class ProcesseurACP {
                 }
                 reconstruit[i] = somme + mV.getValeur(i);
             }
-
+//            System.out.println("Position alphaSeuil[" + k + "]: (" + alphaSeuil.getPositions().get(k).getI() + "," + alphaSeuil.getPositions().get(k).getJ() + ")");
             resultatReconstruit.ajouterVecteur(new model.base.Vecteur(reconstruit), alphaSeuil.getPositions().get(k));
         }
 
