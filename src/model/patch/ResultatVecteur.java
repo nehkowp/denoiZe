@@ -15,7 +15,7 @@ import model.base.Vecteur;
 /**
  * @class ResultatVecteur
  * @brief Gère une collection de vecteurs et leurs positions associées.
- * @author Emma
+ * @author Emma & Paul
  */
 public class ResultatVecteur {
 
@@ -25,7 +25,8 @@ public class ResultatVecteur {
     private List<Position> positions;
 
     /**
-     * @brief Constructeur par défaut. Initialise les listes de vecteurs et positions vides.
+     * @brief Constructeur par défaut. 
+     * Initialise les listes de vecteurs et positions vides.
      * @author Emma
      */
     public ResultatVecteur() {
@@ -33,12 +34,15 @@ public class ResultatVecteur {
         this.vecteurs = new ArrayList<>();
     }
     
+    /**
+     * @brief Constructeur avec liste de vecteurs uniquement.
+     * @param vecteurs Liste des vecteurs.
+     * @author Paul
+     */
     public ResultatVecteur(List<Vecteur> vecteurs) {
         this.positions = new ArrayList<>();
     	this.vecteurs = vecteurs;
     }
-    
-    
 
     /**
      * @brief Ajoute un vecteur et sa position associée.
@@ -103,17 +107,19 @@ public class ResultatVecteur {
         return matrice;
     }
     
+    /**
+     * @brief Transforme une matrice de vecteurs propres en un objet ResultatVecteur.
+     * @author Paul
+     * @param vecteursPropres Matrice contenant les vecteurs propres en colonnes.
+     * @return Un objet ResultatVecteur contenant tous les vecteurs de la matrice.
+     */
     public static ResultatVecteur transformerMatriceVecteursPropresEnResultatVecteur(Matrice vecteursPropres) {
         List<Vecteur> listeVecteurs = new ArrayList<>();
-        
-
         int nombreVecteurs = vecteursPropres.getNbColonnes();
         
         for (int i = 0; i < nombreVecteurs; i++) {
             double[] vecteurPropre = vecteursPropres.getColonne(i); 
-            
             Vecteur v = new Vecteur(vecteurPropre);
-            
             listeVecteurs.add(v);
         }
         

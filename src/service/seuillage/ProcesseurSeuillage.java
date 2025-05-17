@@ -13,7 +13,7 @@ import model.patch.ResultatVecteur;
 /**
  * @class ProcesseurSeuillage
  * @brief Fournit différentes méthodes pour calculer des seuils et appliquer des fonctions de seuillage.
- * @author Bastien
+ * @author Bastien & Emma
  */
 public class ProcesseurSeuillage {
 
@@ -98,6 +98,18 @@ public class ProcesseurSeuillage {
         return resultat;
     }
     
+    /**
+     * @brief Applique un seuillage (dur ou doux) sur les coefficients projetés.
+     * @author Emma
+     * @param alphaProj         Le résultat des projections (vecteurs de coefficients à seuiller).
+     * @param typeSeuil         Le type de seuil à utiliser : "VisuShrink" ou "BayesShrink".
+     * @param fonctionSeuillage La fonction de seuillage : "Dur" pour hard thresholding, "Doux" pour soft thresholding.
+     * @param sigma             L'écart-type du bruit estimé dans l'image.
+     * @param xB                L'image d'origine bruitée (peut servir pour estimer lambda).
+     * @param gamma             La matrice du dictionnaire utilisé pour la projection (non utilisé ici directement, mais potentiellement utile).
+     * @return                  Un nouvel objet ResultatVecteur contenant les vecteurs seuillés.
+     * @throws IllegalArgumentException Si le type de seuil ou la fonction de seuillage est invalide.
+     */
     public ResultatVecteur seuillage(ResultatVecteur alphaProj, String typeSeuil, String fonctionSeuillage, double sigma, Img xB, Matrice gamma) {
         double lambdaGlobal = 0.0;
         boolean isBayes = false;

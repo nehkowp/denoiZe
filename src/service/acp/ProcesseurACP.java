@@ -6,12 +6,9 @@
 package service.acp;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
-
 import model.acp.ResultatACP;
 import model.acp.ResultatMoyCov;
 import model.base.Matrice;
@@ -22,7 +19,7 @@ import model.patch.ResultatVecteur;
 /**
  * @class ProcesseurACP
  * @brief Fournit des méthodes pour calculer la moyenne, la covariance, appliquer l'ACP et projeter des vecteurs.
- * @author Lucas 
+ * @author Lucas & Emma
  */
 public class ProcesseurACP {
 
@@ -203,6 +200,7 @@ public class ProcesseurACP {
     
     /**
      * @brief Reconstruit les vecteurs débruités dans l'espace original à partir des coefficients seuillés.
+     * @author Emma
      * @param alphaSeuil RésultatVecteur contenant les vecteurs de coefficients seuillés.
      * @param U Matrice des vecteurs propres (colonnes).
      * @param mV Vecteur moyen calculé lors de l'ACP.

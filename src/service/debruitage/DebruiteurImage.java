@@ -1,14 +1,16 @@
+/**
+ * @file DebruiteurImage.java
+ * @brief Classe pour le débruitage d'images utilisant l'ACP et le seuillage.
+ */
 package service.debruitage;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import model.acp.ResultatACP;
 import model.acp.ResultatMoyCov;
 import model.base.Img;
 import model.base.Pixel;
 import model.base.Position;
-import model.base.Vecteur;
 import model.patch.Fenetre;
 import model.patch.ParametresFenetre;
 import model.patch.ResultatPatch;
@@ -16,28 +18,47 @@ import model.patch.ResultatPatch.PairePatchPosition;
 import model.patch.ResultatVecteur;
 import service.acp.ProcesseurACP;
 import service.bruit.BruiteurImage;
-import service.evaluation.EvaluationrQualite;
+import service.evaluation.EvaluationQualite;
 import service.patch.GestionnairePatchs;
 import service.seuillage.ProcesseurSeuillage;
 
+/**
+ * @class DebruiteurImage
+ * @brief Implémente le débruitage d'images par analyse en composantes principales et seuillage.
+ * @author Paul & Emma
+ */
 public class DebruiteurImage {
 
 	private BruiteurImage bruiteurImage;
 	private GestionnairePatchs gestionnairePatchs;
 	private ProcesseurACP processeurACP;
 	private ProcesseurSeuillage processeurSeuillage;
-	private EvaluationrQualite evaluationQualite;
+	private EvaluationQualite evaluationQualite;
 	private final static int TAILLE_FENETRE_DEFAUT = 250;
 
+	 /**
+     * @brief Constructeur initialisant les composants nécessaires au débruitage.
+     * @author Paul
+     */
 	public DebruiteurImage() {
 		this.bruiteurImage = new BruiteurImage();
 		this.gestionnairePatchs = new GestionnairePatchs();
 		this.processeurACP = new ProcesseurACP();
 		this.processeurSeuillage = new ProcesseurSeuillage();
-		this.evaluationQualite = new EvaluationrQualite();
+		this.evaluationQualite = new EvaluationQualite();
 
 	}
 
+	/**
+     * @brief Effectue le débruitage global sur l'image entière.
+     * @author Paul & Emma
+     * @param xB Image bruitée d'entrée.
+     * @param typeSeuil Type de seuillage ("VisuShrink" ou "BayesShrink").
+     * @param fonctionSeuillage Fonction de seuillage ("Dur" ou "Doux").
+     * @param sigma Écart-type estimé du bruit.
+     * @param taillePatch Taille des patchs pour l'analyse.
+     * @return Image débruitée après traitement global.
+     */
 	private Img debruiterGlobal(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch) {
 
 		System.out.println("📊 MODE GLOBAL - Traitement de l'image entière");
@@ -113,6 +134,16 @@ public class DebruiteurImage {
 		}
 	}
 
+	/**
+     * @brief Effectue le débruitage local en traitant l'image par fenêtres.
+     * @author Emma & Paul
+     * @param xB Image bruitée d'entrée.
+     * @param typeSeuil Type de seuillage ("VisuShrink" ou "BayesShrink").
+     * @param fonctionSeuillage Fonction de seuillage ("Dur" ou "Doux").
+     * @param sigma Écart-type estimé du bruit.
+     * @param taillePatch Taille des patchs pour l'analyse.
+     * @return Image débruitée après traitement local par fenêtres.
+     */
 	private Img debruiterLocal(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch) {
 
 		System.out.println("🧩 MODE LOCAL - Traitement par fenêtres");
@@ -237,17 +268,16 @@ public class DebruiteurImage {
 	}
 
 	/**
-	 * Fonction principal débruitage ACP + seuillage (mode global ou local) avec résultats.
-	 * 
-	 * @param xB                Image bruitée à débruiter
-	 * @param typeSeuil         Type de seuil ("VisuShrink" ou "BayesShrink")
-	 * @param fonctionSeuillage Fonction de seuillage ("Dur" ou "Doux")
-	 * @param sigma             Écart-type estimé du bruit
-	 * @param taillePatch       Taille des patchs pour l'analyse
-	 * @param modeLocal         Si true, traitement par fenêtres locales; sinon
-	 *                          traitement global
-	 * @return Image débruitée
-	 */
+     * @brief Méthode principale pour débruiter une image via ACP + seuillage.
+     * @author Paul & Emma
+     * @param xB Image bruitée à débruiter.
+     * @param typeSeuil Type de seuillage ("VisuShrink" ou "BayesShrink").
+     * @param fonctionSeuillage Fonction de seuillage ("Dur" ou "Doux").
+     * @param sigma Écart-type estimé du bruit.
+     * @param taillePatch Taille des patchs pour le traitement.
+     * @param modeLocal Si vrai, applique un traitement local par fenêtres, sinon global.
+     * @return Image débruitée.
+     */
 	public Img imageDen(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch,
 			boolean modeLocal) {
 		System.out.println("\n🔍 DÉMARRAGE DU DÉBRUITAGE D'IMAGE 🔍");
@@ -261,9 +291,6 @@ public class DebruiteurImage {
 
 		Img imgResult = modeLocal ? debruiterLocal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch)
 				: debruiterGlobal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch);
-
-		
-
 		return imgResult;
 	}
 

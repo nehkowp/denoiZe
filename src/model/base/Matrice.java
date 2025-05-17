@@ -84,7 +84,6 @@ public class Matrice {
     public int getNbColonnes() {
         return colonnes;
     }
-
     
     /**
      * @brief Récupère la colonne.
@@ -101,7 +100,6 @@ public class Matrice {
         
         return colonne;
     }
-    
     
     /**
      * @brief Multiplie cette matrice par une autre matrice.
