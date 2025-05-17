@@ -106,6 +106,18 @@ public class GestionnairePatchs {
 	    return new Patch(patchPixels);
 	}
 
+	// Méthode pour vérifier la couverture spatiale
+
+	private void ajouterPatch(ResultatPatch resPatch, Pixel[][] imgPixels, int i, int j, int s) {
+		    Pixel[][] patchPixels = new Pixel[s][s];
+		    for (int x = 0; x < s; x++) {
+		        for (int y = 0; y < s; y++) {
+		            patchPixels[x][y] = imgPixels[i + x][j + y];
+		        }
+		    }
+		    Patch patch = new Patch(patchPixels);
+		    resPatch.ajouterPatch(patch, new Position(i, j));
+		}
     /**
      * @brief Extrait des patchs avec un recouvrement par défaut de 50%.
      * @author Emma
@@ -201,36 +213,27 @@ public class GestionnairePatchs {
      * @return ResultatVecteur contenant les vecteurs associés aux positions.
      */
 	public ResultatVecteur vectorPatchs(ResultatPatch yPatchs) {
-	        ResultatVecteur resVect = new ResultatVecteur();
-	                
-	        // Crée un tableau pour visualiser les positions utilisées
-	        int[][] positionsMap = new int[512][512]; // Ajuster la taille selon votre image
-	        
-	        for(PairePatchPosition p : yPatchs) {
-	            Position pPosition = p.getPosition();
-	            Patch pPatch = p.getPatch();
-	            double[] valeurs = new double[pPatch.getTaille()*pPatch.getTaille()];
+	    ResultatVecteur resVect = new ResultatVecteur();
+
+	    for (PairePatchPosition p : yPatchs) {
+	        Position pPosition = p.getPosition();
+	        Patch pPatch = p.getPatch();
+	        if (pPosition != null) {
+	            double[] valeurs = new double[pPatch.getTaille() * pPatch.getTaille()];
 	            int pos = 0;
-	            
-	            // Déboguer les positions
-	            if (pPosition != null) {                
-	                // Marquer cette position sur notre carte
-	                positionsMap[pPosition.getI()][pPosition.getJ()]++;
-	                
-	                for(int x = 0; x < pPatch.getTaille(); x++) {
-	                    for(int y = 0; y < pPatch.getTaille(); y++) {
-	                        valeurs[pos] = pPatch.getPixels()[x][y].getValeur();
-	                        pos++;
-	                    }
+
+	            for (int x = 0; x < pPatch.getTaille(); x++) {
+	                for (int y = 0; y < pPatch.getTaille(); y++) {
+	                    valeurs[pos++] = pPatch.getPixels()[x][y].getValeur();
 	                }
-	                resVect.ajouterVecteur(new Vecteur(valeurs), pPosition);
-	            } else {
-	                System.err.println("ERREUR: Position de patch null!");
 	            }
+	            resVect.ajouterVecteur(new Vecteur(valeurs), pPosition);
 	        }
-	        
-	        return resVect;
 	    }
+
+	    return resVect;
+	}
+
     
     /**
      * @brief Découpe une image en fenêtres selon les paramètres spécifiés.
@@ -239,65 +242,53 @@ public class GestionnairePatchs {
      * @param pF Paramètres définissant la taille et le chevauchement des fenêtres.
      * @return Liste des fenêtres extraites.
      */
-	public List<Fenetre> decoupageImage(Img x, ParametresFenetre pF){
-	 	List<Fenetre> fenetresList = new ArrayList<Fenetre>();
-	 	
-			int chevauchementX = (int) Math.ceil(pF.getChevauchementCombineX() / (pF.getNombreFenetresX()-1));
-	 		int chevauchementY = (int) Math.ceil(pF.getChevauchementCombineY() / (pF.getNombreFenetresY()-1));
-	 		
-	 		int chevauchementXAcc = 0;
-	 		
-	 		int posX=0;
-	 		int posY=0;
-	 		
-	 	    int dernierePositionX = x.getLargeur() - pF.getTailleFenetreCalculee();
-	 	    int dernierePositionY = x.getHauteur() - pF.getTailleFenetreCalculee();
-	 	    
-	 		//indexFenetre commence à 1 /!\
-	 		for(int indexFenetreX = 0; indexFenetreX < pF.getNombreFenetresX(); indexFenetreX++) {
-				
-	 			
-	 			if(indexFenetreX+1 == pF.getNombreFenetresX() ){ // Si dernière fenêtre horizontale ajustez posX
-	 				posX = dernierePositionX;
-				}else{
-					posX = (pF.getTailleFenetreCalculee()*indexFenetreX+1)-chevauchementXAcc;
-				}
-	 				
-	 			int chevauchementYAcc = 0;
-					
-	 			for(int indexFenetreY = 0; indexFenetreY < pF.getNombreFenetresY(); indexFenetreY++) {
-	 				
-	 				if(indexFenetreY+1 == pF.getNombreFenetresY()){ // Si dernière fenêtre horizontale ajustez posY
-	 					posY = dernierePositionY;
-	 				}else{
-	 					posY = (pF.getTailleFenetreCalculee()*indexFenetreY+1)-chevauchementYAcc;
-	 				}
-	 				
-	 				Pixel[][] fPixels = new Pixel[pF.getTailleFenetreCalculee()][pF.getTailleFenetreCalculee()];
-	 				
-	 	     		for (int i = 0; i < pF.getTailleFenetreCalculee(); i++) {
-	 	     		    for (int j = 0; j < pF.getTailleFenetreCalculee(); j++) {
-	 	     		    	
-	 	     		    	fPixels[i][j] = x.getPixel(posY+i,posX+j);
-	 	     		    	fPixels[i][j].setNbChevauchement(fPixels[i][j].getNbChevauchement() + 1);
-	 	     		    	
-	 	     		    }
-	 	     		}
-	 				
-	 	     		Img fImage = new Img(fPixels);
-	 				Fenetre f = new Fenetre(fImage, new Position(posY,posX));
-	 				
-	 	     		chevauchementYAcc = chevauchementYAcc + chevauchementY;
-	 				
-	 				fenetresList.add(f);
-	 				
-	 			}
-		     	chevauchementXAcc = chevauchementXAcc + chevauchementX;
-	
-	 		}
+	public List<Fenetre> decoupageImage(Img x, ParametresFenetre pF) {
+	    List<Fenetre> fenetresList = new ArrayList<>();
 
-			return fenetresList;
-		}
+	    int tailleFenetre = pF.getTailleFenetreCalculee();
+	    int imgLargeur = x.getLargeur();
+	    int imgHauteur = x.getHauteur();
+
+	    int chevauchementX = (int) Math.ceil((double)pF.getChevauchementCombineX() / (pF.getNombreFenetresX() - 1));
+	    int chevauchementY = (int) Math.ceil((double)pF.getChevauchementCombineY() / (pF.getNombreFenetresY() - 1));
+
+	    int dernierePositionX = imgLargeur - tailleFenetre;
+	    int dernierePositionY = imgHauteur - tailleFenetre;
+
+	    for (int indexFenetreX = 0, chevauchementXAcc = 0; indexFenetreX < pF.getNombreFenetresX(); indexFenetreX++, chevauchementXAcc += chevauchementX) {
+	        int posX = (indexFenetreX + 1 == pF.getNombreFenetresX()) ? dernierePositionX : 
+	                   (tailleFenetre * indexFenetreX + 1) - chevauchementXAcc;
+
+	        // Sécurité sur les bornes
+	        if (posX < 0) posX = 0;
+	        if (posX + tailleFenetre > imgLargeur) continue;
+
+	        for (int indexFenetreY = 0, chevauchementYAcc = 0; indexFenetreY < pF.getNombreFenetresY(); indexFenetreY++, chevauchementYAcc += chevauchementY) {
+	            int posY = (indexFenetreY + 1 == pF.getNombreFenetresY()) ? dernierePositionY : 
+	                       (tailleFenetre * indexFenetreY + 1) - chevauchementYAcc;
+
+	            // Sécurité sur les bornes
+	            if (posY < 0) posY = 0;
+	            if (posY + tailleFenetre > imgHauteur) continue;
+
+	            Pixel[][] fPixels = new Pixel[tailleFenetre][tailleFenetre];
+	            for (int i = 0; i < tailleFenetre; i++) {
+	                for (int j = 0; j < tailleFenetre; j++) {
+	                    Pixel px = x.getPixel(posY + i, posX + j);
+	                    px.setNbChevauchement(px.getNbChevauchement() + 1);
+	                    fPixels[i][j] = px;
+	                }
+	            }
+
+	            Img fImage = new Img(fPixels);
+	            Fenetre f = new Fenetre(fImage, new Position(posY, posX));
+	            fenetresList.add(f);
+	        }
+	    }
+
+	    return fenetresList;
+	}
+
 
     /**
      * @brief Transforme un ResultatVecteur en ResultatPatch.

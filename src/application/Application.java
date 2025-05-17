@@ -33,10 +33,10 @@ public class Application {
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
           // Lancement Débruitage en mode de PROD
-//        	lancerModeConsole();
+        	lancerModeConsole();
             
         	// Lancement Débruitage en mode de TEST
-            lancerModeTest();
+            //lancerModeTest();
             
         } else {
             // Mode ligne de commande (avec arguments)
