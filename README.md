@@ -4,151 +4,193 @@
 
 Ce projet implémente une méthode de débruitage d'images basée sur l'Analyse en Composantes Principales (ACP). Cette approche utilise la décomposition en patchs et la projection dans un espace de dimension réduite pour éliminer le bruit gaussien additif.
 
+Développé dans le cadre d'une SAÉ (Situation d'Apprentissage et d'Évaluation) à CY Tech Pau par le Groupe 7 - ING1.
+
 ## Prérequis
 
-- Eclipse avec Maven
-- Git
-
-## Installation et configuration
-
-### 1. Cloner le projet Git
-
-```bash
-git clone https://github.com/nehkowp/denoiZe.git
-cd denoiZe
-```
-
-### 2. Importer le projet dans Eclipse
-
-1. Ouvrez Eclipse
-2. Allez dans `File > Import`
-3. Sélectionnez `Maven > Existing Maven Projects`
-4. Cliquez sur `Next`
-5. Naviguez jusqu'au dossier du projet que vous venez de cloner
-6. Assurez-vous que le fichier `pom.xml` est détecté et sélectionné
-7. Cliquez sur `Finish`
-
-### 3. Configuration Maven
-
-Le projet est configuré avec un fichier `pom.xml` qui définit les dépendances et la structure du projet. Si vous rencontrez des problèmes avec la configuration Maven, suivez ces étapes :
-
-1. Clic droit sur le projet > `Maven > Update Project...`
-2. Cochez l'option "Force Update of Snapshots/Releases"
-3. Cliquez sur `OK`
-
-Si vous voyez l'erreur "Cannot nest 'denoiZe/src/main/resources' inside 'denoiZe/src'", suivez ces étapes supplémentaires :
-
-1. Ouvrez le fichier `pom.xml`
-2. Vérifiez que la section `<build>` est correctement configurée comme ci-dessous :
-
-```xml
-<build>
-    <sourceDirectory>src</sourceDirectory>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
-            <configuration>
-                <source>17</source>
-                <target>17</target>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
-
-3. Sauvegardez le fichier et mettez à jour le projet Maven à nouveau
-
-### 4. Dépendances
-
-Le projet utilise la bibliothèque Apache Commons Math pour les calculs matriciels. Si cette dépendance n'est pas correctement chargée, vérifiez qu'elle est bien présente dans le fichier `pom.xml` :
-
-```xml
-<dependencies>
-    <!-- Dépendance pour Apache Commons Math -->
-    <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-math3</artifactId>
-        <version>3.6.1</version>
-    </dependency>
-</dependencies>
-```
-
-Si vous rencontrez une erreur `ClassNotFoundException` pour `org.apache.commons.math3.linear.RealMatrix`, essayez de nettoyer et reconstruire le projet :
-
-1. Projet > `Clean...`
-2. Clic droit sur le projet > `Maven > Clean`
-3. Clic droit sur le projet > `Maven > Install`
+- Java JDK 17 ou supérieur
+- Eclipse IDE (pour le build du .jar)
 
 ## Structure du projet
 
 ```
-debruitage-image-acp/
-├── src/
-│   ├── exception/
-│   │   ├── MatriceException.java
-│   │   └── VecteurException.java
-│   ├── model/
-│   │   ├── base/
-│   │   │   ├── Matrice.java
-│   │   │   ├── Vecteur.java
-│   │   │   └── Position.java
-│   │   └── resultat/
-│   │       ├── ResultatACP.java
-│   │       ├── ResultatMoyCov.java
-│   │       ├── ResultatPatch.java
-│   │       └── ResultatVecteur.java
-│   ├── service/
-│   │   ├── debruitage/
-│   │   │   └── DebruiteurImage.java
-│   │   ├── gestion/
-│   │   │   ├── GestionnaireImages.java
-│   │   │   └── GestionnairePatchs.java
-│   │   └── traitement/
-│   │       ├── ProcesseurACP.java
-│   │       └── ProcesseurBruit.java
-│   └── ui/
-│       └── InterfaceUtilisateur.java
+denoiZe/
+├── src/             # Code source
 ├── data/
-│   ├── images/
-│   │   ├── originales/
-│   │   └── bruitees/
-│   └── resultats/
-├── pom.xml
+│   ├── x0/          # Images originales
+│   ├── xB/          # Images bruitées (générées par le programme)
+│   └── xR/          # Images débruitées (résultats)
+├── denoize.jar      # Exécutable (généré à la compilation)
 └── README.md
 ```
 
-## Exécution du projet
+## Installation et compilation
 
-Pour exécuter le projet, localisez la classe principale `DebruiteurImage.java` ou `InterfaceUtilisateur.java` et exécutez-la comme une application Java :
+### Compilation avec Eclipse
 
-1. Clic droit sur la classe principale
-2. Sélectionnez `Run As > Java Application`
+1. **Cloner le projet**
+
+   ```bash
+   git clone https://github.com/nehkowp/denoiZe.git
+   ```
+
+2. **Importer dans Eclipse**
+
+   - Ouvrez Eclipse
+   - Allez dans `File > Import`
+   - Sélectionnez `Maven > Existing Maven Projects`
+   - Naviguez jusqu'au dossier cloné
+   - Sélectionnez le projet et cliquez sur `Finish`
+
+3. **Compiler et créer le JAR avec Eclipse**
+   - Clic droit sur le projet > `Run As > Maven Build...`
+   - Dans le champ `Goals`, saisissez `clean package`
+   - Cliquez sur `Run`
+   - Le fichier JAR sera généré à la racine du projet : `denoize.jar`
 
 ## Utilisation
 
-1. Chargez une image à débruiter
-2. Sélectionnez les paramètres de débruitage (taille des patchs, méthode de seuillage, etc.)
-3. Exécutez le processus de débruitage
-4. Visualisez et comparez les résultats
+DenoiZe propose un pipeline complet de traitement d'image qui:
+
+1. **Prend** une image originale (non bruitée)
+2. **Applique** un bruit gaussien à cette image
+3. **Débruite** l'image en utilisant l'ACP
+4. **Évalue** la qualité du débruitage (MSE, PSNR)
+
+### Préparation
+
+**Important**: Placez vos images originales dans le dossier `data/x0/`
+
+Les dossiers `data/xB/` (images bruitées) et `data/xR/` (images débruitées) seront créés automatiquement.
+
+### Mode console interactif (sans arguments)
+
+Double-cliquez sur le fichier JAR ou exécutez :
+
+```bash
+java -jar denoize.jar
+```
+
+L'application vous guidera à travers les étapes suivantes :
+
+1. Choix de l'image originale parmi celles présentes dans `data/x0/`
+2. Configuration des paramètres de bruitage et débruitage
+3. Exécution du processus
+4. Affichage des résultats d'évaluation
+
+### Mode ligne de commande (avec arguments)
+
+```bash
+java -jar denoize.jar [options]
+```
+
+Options disponibles :
+
+| Option                  | Format court    | Description                                                        | Statut                        |
+| ----------------------- | --------------- | ------------------------------------------------------------------ | ----------------------------- |
+| `--image <nom>`         | `-i <nom>`      | Nom de l'image (dans data/x0/)                                     | **Obligatoire**               |
+| `--global`              | `-g`            | Utilise la méthode de débruitage globale                           | _Facultatif_                  |
+| `--local`               | `-l`            | Utilise la méthode de débruitage locale                            | _Facultatif_ (défaut)         |
+| `--threshold <type>`    | `-t <type>`     | Type de seuillage: 'hard' ou 'soft'                                | _Facultatif_ (défaut: 'hard') |
+| `--shrink <type>`       | `-s <type>`     | Type de seuillage adaptatif: 'v' (VisuShrink) ou 'b' (BayesShrink) | _Facultatif_ (défaut: 'v')    |
+| `--sigma <valeur>`      | `-sig <valeur>` | Écart-type du bruit                                                | _Facultatif_ (défaut: 20.0)   |
+| `--patch-size <taille>` | `-p <taille>`   | Taille des patchs (entier impair)                                  | _Facultatif_ (défaut: 7)      |
+| `--help`                | `-h`            | Affiche l'aide de la commande                                      | _Facultatif_                  |
+
+### Exemples d'utilisation
+
+1. Débruiter une image avec les paramètres par défaut :
+
+   ```bash
+   java -jar denoize.jar --image lena.png
+   ```
+
+2. Débruiter avec la méthode globale et seuillage soft :
+
+   ```bash
+   java -jar denoize.jar -i lena.png -g -t soft
+   ```
+
+3. Paramètres personnalisés pour le bruit et les patchs :
+   ```bash
+   java -jar denoize.jar -i lena.png -sig 30 -p 9 -s b
+   ```
+
+## Méthodes de débruitage
+
+### Méthode globale
+
+- Analyse l'image entière avec une approche globale par ACP
+- Moins gourmande en calculs
+- Meilleure préservation des structures globales de l'image
+
+### Méthode locale
+
+- Analyse des patches locaux dans l'image
+- Plus précise pour préserver les détails
+- Plus gourmande en calculs
+
+## Types de seuillage
+
+### Dur (Hard)
+
+- Les composantes inférieures au seuil sont mises à zéro
+- Les autres restent inchangées
+
+### Doux (Soft)
+
+- Les composantes inférieures au seuil sont mises à zéro
+- Les autres sont réduites par la valeur du seuil
+
+## Types de seuillage adaptatif
+
+### VisuShrink (v)
+
+- Méthode basée sur le principe de réduction du bruit minimal
+- Seuil universel déterminé à partir de l'énergie estimée du bruit
+
+### BayesShrink (b)
+
+- Méthode basée sur l'estimation bayésienne
+- Généralement plus efficace pour les bruits variables
+
+## Évaluation de la qualité
+
+Le programme calcule deux métriques pour évaluer la qualité du débruitage :
+
+### MSE (Mean Square Error)
+
+- Mesure la différence moyenne des carrés des erreurs entre pixels
+- Plus la valeur est basse, plus les images sont similaires
+
+### PSNR (Peak Signal-to-Noise Ratio)
+
+- Évalue la qualité de reconstruction d'une image
+- Plus la valeur est élevée, meilleure est la qualité
+- Valeurs typiques : >30 dB (bon), >40 dB (excellent)
 
 ## Résolution des problèmes courants
 
-### Erreur "Cannot nest 'denoiZe/src/main/resources' inside 'denoiZe/src'"
+### Erreur "L'image n'existe pas dans le dossier data/x0"
 
-Cette erreur est liée à la structure du projet Maven. Elle peut être résolue en modifiant la configuration dans le fichier `pom.xml` comme indiqué dans la section "Configuration Maven".
+Vérifiez que vous avez bien placé votre image originale dans le dossier `data/x0/` et que le nom spécifié est correct, y compris l'extension du fichier (par exemple, `.png`, `.jpg`).
 
-### Erreur "NoClassDefFoundError: org/apache/commons/math3/linear/RealMatrix"
+### Messages "Aucun fichier trouvé dans le dossier data/x0"
 
-Cette erreur indique que la dépendance Apache Commons Math n'est pas correctement chargée. Suivez les étapes de la section "Dépendances" pour résoudre ce problème.
+Créez le dossier `data/x0/` à la racine du projet et placez-y au moins une image.
+
+### Problème de chemin lors de l'exécution du JAR
+
+Assurez-vous d'exécuter le JAR depuis la racine du projet, où se trouvent les dossiers `data` et `src`. En d'autres termes, le JAR et le dossier `data` doivent être au même niveau.
+
+## Membres du Groupe 7 - ING1 CY-Tech - 2024-2025
+
+- BRECHENMACHER Paul
+- CHAPUIS Lucas
+- DAVID Bastien
+- LESBARRERES Emma
+- POIRIER Alexis
 
 ---
 
-Groupe 7 - ING1 CY-Tech - 2024-2025
-
-BRECHENMACHER Paul
-CHAPUIS Lucas
-DAVID Bastien
-LESBARRERES Emma  
-POIRIER Alexis
+Ce projet utilise la bibliothèque Apache Commons Math pour les calculs matriciels.
