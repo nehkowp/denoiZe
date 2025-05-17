@@ -10,16 +10,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import model.base.Img;
 import service.bruit.BruiteurImage;
 import service.debruitage.DebruiteurImage;
-import service.evaluation.EvaluationrQualite;
+import service.evaluation.EvaluationQualite;
 
+/**
+ * @class Application
+ * @brief Classe principale pour le traitement d'images bruitées et leur débruitage.
+ * @author Paul & Emma
+ */
 public class Application {
     
 	 /**
-     * Méthode principale qui détermine le mode d'exécution en fonction des arguments.
+     * @brief Méthode principale qui détermine le mode d'exécution en fonction des arguments.
      * Sans arguments, lance le mode console interactif.
      * Avec arguments, traite la commande en ligne.
      * @author Paul
@@ -41,7 +45,8 @@ public class Application {
     }
     
     /**
-     * Lance l'application en mode console interactif.
+     * @brief Lance l'application en mode console interactif.
+     * @author Paul
      */
     private static void lancerModeConsole() {
         Scanner scanner = new Scanner(System.in);
@@ -112,7 +117,7 @@ public class Application {
             System.out.println("Image débruitée sauvegardée: " + outputImagePath);
             
             // Évaluation
-            EvaluationrQualite eval = new EvaluationrQualite();
+            EvaluationQualite eval = new EvaluationQualite();
             double mse = eval.mse(x0, xR);
             double psnr = eval.psnr(x0, xR);
             
@@ -141,13 +146,17 @@ public class Application {
         System.out.println("\nTraitement terminé.");
     }
     
-    
+    /**
+     * @brief Lance une exécution automatisée de test avec des paramètres prédéfinis.
+     * @author Paul
+     * @throws IOException En cas de problème lors de la lecture ou de l'écriture d'image
+     */
     private static void lancerModeTest() throws IOException {
     	 String imageName = "lena_gray.png";
          Img x0 = new Img("data/x0/" + imageName);
 
          DebruiteurImage dImg = new DebruiteurImage();
-         EvaluationrQualite eval = new EvaluationrQualite();
+         EvaluationQualite eval = new EvaluationQualite();
 
          // Niveau de bruit sigma
          double sigma = 20.0;
@@ -207,12 +216,11 @@ public class Application {
     
     
   
-   /**
-     * Traite les arguments de la ligne de commande pour effectuer le débruitage.
-     * 
-     * @param args Arguments de la ligne de commande
+    /**
+     * @brief Traite les arguments de la ligne de commande pour configurer un débruitage.
+     * @author Paul
+     * @param args Arguments en ligne de commande
      */
-    
     private static void traiterArgumentsCommande(String[] args) {
         // Paramètres par défaut
         String imageName = null;
@@ -383,7 +391,7 @@ public class Application {
             System.out.println("Image débruitée sauvegardée: " + outputImagePath);
             
             // Évaluation
-            EvaluationrQualite eval = new EvaluationrQualite();
+            EvaluationQualite eval = new EvaluationQualite();
             double mse = eval.mse(x0, xR);
             double psnr = eval.psnr(x0, xR);
             
@@ -408,8 +416,14 @@ public class Application {
             e.printStackTrace();
         }
     }
+    
     /**
-     * Demande à l'utilisateur la taille des patchs.
+     * @brief Demande à l'utilisateur de saisir une taille de patch parmi des options valides.
+     * @author Emma
+     * @param scanner Scanner actif
+     * @param message Message à afficher à l'utilisateur
+     * @param choixValides Tableau d'entiers représentant les tailles autorisées
+     * @return La taille choisie
      */
     private static int demanderPatch(Scanner scanner, String message, int[] choixValides) {
     	int choix;
@@ -426,7 +440,10 @@ public class Application {
     }
     
     /**
-     * Formate un tableau d'entiers en chaîne lisible pour l'affichage.
+     * @brief Formate un tableau d'entiers pour affichage en texte lisible.
+     * @author Paul
+     * @param options Tableau d'options
+     * @return Chaîne formatée des options
      */
     private static String formatOptionsValides(int[] options) {
         StringBuilder sb = new StringBuilder();
@@ -440,7 +457,12 @@ public class Application {
     }
     
     /**
-     * Demande à l'utilisateur un nombre réel strictement supérieur à minValue.
+     * @brief Demande un nombre réel supérieur à une valeur minimale.
+     * @author Emma
+     * @param scanner Scanner actif
+     * @param message Message à afficher
+     * @param minValue Valeur minimale 
+     * @return Valeur saisie par l'utilisateur
      */
     private static double demanderDouble(Scanner scanner, String message, double minValue) {
         double value = -1;
@@ -461,7 +483,12 @@ public class Application {
     }
 
     /**
-     * Demande à l'utilisateur un choix parmi une liste d'options valides.
+     * @brief Demande à l'utilisateur de choisir une option parmi des choix donnés.
+     * @author Emma
+     * @param scanner Scanner actif
+     * @param message Message à afficher
+     * @param choixValides Liste des chaînes valides
+     * @return Choix validé
      */
     private static String demanderChoix(Scanner scanner, String message, String[] choixValides) {
         String choix = "";
@@ -478,7 +505,11 @@ public class Application {
     }
 
     /**
-     * Demande à l'utilisateur de saisir un booléen ('true' ou 'false').
+     * @brief Demande un booléen à l'utilisateur (true/false).
+     * @author Emma
+     * @param scanner Scanner actif
+     * @param message Message à afficher
+     * @return Valeur booléenne saisie
      */
     private static boolean demanderBool(Scanner scanner, String message) {
         while (true) {
@@ -494,7 +525,11 @@ public class Application {
     }
     
     /**
-     * Récupère tous les noms de fichiers d'images dans le dossier spécifié.
+     * @brief Récupère tous les noms de fichiers d'images dans le dossier spécifié.
+     * @author Paul
+     * @param folderPath Le chemin absolu ou relatif vers le dossier contenant les fichiers.
+     * @return Un tableau de chaînes de caractères contenant les noms des fichiers image trouvés.
+     *         Retourne un tableau vide si le dossier est vide, invalide, ou ne contient aucune image.
      */
     private static String[] listerFichiersImages(String folderPath) {
         File folder = new File(folderPath);
@@ -531,7 +566,8 @@ public class Application {
     }
     
     /**
-     * Affiche l'aide pour l'utilisation en ligne de commande.
+     * @brief Affiche un message d'aide pour l'utilisation en ligne de commande.
+     * @author Paul
      */
     private static void afficherAide() {
         System.out.println("DenoiZe - Outil de débruitage d'images par ACP");

@@ -1,5 +1,5 @@
 /**
- * @file EvaluationrQualite.java
+ * @file EvaluationQualite.java
  * @brief Classe fournissant des méthodes pour évaluer la qualité d'une image reconstruite par rapport à l'originale.
  */
 
@@ -8,11 +8,11 @@ package service.evaluation;
 import model.base.Img;
 
 /**
- * @class EvaluationrQualite
+ * @class EvaluationQualite
  * @brief Contient des méthodes pour calculer des mesures de qualité d'image, telles que le MSE et le PSNR.
  * @author Bastien
  */
-public class EvaluationrQualite {
+public class EvaluationQualite {
 
     /**
      * @brief Calcule l'erreur quadratique moyenne (MSE) entre deux images.

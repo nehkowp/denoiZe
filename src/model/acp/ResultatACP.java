@@ -11,7 +11,7 @@ import model.base.Vecteur;
 /**
  * @class ResultatACP
  * @brief Contient les résultats d'une Analyse en Composantes Principales (ACP).
- * @author Emma
+ * @author Emma & Paul
  */
 public class ResultatACP {
 
