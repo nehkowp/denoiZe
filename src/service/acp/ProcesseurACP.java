@@ -220,7 +220,7 @@ public class ProcesseurACP {
                 }
                 reconstruit[i] = somme + mV.getValeur(i);
             }
-            resultatReconstruit.ajouterVecteur(new model.base.Vecteur(reconstruit), alphaSeuil.getPositions().get(k));
+            resultatReconstruit.ajouterVecteur(new Vecteur(reconstruit), alphaSeuil.getPositions().get(k));
         }
 
         return resultatReconstruit;
