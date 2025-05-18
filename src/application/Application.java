@@ -128,9 +128,9 @@ public class Application {
 
      		if (psnr < 20) {
      			System.out.println("🔴 Qualité faible - Débruitage limité");
-     		} else if (psnr < 25) {
-     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
      		} else if (psnr < 30) {
+     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+     		} else if (psnr < 40) {
      			System.out.println("🟢 Bonne qualité - Débruitage efficace");
      		} else {
      			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -180,9 +180,9 @@ public class Application {
 
  		if (psnrValue < 20) {
  			System.out.println("🔴 Qualité faible - Débruitage limité");
- 		} else if (psnrValue < 25) {
- 			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
  		} else if (psnrValue < 30) {
+ 			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+ 		} else if (psnrValue < 40) {
  			System.out.println("🟢 Bonne qualité - Débruitage efficace");
  		} else {
  			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -204,9 +204,9 @@ public class Application {
 
   		if (psnrValue < 20) {
   			System.out.println("🔴 Qualité faible - Débruitage limité");
-  		} else if (psnrValue < 25) {
-  			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
   		} else if (psnrValue < 30) {
+  			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+  		} else if (psnrValue < 40) {
   			System.out.println("🟢 Bonne qualité - Débruitage efficace");
   		} else {
   			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -402,9 +402,9 @@ public class Application {
 
      		if (psnr < 20) {
      			System.out.println("🔴 Qualité faible - Débruitage limité");
-     		} else if (psnr < 25) {
-     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
      		} else if (psnr < 30) {
+     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+     		} else if (psnr < 40) {
      			System.out.println("🟢 Bonne qualité - Débruitage efficace");
      		} else {
      			System.out.println("🔵 Excellente qualité - Débruitage optimal");
