@@ -128,9 +128,9 @@ public class Application {
 
      		if (psnr < 20) {
      			System.out.println("🔴 Qualité faible - Débruitage limité");
-     		} else if (psnr < 25) {
-     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
      		} else if (psnr < 30) {
+     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+     		} else if (psnr < 40) {
      			System.out.println("🟢 Bonne qualité - Débruitage efficace");
      		} else {
      			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -180,9 +180,9 @@ public class Application {
 
  		if (psnrValue < 20) {
  			System.out.println("🔴 Qualité faible - Débruitage limité");
- 		} else if (psnrValue < 25) {
- 			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
  		} else if (psnrValue < 30) {
+ 			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+ 		} else if (psnrValue < 40) {
  			System.out.println("🟢 Bonne qualité - Débruitage efficace");
  		} else {
  			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -204,9 +204,9 @@ public class Application {
 
   		if (psnrValue < 20) {
   			System.out.println("🔴 Qualité faible - Débruitage limité");
-  		} else if (psnrValue < 25) {
-  			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
   		} else if (psnrValue < 30) {
+  			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+  		} else if (psnrValue < 40) {
   			System.out.println("🟢 Bonne qualité - Débruitage efficace");
   		} else {
   			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -402,9 +402,9 @@ public class Application {
 
      		if (psnr < 20) {
      			System.out.println("🔴 Qualité faible - Débruitage limité");
-     		} else if (psnr < 25) {
-     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
      		} else if (psnr < 30) {
+     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+     		} else if (psnr < 40) {
      			System.out.println("🟢 Bonne qualité - Débruitage efficace");
      		} else {
      			System.out.println("🔵 Excellente qualité - Débruitage optimal");
@@ -584,13 +584,12 @@ public class Application {
         System.out.println("                            ('v' = VisuShrink, 'b' = BayesShrink)");
         System.out.println("  --sigma, -sig <valeur>    Écart-type du bruit                                [Défaut: 20.0]");
         System.out.println("  --patch-size, -p <taille> Taille des patchs (entier impair)                  [Défaut: 7]");
-        System.out.println("  --output, -o <chemin>     Chemin de destination pour l'image débruitée       [Facultatif]");
         System.out.println("  --help, -h                Affiche cette aide");
         System.out.println();
         System.out.println("Exemples:");
-        System.out.println("  java -jar denoize.jar -i lena.png");
-        System.out.println("  java -jar denoize.jar -i lena.png -g -t soft");
-        System.out.println("  java -jar denoize.jar -i lena.png -sig 30 -p 9 -s b");
+        System.out.println("  java -jar denoize.jar -i lena_gray.png");
+        System.out.println("  java -jar denoize.jar -i lena_gray.png -g -t soft");
+        System.out.println("  java -jar denoize.jar -i lena_gray.png -sig 30 -p 9 -s b");
         System.out.println();
         System.out.println("Sans arguments, le mode console interactif sera lancé.");
     }
