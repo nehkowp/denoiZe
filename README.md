@@ -102,18 +102,18 @@ Options disponibles :
 1. Débruiter une image avec les paramètres par défaut :
 
    ```bash
-   java -jar denoize.jar --image lena.png
+   java -jar denoize.jar --image lena_gray.png
    ```
 
 2. Débruiter avec la méthode globale et seuillage soft :
 
    ```bash
-   java -jar denoize.jar -i lena.png -g -t soft
+   java -jar denoize.jar -i lena_gray.png -g -t soft
    ```
 
 3. Paramètres personnalisés pour le bruit et les patchs :
    ```bash
-   java -jar denoize.jar -i lena.png -sig 30 -p 9 -s b
+   java -jar denoize.jar -i lena_gray.png -sig 30 -p 9 -s b
    ```
 
 ## Méthodes de débruitage

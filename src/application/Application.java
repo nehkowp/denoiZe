@@ -584,13 +584,12 @@ public class Application {
         System.out.println("                            ('v' = VisuShrink, 'b' = BayesShrink)");
         System.out.println("  --sigma, -sig <valeur>    Écart-type du bruit                                [Défaut: 20.0]");
         System.out.println("  --patch-size, -p <taille> Taille des patchs (entier impair)                  [Défaut: 7]");
-        System.out.println("  --output, -o <chemin>     Chemin de destination pour l'image débruitée       [Facultatif]");
         System.out.println("  --help, -h                Affiche cette aide");
         System.out.println();
         System.out.println("Exemples:");
-        System.out.println("  java -jar denoize.jar -i lena.png");
-        System.out.println("  java -jar denoize.jar -i lena.png -g -t soft");
-        System.out.println("  java -jar denoize.jar -i lena.png -sig 30 -p 9 -s b");
+        System.out.println("  java -jar denoize.jar -i lena_gray.png");
+        System.out.println("  java -jar denoize.jar -i lena_gray.png -g -t soft");
+        System.out.println("  java -jar denoize.jar -i lena_gray.png -sig 30 -p 9 -s b");
         System.out.println();
         System.out.println("Sans arguments, le mode console interactif sera lancé.");
     }
