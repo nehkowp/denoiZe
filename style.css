@@ -1,0 +1,136 @@
+.idBtnDenoize {
+	-fx-background-color: #21cc11;
+	-fx-text-fill: white; 
+	-fx-font-weight: bold;
+}
+
+.idBtnNoize {
+	-fx-background-color: #efd219;
+	-fx-text-fill: white; 
+	-fx-font-weight: bold;
+}
+
+.idBtnAddImage {
+	-fx-background-color: #0f9fe7;
+	-fx-text-fill: white; 
+	-fx-font-weight: bold;
+}
+
+.idSigmaSlider {
+	-fx-text-fill: white; /* Si ça ne marche pas */
+    -fx-fill: white;      /* Essayé aussi */
+    -fx-font-size: 14px;
+}
+
+/* STYLE POUR LA COMBOBOX "idComboMode" */
+
+.combo-box.idComboMode {
+    -fx-background-color: linear-gradient(#3a3a3a, #2a2a2a);
+    -fx-border-color: #00bcd4;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 6 12;
+}
+
+.combo-box.idComboMode .list-cell {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 6 10;
+}
+
+/* Flèche de droite */
+.combo-box.idComboMode .arrow {
+    -fx-background-color: white;
+}
+
+/* Menu déroulant */
+.combo-box-popup .list-view {
+    -fx-background-color: #2a2a2a;
+    -fx-control-inner-background: #2a2a2a;
+    -fx-padding: 2;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 1);
+}
+
+/* Options dans la liste */
+.combo-box-popup .list-cell {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 6 10;
+}
+
+/* Surlignage lors du survol */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #00bcd4;
+    -fx-text-fill: black;
+}
+
+.radio-button {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.radio-button .radio {
+    -fx-background-color: #2a2a2a;
+    -fx-border-color: #00bcd4;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-padding: 4;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: #00bcd4;
+    -fx-border-color: #00bcd4;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: black;
+}
+
+.text-field {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #bbbbbb;
+
+    -fx-border-color: #00bcd4;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 13px;
+}
+
+.slider {
+    -fx-padding: 10 0 10 0;
+}
+
+.slider .track {
+    -fx-background-color: #444;
+    -fx-background-radius: 5;
+    -fx-pref-height: 6;
+}
+
+.slider .thumb {
+    -fx-background-color: #00bcd4;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, #00bcd4, 5, 0.5, 0, 0);
+}
+
+.slider .thumb:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-cursor: hand;
+}
+
+.slider .tick-mark {
+    -fx-stroke: #888;
+}
+
+.slider .tick-label {
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+}
