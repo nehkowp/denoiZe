@@ -289,13 +289,13 @@ public class GUI extends Application {
 	                    }
 	                }
 	            } else {
-	                // Mode global : valeurs "5x5", "7x7", "9x9" à parser
+	                // Mode global : valeurs "19x19", "21x21", "23x23" 
 	                for (Node node : widgetsBox.getChildren()) {
 	                    if (node instanceof VBox) {
 	                        VBox vbox = (VBox) node;
 	                        for (Node rbNode : vbox.getChildren()) {
 	                            if (rbNode instanceof RadioButton rb && rb.isSelected()) {
-	                                String text = rb.getText(); // e.g. "5x5"
+	                                String text = rb.getText(); 
 	                                taillePatch = Integer.parseInt(text.split("x")[0]);
 	                            }
 	                        }
