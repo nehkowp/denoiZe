@@ -126,9 +126,9 @@ public class GUI extends Application {
 	            labelPatchs.setTextFill(Color.WHITE);
 
 	            ToggleGroup tgPatchsLocal = new ToggleGroup();
-	            RadioButton rb17 = new RadioButton("17");
-	            RadioButton rb21 = new RadioButton("21");
-	            RadioButton rb23 = new RadioButton("23");
+	            RadioButton rb17 = new RadioButton("5x5");
+	            RadioButton rb21 = new RadioButton("7x7");
+	            RadioButton rb23 = new RadioButton("9x9");
 	            rb17.setToggleGroup(tgPatchsLocal);
 	            rb21.setToggleGroup(tgPatchsLocal);
 	            rb23.setToggleGroup(tgPatchsLocal);
@@ -158,9 +158,9 @@ public class GUI extends Application {
 	            labelPatchGlobal.setTextFill(Color.WHITE);
 
 	            ToggleGroup tgPatchGlobal = new ToggleGroup();
-	            RadioButton rb5x5 = new RadioButton("5x5");
-	            RadioButton rb7x7 = new RadioButton("7x7");
-	            RadioButton rb9x9 = new RadioButton("9x9");
+	            RadioButton rb5x5 = new RadioButton("19x19");
+	            RadioButton rb7x7 = new RadioButton("21x21");
+	            RadioButton rb9x9 = new RadioButton("23x23");
 	            rb5x5.setToggleGroup(tgPatchGlobal);
 	            rb7x7.setToggleGroup(tgPatchGlobal);
 	            rb9x9.setToggleGroup(tgPatchGlobal);
