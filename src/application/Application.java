@@ -45,6 +45,35 @@ public class Application {
     }
     
     /**
+     * @brief Affiche les résultats de l’évaluation de la qualité d'une image débruitée par rapport à l’image originale.
+     * @author Emma
+     * @param x0 Image originale (référence)
+     * @param xR Image reconstruite ou débruitée
+     */
+    public static void afficherResultat(Img x0, Img xR) {
+    	// Évaluation
+        EvaluationQualite eval = new EvaluationQualite();
+        double mse = eval.mse(x0, xR);
+        double psnr = eval.psnr(x0, xR);
+        
+        System.out.println("\n📊 ÉVALUATION DE LA QUALITÉ 📊");
+ 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+ 		System.out.println("📉 MSE  : " + String.format("%.2f", mse));
+ 		System.out.println("📈 PSNR : " + String.format("%.2f", psnr) + " dB");
+
+ 		if (psnr < 20) {
+ 			System.out.println("🔴 Qualité faible - Débruitage limité");
+ 		} else if (psnr < 30) {
+ 			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
+ 		} else if (psnr < 40) {
+ 			System.out.println("🟢 Bonne qualité - Débruitage efficace");
+ 		} else {
+ 			System.out.println("🔵 Excellente qualité - Débruitage optimal");
+ 		}
+ 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    }
+    
+    /**
      * @brief Lance l'application en mode console interactif.
      * @author Paul
      */
@@ -117,25 +146,7 @@ public class Application {
             System.out.println("Image débruitée sauvegardée: " + outputImagePath);
             
             // Évaluation
-            EvaluationQualite eval = new EvaluationQualite();
-            double mse = eval.mse(x0, xR);
-            double psnr = eval.psnr(x0, xR);
-            
-            System.out.println("\n📊 ÉVALUATION DE LA QUALITÉ 📊");
-     		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-     		System.out.println("📉 MSE  : " + String.format("%.2f", mse));
-     		System.out.println("📈 PSNR : " + String.format("%.2f", psnr) + " dB");
-
-     		if (psnr < 20) {
-     			System.out.println("🔴 Qualité faible - Débruitage limité");
-     		} else if (psnr < 30) {
-     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
-     		} else if (psnr < 40) {
-     			System.out.println("🟢 Bonne qualité - Débruitage efficace");
-     		} else {
-     			System.out.println("🔵 Excellente qualité - Débruitage optimal");
-     		}
-     		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            afficherResultat(x0, xR);
             
         } catch (Exception e) {
             System.err.println("Erreur lors du traitement: " + e.getMessage());
@@ -169,49 +180,15 @@ public class Application {
          Img xRGlobal = dImg.imageDen(xB, "BayesShrink", "Doux", sigma, 7, false);
          xRGlobal.saveImg("data/xR/global_" + imageName);
          
-       //Évaluer les résultats
- 		double mseValue = eval.mse(x0, xRGlobal);
- 		double psnrValue = eval.psnr(x0, xRGlobal);
-
- 		System.out.println("\n📊 ÉVALUATION DE LA QUALITÉ 📊");
- 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
- 		System.out.println("📉 MSE  : " + String.format("%.2f", mseValue));
- 		System.out.println("📈 PSNR : " + String.format("%.2f", psnrValue) + " dB");
-
- 		if (psnrValue < 20) {
- 			System.out.println("🔴 Qualité faible - Débruitage limité");
- 		} else if (psnrValue < 30) {
- 			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
- 		} else if (psnrValue < 40) {
- 			System.out.println("🟢 Bonne qualité - Débruitage efficace");
- 		} else {
- 			System.out.println("🔵 Excellente qualité - Débruitage optimal");
- 		}
- 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+      // Évaluation
+         afficherResultat(x0, xRGlobal);
 
          // Débruitage LOCAL
          Img xRLocal = dImg.imageDen(xB, "BayesShrink", "Doux", sigma, 7, true);
          xRLocal.saveImg("data/xR/local_" + imageName);
 
-       //Évaluer les résultats
-  		mseValue = eval.mse(x0, xRLocal);
-  		psnrValue = eval.psnr(x0, xRLocal);
-
-  		System.out.println("\n📊 ÉVALUATION DE LA QUALITÉ 📊");
-  		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  		System.out.println("📉 MSE  : " + String.format("%.2f", mseValue));
-  		System.out.println("📈 PSNR : " + String.format("%.2f", psnrValue) + " dB");
-
-  		if (psnrValue < 20) {
-  			System.out.println("🔴 Qualité faible - Débruitage limité");
-  		} else if (psnrValue < 30) {
-  			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
-  		} else if (psnrValue < 40) {
-  			System.out.println("🟢 Bonne qualité - Débruitage efficace");
-  		} else {
-  			System.out.println("🔵 Excellente qualité - Débruitage optimal");
-  		}
-  		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+      // Évaluation
+         afficherResultat(x0, xRLocal);
     }
     
     
@@ -390,26 +367,8 @@ public class Application {
             xR.saveImg(outputImagePath);
             System.out.println("Image débruitée sauvegardée: " + outputImagePath);
             
-            // Évaluation
-            EvaluationQualite eval = new EvaluationQualite();
-            double mse = eval.mse(x0, xR);
-            double psnr = eval.psnr(x0, xR);
-            
-            System.out.println("\n📊 ÉVALUATION DE LA QUALITÉ 📊");
-     		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-     		System.out.println("📉 MSE  : " + String.format("%.2f", mse));
-     		System.out.println("📈 PSNR : " + String.format("%.2f", psnr) + " dB");
-
-     		if (psnr < 20) {
-     			System.out.println("🔴 Qualité faible - Débruitage limité");
-     		} else if (psnr < 30) {
-     			System.out.println("🟠 Qualité moyenne - Débruitage acceptable");
-     		} else if (psnr < 40) {
-     			System.out.println("🟢 Bonne qualité - Débruitage efficace");
-     		} else {
-     			System.out.println("🔵 Excellente qualité - Débruitage optimal");
-     		}
-     		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+         // Évaluation
+            afficherResultat(x0, xR);
             
         } catch (Exception e) {
             System.err.println("Erreur lors du traitement: " + e.getMessage());
