@@ -46,6 +46,12 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/css</directory>
+			</resource>
+		</resources>
+
 		<plugins>
 
 			<plugin>
