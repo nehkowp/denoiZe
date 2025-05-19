@@ -126,17 +126,17 @@ public class GUI extends Application {
 	            labelPatchs.setTextFill(Color.WHITE);
 
 	            ToggleGroup tgPatchsLocal = new ToggleGroup();
-	            RadioButton rb17 = new RadioButton("5x5");
+	            RadioButton rb19= new RadioButton("5x5");
 	            RadioButton rb21 = new RadioButton("7x7");
 	            RadioButton rb23 = new RadioButton("9x9");
-	            rb17.setToggleGroup(tgPatchsLocal);
+	            rb19.setToggleGroup(tgPatchsLocal);
 	            rb21.setToggleGroup(tgPatchsLocal);
 	            rb23.setToggleGroup(tgPatchsLocal);
-	            rb17.setTextFill(Color.WHITE);
+	            rb19.setTextFill(Color.WHITE);
 	            rb21.setTextFill(Color.WHITE);
 	            rb23.setTextFill(Color.WHITE);
 
-	            VBox radioPatchsBox = new VBox(5, rb17, rb21, rb23);
+	            VBox radioPatchsBox = new VBox(5, rb19, rb21, rb23);
 	            radioPatchsBox.setAlignment(Pos.CENTER_LEFT);
 
 	            // Label + TextField pour Taille Fenetre
@@ -158,17 +158,17 @@ public class GUI extends Application {
 	            labelPatchGlobal.setTextFill(Color.WHITE);
 
 	            ToggleGroup tgPatchGlobal = new ToggleGroup();
-	            RadioButton rb5x5 = new RadioButton("19x19");
-	            RadioButton rb7x7 = new RadioButton("21x21");
-	            RadioButton rb9x9 = new RadioButton("23x23");
-	            rb5x5.setToggleGroup(tgPatchGlobal);
-	            rb7x7.setToggleGroup(tgPatchGlobal);
-	            rb9x9.setToggleGroup(tgPatchGlobal);
-	            rb5x5.setTextFill(Color.WHITE);
-	            rb7x7.setTextFill(Color.WHITE);
-	            rb9x9.setTextFill(Color.WHITE);
+	            RadioButton rb19 = new RadioButton("19x19");
+	            RadioButton rb21 = new RadioButton("21x21");
+	            RadioButton rb23 = new RadioButton("23x23");
+	            rb19.setToggleGroup(tgPatchGlobal);
+	            rb21.setToggleGroup(tgPatchGlobal);
+	            rb23.setToggleGroup(tgPatchGlobal);
+	            rb19.setTextFill(Color.WHITE);
+	            rb21.setTextFill(Color.WHITE);
+	            rb23.setTextFill(Color.WHITE);
 
-	            VBox radioGlobalBox = new VBox(5, rb5x5, rb7x7, rb9x9);
+	            VBox radioGlobalBox = new VBox(5, rb19, rb21, rb23);
 	            radioGlobalBox.setAlignment(Pos.CENTER_LEFT);
 
 	            widgetsBox.getChildren().addAll(labelPatchGlobal, radioGlobalBox);
@@ -282,7 +282,8 @@ public class GUI extends Application {
 	                        VBox vbox = (VBox) node;
 	                        for (Node rbNode : vbox.getChildren()) {
 	                            if (rbNode instanceof RadioButton rb && rb.isSelected()) {
-	                                taillePatch = Integer.parseInt(rb.getText());
+	                                String text = rb.getText(); // e.g. "5x5"
+	                                taillePatch = Integer.parseInt(text.split("x")[0]);
 	                            }
 	                        }
 	                    }
