@@ -1,21 +1,24 @@
 package ui;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
-
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -73,6 +76,11 @@ public class GUI extends Application {
     private ToggleGroup tgPatchLocal;
     private ToggleGroup tgPatchGlobal;
     private double currentSigma = 10.0;
+    
+    //ProgresseBar 
+    private ProgressBar progressBar;
+    private Label progressLabel;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -101,7 +109,7 @@ public class GUI extends Application {
         
         // Déclencher l'action du ComboBox pour afficher les bons widgets dès le départ
         choixMode.getSelectionModel().selectFirst();
-        choixMode.fireEvent(new javafx.event.ActionEvent());
+        choixMode.fireEvent(new ActionEvent());
     }
 
     private GridPane createGridPane() {
@@ -109,6 +117,23 @@ public class GUI extends Application {
         grid.setHgap(15);
         grid.setVgap(15);
         grid.setAlignment(Pos.CENTER);
+        
+     // Barre de progression en haut
+        progressLabel = new Label("Débruitage en cours...");
+        progressLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        progressLabel.setVisible(false);
+
+        progressBar = new ProgressBar();
+        progressBar.setPrefWidth(400);
+        progressBar.setVisible(false);
+
+        // Conteneur horizontal
+        VBox progressBox = new VBox(5, progressLabel, progressBar);
+        progressBox.setAlignment(Pos.CENTER);
+
+        // Ajouter la barre de progression en haut du GridPane
+        grid.add(progressBox, 0, 0, 2, 1); // Colonne 0-1, ligne 0
+
         
         // Création des panneaux d'image
         originalImagePane = createImagePane("Image Originale");
@@ -137,10 +162,11 @@ public class GUI extends Application {
         denoisedImagePane.getChildren().add(denoisedImageView);
         
         // Placement dans la grille
-        grid.add(originalImagePane, 0, 0);
-        grid.add(denoisedImagePane, 1, 0);
-        grid.add(noisedImagePane, 0, 1);
-        grid.add(statsPane, 1, 1);
+        grid.add(originalImagePane, 0, 1);
+        grid.add(denoisedImagePane, 1, 1);
+        grid.add(noisedImagePane, 0, 2);
+        grid.add(statsPane, 1, 2);
+
         
         return grid;
     }
@@ -195,7 +221,7 @@ public class GUI extends Application {
         
         // Label en haut du panneau
         Label titleLabel = new Label("Analyse de la Qualité");
-        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-text-fill: #00bcd4; -fx-font-size: 16px; -fx-font-weight: bold;");
         titleLabel.setPadding(new Insets(10, 0, 0, 0));
         
         // Contenu initial
@@ -437,11 +463,11 @@ public class GUI extends Application {
                 Image image = new Image(file.toURI().toString());
                 originalImageView.setImage(image);
                 originalImg = imageToImg(image);
-                updatePanelStatus(originalImagePane, "Image originale chargée", true);
+                updatePanelStatus(originalImagePane, "", true);
                 
                 // Réinitialiser les autres panneaux
-                resetPanel(noisedImagePane, "Image bruitée");
-                resetPanel(denoisedImagePane, "Image débruitée");
+                resetPanel(noisedImagePane, "");
+                resetPanel(denoisedImagePane, "");
                 resetStatsPanel();
             }
         });
@@ -456,10 +482,10 @@ public class GUI extends Application {
                 // Affichage de l'image bruitée
                 Image noisedImageFX = imgToImage(noisedImg);
                 noisedImageView.setImage(noisedImageFX);
-                updatePanelStatus(noisedImagePane, "Image bruitée avec σ = " + (int)sigma, true);
+                updatePanelStatus(noisedImagePane, "", true);
                 
                 // Réinitialiser les panneaux suivants
-                resetPanel(denoisedImagePane, "Image débruitée");
+                resetPanel(denoisedImagePane, "");
                 resetStatsPanel();
             } else {
                 showAlert(stage, "Aucune image originale n'a été chargée.");
@@ -469,42 +495,68 @@ public class GUI extends Application {
         // Action pour débruiter l'image
         btnDenoize.setOnAction(e -> {
             if (noisedImageView.getImage() != null) {
-                // Récupération des paramètres
-                String typeSeuil = ((RadioButton) tgTypeSeuillage.getSelectedToggle()).getText();
-                String fonctionSeuillage = ((RadioButton) tgFonctionSeuillage.getSelectedToggle()).getText();
-                boolean modeLocal = "Local".equals(choixMode.getValue());
-                
-                // Taille du patch
-                int taillePatch = getPatchSize(modeLocal);
-                
-                // Débruitage
-                DebruiteurImage debruiteur = new DebruiteurImage();
-                try {
-                    denoisedImg = debruiteur.imageDen(
-                        noisedImg, 
-                        typeSeuil, 
-                        fonctionSeuillage, 
-                        currentSigma, 
-                        taillePatch, 
-                        modeLocal
-                    );
-                    
-                    // Affichage de l'image débruitée
-                    Image denoisedImageFX = imgToImage(denoisedImg);
-                    denoisedImageView.setImage(denoisedImageFX);
-                    updatePanelStatus(denoisedImagePane, "Image débruitée", true);
-                    
-                    // Mise à jour des statistiques
-                    updateStatsPanel();
-                    
-                } catch (Exception ex) {
-                    showAlert(stage, "Erreur lors du débruitage: " + ex.getMessage());
-                    ex.printStackTrace();
-                }
+                // Afficher la barre de progression
+                progressBar.setVisible(true);
+                progressLabel.setVisible(true);
+                progressBar.setProgress(-1); // indéterminé (spinner style)
+
+                Task<Void> task = new Task<>() {
+                    @Override
+                    protected Void call() {
+                        try {
+                            // Récupération des paramètres
+                            String typeSeuil = ((RadioButton) tgTypeSeuillage.getSelectedToggle()).getText();
+                            String fonctionSeuillage = ((RadioButton) tgFonctionSeuillage.getSelectedToggle()).getText();
+                            boolean modeLocal = "Local".equals(choixMode.getValue());
+                            int taillePatch = getPatchSize(modeLocal);
+
+                            DebruiteurImage debruiteur = new DebruiteurImage();
+                            denoisedImg = debruiteur.imageDen(
+                                noisedImg, 
+                                typeSeuil, 
+                                fonctionSeuillage, 
+                                currentSigma, 
+                                taillePatch, 
+                                modeLocal
+                            );
+                        } catch (Exception ex) {
+                            Platform.runLater(() -> showAlert(stage, "Erreur lors du débruitage: " + ex.getMessage()));
+                            ex.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        Platform.runLater(() -> {
+                            Image denoisedImageFX = imgToImage(denoisedImg);
+                            denoisedImageView.setImage(denoisedImageFX);
+                            updatePanelStatus(denoisedImagePane, "", true);
+                            updateStatsPanel();
+
+                            progressBar.setVisible(false);
+                            progressLabel.setVisible(false);
+                        });
+                    }
+
+                    @Override
+                    protected void failed() {
+                        Platform.runLater(() -> {
+                            progressBar.setVisible(false);
+                            progressLabel.setVisible(false);
+                            showAlert(stage, "Le débruitage a échoué.");
+                        });
+                    }
+                };
+
+                // Lancer le thread
+                new Thread(task).start();
+
             } else {
                 showAlert(stage, "Veuillez d'abord bruiter l'image originale.");
             }
         });
+
     }
     
     private int getPatchSize(boolean modeLocal) {
@@ -524,37 +576,64 @@ public class GUI extends Application {
     }
     
     private void updatePanelStatus(StackPane panel, String status, boolean success) {
-        // Supprimer le placeholder et le message de statut s'ils existent
-        panel.getChildren().removeIf(node -> 
-            node instanceof Rectangle || 
-            (node instanceof Label && ((Label)node).getText().contains("Aucune") || ((Label)node).getText().contains("Image")));
-        
-        // Ajouter un nouveau message de statut
+        // Supprimer placeholder et anciens statuts
+        panel.getChildren().removeIf(node ->
+            node instanceof Rectangle ||
+            (node instanceof Label && (
+                ((Label) node).getText().contains("Aucune") ||
+                ((Label) node).getText().contains("Image") ||
+                ((Label) node).getText().contains("En attente...")
+            ))
+        );
+
+        // Ajouter le nouveau message
         Label statusLabel = new Label(status);
         statusLabel.setStyle("-fx-text-fill: " + (success ? "#4CAF50" : "#F44336") + "; -fx-font-size: 12px;");
         panel.getChildren().add(statusLabel);
         StackPane.setAlignment(statusLabel, Pos.BOTTOM_CENTER);
         StackPane.setMargin(statusLabel, new Insets(0, 0, 5, 0));
     }
+
     
     private void resetPanel(StackPane panel, String title) {
-        // Conserver uniquement le titre
         Label titleLabel = (Label) panel.getChildren().get(0);
-        panel.getChildren().clear();
-        panel.getChildren().add(titleLabel);
-        
-        // Ajouter un placeholder
+
+        // Retrouver l'ImageView déjà présent
+        ImageView imageView = null;
+        for (javafx.scene.Node node : panel.getChildren()) {
+            if (node instanceof ImageView) {
+                imageView = (ImageView) node;
+                break;
+            }
+        }
+
+        if (imageView != null) {
+            imageView.setImage(null); // vide l'image mais conserve le node
+        }
+
+        // Nettoyer tous les éléments sauf le titre et l’image
+        panel.getChildren().removeIf(node ->
+            !(node instanceof Label && node == titleLabel) &&
+            !(node instanceof ImageView)
+        );
+
+        // Ajouter placeholder
         Rectangle placeholder = new Rectangle(250, 250);
         placeholder.setFill(Color.web("#2A2A2A"));
         placeholder.setArcWidth(20);
         placeholder.setArcHeight(20);
         panel.getChildren().add(placeholder);
-        
-        // Ajouter un message de statut
+
+        // Message de statut
         Label statusLabel = new Label("En attente...");
         statusLabel.setStyle("-fx-text-fill: #AAAAAA; -fx-font-size: 14px;");
         panel.getChildren().add(statusLabel);
+        StackPane.setAlignment(statusLabel, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(statusLabel, new Insets(0, 0, 5, 0));
     }
+
+
+
     
     private void resetStatsPanel() {
         // Conserver uniquement le titre
@@ -590,10 +669,6 @@ public class GUI extends Application {
             statsContent.setAlignment(Pos.CENTER);
             statsContent.setPadding(new Insets(20));
             
-            // Titre
-            Label titleStats = new Label("Résultats de l'Évaluation");
-            titleStats.setStyle("-fx-text-fill: #00bcd4; -fx-font-size: 16px; -fx-font-weight: bold;");
-            
             // MSE
             HBox mseBox = createStatsRow("MSE", df.format(mse), 
                     "Erreur Quadratique Moyenne\nPlus la valeur est petite, meilleur est le débruitage");
@@ -627,7 +702,7 @@ public class GUI extends Application {
             paramsBox.getChildren().addAll(paramsTitle, sigmaValue, modeValue, patchValue, seuilValue, fonctionValue);
             
             // Assemblage
-            statsContent.getChildren().addAll(titleStats, mseBox, psnrBox, paramsBox);
+            statsContent.getChildren().addAll(mseBox, psnrBox, paramsBox);
             
             // Mise à jour du panneau de statistiques
             statsPane.getChildren().clear();
@@ -646,24 +721,13 @@ public class GUI extends Application {
         Label valueLabel = new Label(value);
         valueLabel.setStyle("-fx-text-fill: #00bcd4; -fx-font-size: 16px; -fx-font-weight: bold;");
         
-        // Icône d'info-bulle
-        Label infoIcon = new Label(" ⓘ ");
-        infoIcon.setStyle("-fx-text-fill: #AAAAAA; -fx-font-size: 14px; -fx-cursor: hand;");
-        
         // Info-bulle personnalisée
         VBox tooltipContent = new VBox(5);
         Label tooltipLabel = new Label(tooltip);
         tooltipLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-wrap-text: true;");
         tooltipContent.getChildren().add(tooltipLabel);
         
-        // Action au survol
-        infoIcon.setOnMouseEntered(e -> {
-            javafx.scene.control.Tooltip tip = new javafx.scene.control.Tooltip(tooltip);
-            tip.setStyle("-fx-font-size: 12px; -fx-background-color: #333333;");
-            javafx.scene.control.Tooltip.install(infoIcon, tip);
-        });
-        
-        row.getChildren().addAll(titleLabel, valueLabel, infoIcon);
+        row.getChildren().addAll(titleLabel, valueLabel);
         HBox.setHgrow(valueLabel, Priority.ALWAYS);
         
         return row;
