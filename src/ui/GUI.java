@@ -18,7 +18,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -452,25 +451,29 @@ public class GUI extends Application {
     
     private void setupButtonActions(Button btnAddImage, Button btnNoize, Button btnDenoize, Stage stage) {
         // Action pour ajouter une image
-        btnAddImage.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Choisir une image");
-            fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.bmp")
-            );
-            File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-                Image image = new Image(file.toURI().toString());
-                originalImageView.setImage(image);
-                originalImg = imageToImg(image);
-                updatePanelStatus(originalImagePane, "", true);
-                
-                // Réinitialiser les autres panneaux
-                resetPanel(noisedImagePane, "");
-                resetPanel(denoisedImagePane, "");
-                resetStatsPanel();
-            }
-        });
+    	btnAddImage.setOnAction(e -> {
+    	    FileChooser fileChooser = new FileChooser();
+    	    fileChooser.setTitle("Choisir une image");
+    	    fileChooser.getExtensionFilters().addAll(
+    	        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.bmp")
+    	    );
+    	    File file = fileChooser.showOpenDialog(stage);
+    	    if (file != null) {
+    	        // Reset avant toute chose
+    	        noisedImageView.setImage(null);
+    	        denoisedImageView.setImage(null);
+    	        resetPanel(noisedImagePane, "");
+    	        resetPanel(denoisedImagePane, "");
+    	        resetStatsPanel();
+
+    	        // Forcer le chargement de l’image en mode synchrone
+    	        Image image = new Image(file.toURI().toString());
+    	        originalImageView.setImage(image);
+    	        originalImg = imageToImg(image);
+    	        updatePanelStatus(originalImagePane, "", true);
+    	    }
+    	});
+
 
         // Action pour bruiter l'image
         btnNoize.setOnAction(e -> {
@@ -596,45 +599,47 @@ public class GUI extends Application {
 
     
     private void resetPanel(StackPane panel, String title) {
-        Label titleLabel = (Label) panel.getChildren().get(0);
-
-        // Retrouver l'ImageView déjà présent
+        // Nettoyer le contenu existant sauf l’ImageView et le Slider
         ImageView imageView = null;
-        for (javafx.scene.Node node : panel.getChildren()) {
+        Slider zoomSlider = null;
+
+        for (Node node : panel.getChildren()) {
             if (node instanceof ImageView) {
                 imageView = (ImageView) node;
-                break;
+            } else if (node instanceof Slider) {
+                zoomSlider = (Slider) node;
             }
         }
 
         if (imageView != null) {
-            imageView.setImage(null); // vide l'image mais conserve le node
+            imageView.setImage(null);
         }
 
-        // Nettoyer tous les éléments sauf le titre et l’image
+        // Supprime tous les autres enfants sauf ImageView et Slider
         panel.getChildren().removeIf(node ->
-            !(node instanceof Label && node == titleLabel) &&
-            !(node instanceof ImageView)
+            !(node instanceof ImageView || node instanceof Slider)
         );
 
-        // Ajouter placeholder
+        // Placeholder
         Rectangle placeholder = new Rectangle(250, 250);
         placeholder.setFill(Color.web("#2A2A2A"));
         placeholder.setArcWidth(20);
         placeholder.setArcHeight(20);
         panel.getChildren().add(placeholder);
 
-        // Message de statut
+        // Label de statut
         Label statusLabel = new Label("En attente...");
         statusLabel.setStyle("-fx-text-fill: #AAAAAA; -fx-font-size: 14px;");
-        panel.getChildren().add(statusLabel);
         StackPane.setAlignment(statusLabel, Pos.BOTTOM_CENTER);
         StackPane.setMargin(statusLabel, new Insets(0, 0, 5, 0));
+        panel.getChildren().add(statusLabel);
+
+        // Cacher le slider s’il existe
+        if (zoomSlider != null) {
+            zoomSlider.setVisible(false);
+        }
     }
 
-
-
-    
     private void resetStatsPanel() {
         // Conserver uniquement le titre
         Label titleLabel = (Label) statsPane.getChildren().get(0);
