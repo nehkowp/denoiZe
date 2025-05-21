@@ -115,9 +115,9 @@ public class Application {
         int taillePatch = 0;
         
         if(modeLocal) {
-            taillePatch = demanderPatch(scanner, "Entrez la taille des patches (17, 21, 23): ", new int[]{17, 21, 23});
+            taillePatch = demanderPatch(scanner, "Entrez la taille des patches (5, 7, 9) : ", new int[]{5, 7, 9});
         } else {
-            taillePatch = demanderPatch(scanner, "Entrez la taille des patches (5, 7, 9): ", new int[]{5, 7, 9});
+            taillePatch = demanderPatch(scanner, "Entrez la taille des patches (17, 21, 23): ", new int[]{17, 21, 23});
         }
 
         // Processus de débruitage
