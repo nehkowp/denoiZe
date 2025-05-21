@@ -130,7 +130,7 @@ public class Application {
             Img xB = BruiteurImage.noising(x0, sigma);
             
             String bruitedImagePath = "data/xB/" + imageName;
-            xB.saveImg(bruitedImagePath);
+            xB.saveImg(bruitedImagePath,x0.isEstRGB());
             System.out.println("Image bruitée sauvegardée: " + bruitedImagePath);
             
             // Débruitage
@@ -142,7 +142,7 @@ public class Application {
             
             String methodName = modeLocal ? "local" : "global";
             String outputImagePath = "data/xR/" + methodName + "_" + imageName;
-            xR.saveImg(outputImagePath);
+            xR.saveImg(outputImagePath,x0.isEstRGB());
             System.out.println("Image débruitée sauvegardée: " + outputImagePath);
             
             // Évaluation
@@ -167,25 +167,24 @@ public class Application {
          Img x0 = new Img("data/x0/" + imageName);
 
          DebruiteurImage dImg = new DebruiteurImage();
-         EvaluationQualite eval = new EvaluationQualite();
 
          // Niveau de bruit sigma
          double sigma = 20.0;
 
          // Bruitage synthétique
          Img xB = BruiteurImage.noising(x0, sigma);
-         xB.saveImg("data/xB/" + imageName);
+         xB.saveImg("data/xB/" + imageName,x0.isEstRGB());
 
          // Débruitage GLOBAL
          Img xRGlobal = dImg.imageDen(xB, "BayesShrink", "Doux", sigma, 7, false);
-         xRGlobal.saveImg("data/xR/global_" + imageName);
+         xRGlobal.saveImg("data/xR/global_" + imageName, x0.isEstRGB());
          
       // Évaluation
          afficherResultat(x0, xRGlobal);
 
          // Débruitage LOCAL
          Img xRLocal = dImg.imageDen(xB, "BayesShrink", "Doux", sigma, 7, true);
-         xRLocal.saveImg("data/xR/local_" + imageName);
+         xRLocal.saveImg("data/xR/local_" + imageName,x0.isEstRGB());
 
       // Évaluation
          afficherResultat(x0, xRLocal);
@@ -339,7 +338,7 @@ public class Application {
             Img xB = BruiteurImage.noising(x0, sigma);
             
             String bruitedImagePath = "data/xB/" + imageName;
-            xB.saveImg(bruitedImagePath);
+            xB.saveImg(bruitedImagePath,x0.isEstRGB());
             System.out.println("Image bruitée sauvegardée: " + bruitedImagePath);
             
             // Débruitage
@@ -364,7 +363,7 @@ public class Application {
             String extension = (dotIndex != -1) ? imageName.substring(dotIndex) : ".png";
             
             String outputImagePath = "data/xR/" + baseName + "_" + methodName + "_" + threshold + "_" + shrink + extension;
-            xR.saveImg(outputImagePath);
+            xR.saveImg(outputImagePath,x0.isEstRGB());
             System.out.println("Image débruitée sauvegardée: " + outputImagePath);
             
          // Évaluation

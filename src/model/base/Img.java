@@ -18,6 +18,8 @@ import javax.imageio.ImageIO;
  */
 public class Img {
 
+	//true si l'image est en couleur , false si byte_gray 
+	private boolean estRGB;
     //Largeur de l'image (nombre de colonnes de pixels)
     private int largeur;
     //Hauteur de l'image (nombre de lignes de pixels)
@@ -38,11 +40,27 @@ public class Img {
         this.pixels = new Pixel[hauteur][largeur];
 
         WritableRaster raster = image.getRaster();
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
-                pixels[i][j] = new Pixel(raster.getSampleDouble(j, i, 0));
+        if (image.getType() == BufferedImage.TYPE_BYTE_GRAY) {
+        	this.estRGB =false;
+        	for (int i = 0; i < hauteur; i++) {
+                for (int j = 0; j < largeur; j++) {
+                    pixels[i][j] = new Pixel(raster.getSampleDouble(j, i, 0));
+                }
             }
+        }else {
+        	this.estRGB =true;
+        	for (int i = 0; i < hauteur; i++) {
+                for (int j = 0; j < largeur; j++) {
+                    double r = (raster.getSampleDouble(j, i, 0));
+                    double g = (raster.getSampleDouble(j, i, 1));
+                    double b = (raster.getSampleDouble(j, i, 2));
+                    pixels[i][j] = new Pixel(r,g,b); 
+                }
+            }
+        	
         }
+        
+        
     }
 
     /**
@@ -50,7 +68,8 @@ public class Img {
      * @author Paul & Alexis
      * @param generatedPixels Matrice de pixels représentant l'image.
      */
-    public Img(Pixel generatedPixels[][]) {
+    public Img(Pixel generatedPixels[][], boolean estRGB) {
+    	this.estRGB = estRGB;
         this.hauteur = generatedPixels.length;
         this.largeur = generatedPixels[0].length;
         this.pixels = new Pixel[hauteur][largeur];
@@ -117,7 +136,7 @@ public class Img {
      * @return Une copie de l'image actuelle.
      */
     public Img clone() {
-        return new Img(this.getPixels());
+        return new Img(this.getPixels(),this.estRGB);
     }
 
     /**
@@ -126,18 +145,42 @@ public class Img {
      * @param filename Chemin du fichier de sortie (incluant l'extension).
      * @throws IOException En cas d'erreur d'écriture du fichier.
      */
-    public void saveImg(String filename) throws IOException {
-        BufferedImage image = new BufferedImage(this.largeur, this.hauteur, BufferedImage.TYPE_BYTE_GRAY);
+    public void saveImg(String filename, boolean estRGB) throws IOException {
+    	
+    	if(estRGB) {
+    		BufferedImage image = new BufferedImage(this.largeur, this.hauteur, BufferedImage.TYPE_INT_RGB);
+    		
+	        for (int i = 0; i < this.hauteur; i++) {
+	            for (int j = 0; j < this.largeur; j++) {
+	                double[] rgb = this.getPixel(i, j).getValeurs();
+	                image.getRaster().setSample(j, i, 0, Math.max(0, Math.min(Math.round(rgb[0]),255)));
+	                image.getRaster().setSample(j, i, 1, Math.max(0, Math.min(Math.round(rgb[1]),255)));
+	                image.getRaster().setSample(j, i, 2, Math.max(0, Math.min(Math.round(rgb[2]),255)));
+	            }
+	        }
 
-        for (int i = 0; i < this.hauteur; i++) {
-            for (int j = 0; j < this.largeur; j++) {
-                int pixelValue = (int) Math.min(255, Math.max(0, Math.round(this.getPixel(i, j).getValeur())));
-                image.getRaster().setSample(j, i, 0, pixelValue);
-            }
-        }
+	        String format = filename.substring(filename.lastIndexOf('.') + 1);
+	        ImageIO.write(image, format, new File(filename));
+	        
+    	}else {
+    		 BufferedImage image = new BufferedImage(this.largeur, this.hauteur, BufferedImage.TYPE_BYTE_GRAY);
 
-        String format = filename.substring(filename.lastIndexOf('.') + 1);
-        ImageIO.write(image, format, new File(filename));
+    	        for (int i = 0; i < this.hauteur; i++) {
+    	            for (int j = 0; j < this.largeur; j++) {
+    	                int pixelValue = (int) Math.min(255, Math.max(0, Math.round(this.getPixel(i, j).getValeur())));
+    	                image.getRaster().setSample(j, i, 0, pixelValue);
+    	            }
+    	        }
+
+    	        String format = filename.substring(filename.lastIndexOf('.') + 1);
+    	        ImageIO.write(image, format, new File(filename));
+    	}
+       
     }
+
+	public boolean isEstRGB() {
+		return estRGB;
+	}
+
 }
 
