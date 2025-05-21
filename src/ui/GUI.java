@@ -52,8 +52,7 @@ import service.evaluation.EvaluationQualite;
  * @brief Interface graphique principale de l'application de traitement d'images.
  * @author Emma & Alexis
  */
-public class GUI extends Application {
-    
+public class GUI extends Application {    
     // Images
     private ImageView imageOriginale;
     private ImageView imageBruitee;
