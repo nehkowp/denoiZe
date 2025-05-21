@@ -1,3 +1,8 @@
+/**
+ * @file GUI.java
+ * @brief Interface graphique principale de l'application de traitement d'images.
+ */
+
 package ui;
 
 import java.io.File;
@@ -42,6 +47,11 @@ import service.bruit.BruiteurImage;
 import service.debruitage.DebruiteurImage;
 import service.evaluation.EvaluationQualite;
 
+/**
+ * @class GUI
+ * @brief Interface graphique principale de l'application de traitement d'images.
+ * @author Emma & Alexis
+ */
 public class GUI extends Application {
     
     // Images
