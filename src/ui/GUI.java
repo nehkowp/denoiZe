@@ -20,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -39,6 +40,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.base.Img;
@@ -54,9 +56,14 @@ import service.evaluation.EvaluationQualite;
  */
 public class GUI extends Application {    
     // Images
-    private ImageView imageOriginale;
-    private ImageView imageBruitee;
-    private ImageView imageDebruitee;
+	private ImageView vueImageOriginale;
+	private ImageView vueImageBruitee;
+	private ImageView vueImageDebruitee;
+	
+	// Conteneurs zoomable
+	private ScrollPane panneauZoomOriginale;
+	private ScrollPane panneauZoomBruitee;
+	private ScrollPane panneauZoomDebruitee;
     
     // Conteneurs des images
     private StackPane panneauImageOriginale;
@@ -96,7 +103,7 @@ public class GUI extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Denoiℤe - Débruitage d'images par ACP");
 
-        BorderPane mainLayout = new BorderPane(); // votre interface
+        BorderPane mainLayout = new BorderPane(); 
         
         mainLayout.setStyle("-fx-background-color: #121212;");
         mainLayout.setPrefSize(1400, 900);
@@ -134,8 +141,8 @@ public class GUI extends Application {
         grille.setHgap(15);
         grille.setVgap(15);
         grille.setAlignment(Pos.CENTER);
-        
-        // Barre de progression en haut
+
+        // Barre de progression
         progressLabel = new Label("Débruitage en cours...");
         progressLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
         progressLabel.setVisible(false);
@@ -144,47 +151,58 @@ public class GUI extends Application {
         progressBar.setPrefWidth(400);
         progressBar.setVisible(false);
 
-        // Conteneur horizontal
         VBox progressBox = new VBox(5, progressLabel, progressBar);
         progressBox.setAlignment(Pos.CENTER);
-
-        // Ajouter la barre de progression en haut du GridPane
         grille.add(progressBox, 0, 0, 2, 1);
 
-        // Création des panneaux d'image
+        // Panneaux statiques
         panneauImageOriginale = creerImagePane("Image Originale");
         panneauImageBruitee = creerImagePane("Image Bruitée");
         panneauImageDebruitee = creerImagePane("Image Débruitée");
         panneauStatistiques = creerPanneauStatistiques();
-        
-        // Récupération des labels pour les modifier plus tard
         labelStats = (Label) panneauStatistiques.getChildren().get(0);
-        
-        // Configuration des ImageViews
-        imageOriginale = new ImageView();
-        imageBruitee = new ImageView();
-        imageDebruitee = new ImageView();
-        
-        configureImageView(imageOriginale);
-        configureImageView(imageBruitee);
-        configureImageView(imageDebruitee);
-        
-        // Ajout des ImageViews aux panneaux
-        panneauImageOriginale.getChildren().add(imageOriginale);
-        panneauImageBruitee.getChildren().add(imageBruitee);
-        panneauImageDebruitee.getChildren().add(imageDebruitee);
-        
-        // Placement dans la grille
-        grille.add(panneauImageOriginale, 0, 1);
-        grille.add(panneauImageDebruitee, 1, 1);
-        grille.add(panneauImageBruitee, 0, 2);
+
+        // ImageView
+        vueImageOriginale = new ImageView();
+        vueImageBruitee = new ImageView();
+        vueImageDebruitee = new ImageView();
+
+        configureImageView(vueImageOriginale);
+        configureImageView(vueImageBruitee);
+        configureImageView(vueImageDebruitee);
+
+        // Ajout panneau image originale 
+        if (vueImageOriginale.getImage() != null) {
+            panneauZoomOriginale = creerPanneauImageZoomable(vueImageOriginale);
+            grille.add(panneauZoomOriginale, 0, 1);
+        } else {
+            grille.add(panneauImageOriginale, 0, 1);
+        }
+
+        // Ajout panneau image bruitée 
+        if (vueImageBruitee.getImage() != null) {
+            panneauZoomBruitee = creerPanneauImageZoomable(vueImageBruitee);
+            grille.add(panneauZoomBruitee, 0, 2);
+        } else {
+            grille.add(panneauImageBruitee, 0, 2);
+        }
+
+        // Ajout panneau image débruitée 
+        if (vueImageDebruitee.getImage() != null) {
+            panneauZoomDebruitee = creerPanneauImageZoomable(vueImageDebruitee);
+            grille.add(panneauZoomDebruitee, 1, 1);
+        } else {
+            grille.add(panneauImageDebruitee, 1, 1);
+        }
+
+        // Ajout panneau statistiques
         grille.add(panneauStatistiques, 1, 2);
-  
+
         return grille;
     }
 
     /**
-     * @brief Configure une vue d’image avec des dimensions, un lissage et un positionnement adaptés à l'affichage.
+     * @brief Configure une vue d'image avec des dimensions, un lissage et un positionnement adaptés à l'affichage.
      * @author Alexis
      * @param imageView L'objet ImageView à configurer.
      */
@@ -200,7 +218,7 @@ public class GUI extends Application {
     }
     
     /**
-     * @brief Crée un panneau d’image stylisé avec un titre, un espace pour l’image et un message de statut.
+     * @brief Crée un panneau d'image stylisé avec un titre, un espace pour l'image et un message de statut.
      * @author Alexis
      * @param titre Le titre à afficher en haut du panneau.
      * @return Un StackPane prêt à afficher une image.
@@ -272,8 +290,8 @@ public class GUI extends Application {
     /**
      * @brief Crée le panneau latéral contenant les paramètres et actions de débruitage.
      * @author Alexis
-     * @param stage La fenêtre principale JavaFX, utilisée pour certaines actions comme l'import d’image.
-     * @return Un VBox prêt à être intégré à l’interface.
+     * @param stage La fenêtre principale JavaFX, utilisée pour certaines actions comme l'import d'image.
+     * @return Un VBox prêt à être intégré à l'interface.
      */
     private VBox creerParamPane(Stage stage) {
         VBox conteneur = new VBox(15);
@@ -309,7 +327,7 @@ public class GUI extends Application {
         boutonDebruiter.setMaxWidth(Double.MAX_VALUE);
         
         // Actions des boutons
-        setupButtonActions(boutonAjouterImage, boutonBruiter, boutonDebruiter, stage);
+        configurerActionsDesBoutons(boutonAjouterImage, boutonBruiter, boutonDebruiter, stage);
         
         // Assemblage
         conteneur.getChildren().addAll(
@@ -505,8 +523,8 @@ public class GUI extends Application {
      * @param boutonDebruiter Bouton pour lancer le débruitage de l'image bruitée.
      * @param stage La fenêtre principale de l'application, utilisée pour les dialogues et alertes.
      */
-    private void setupButtonActions(Button boutonAjouterImage, Button boutonBruiter, Button boutonDebruiter, Stage stage) {
-        // Action pour ajouter une image
+    private void configurerActionsDesBoutons(Button boutonAjouterImage, Button boutonBruiter, Button boutonDebruiter, Stage stage) {
+    	// Action pour ajouter une image (corrigée)
     	boutonAjouterImage.setOnAction(e -> {
     	    FileChooser fileChooser = new FileChooser();
     	    fileChooser.setTitle("Choisir une image");
@@ -515,104 +533,197 @@ public class GUI extends Application {
     	    );
     	    File file = fileChooser.showOpenDialog(stage);
     	    if (file != null) {
-    	        // Reset avant toute chose
-    	        imageBruitee.setImage(null);
-    	        imageDebruitee.setImage(null);
-    	        reinitialiserPanneau(panneauImageBruitee);
-    	        reinitialiserPanneau(panneauImageDebruitee);
-    	        reinitialiserPanneauStatistiques();
+    	        try {
+    	            // Reset des images bruitées et débruitées
+    	            vueImageBruitee.setImage(null);
+    	            vueImageDebruitee.setImage(null);
+    	            imgBruitee = null;
+    	            imgDebruitee = null;
+    	            
+    	            // Forcer le chargement de l'image en mode synchrone
+    	            Image image = new Image(file.toURI().toString());
+    	            
+    	            // S'assurer que l'image est chargée correctement
+    	            if (image.isError()) {
+    	                throw new Exception("Erreur de chargement de l'image");
+    	            }
 
-    	        // Forcer le chargement de l’image en mode synchrone
-    	        Image image = new Image(file.toURI().toString());
-    	        imageOriginale.setImage(image);
-    	        imgOriginale = convertirImageEnImg(image);
-    	        mettreAJourStatutPanel(panneauImageOriginale, "");
+    	            // Mettre à jour l'image dans la vue
+    	            vueImageOriginale.setImage(image);
+    	            
+    	            // Convertir en format interne
+    	            imgOriginale = convertirImageEnImg(image);
+    	            
+    	            // Récupérer la grille d'images
+    	            GridPane grilleImages = (GridPane)((BorderPane)((StackPane)stage.getScene().getRoot())
+    	                .getChildren().get(0)).getCenter();
+    	            
+    	            // Vider complètement la grille
+    	            grilleImages.getChildren().clear();
+    	            
+    	            // Réinitialiser les panneaux statiques
+    	            reinitialiserPanneau(panneauImageOriginale);
+    	            reinitialiserPanneau(panneauImageBruitee);
+    	            reinitialiserPanneau(panneauImageDebruitee);
+    	            reinitialiserPanneauStatistiques();
+    	            
+    	            // Réinitialiser la barre de progression
+    	            progressBar.setVisible(false);
+    	            progressLabel.setVisible(false);
+    	            
+    	            // Ajouter la barre de progression
+    	            VBox progressBox = new VBox(5, progressLabel, progressBar);
+    	            progressBox.setAlignment(Pos.CENTER);
+    	            grilleImages.add(progressBox, 0, 0, 2, 1);
+    	            
+    	            // Ajouter les panneaux statiques à la grille
+    	            grilleImages.add(panneauImageOriginale, 0, 1);
+    	            grilleImages.add(panneauImageBruitee, 0, 2);
+    	            grilleImages.add(panneauImageDebruitee, 1, 1);
+    	            grilleImages.add(panneauStatistiques, 1, 2);
+    	            
+    	            // Nettoyer le panneau de l'image originale
+    	            panneauImageOriginale.getChildren().removeIf(node ->
+    	                node instanceof Rectangle ||
+    	                (node instanceof Label && !((Label) node).getText().equals("Image Originale"))
+    	            );
+    	            
+    	            // Ajouter l'image originale au panneau
+    	            panneauImageOriginale.getChildren().add(vueImageOriginale);
+    	            StackPane.setAlignment(vueImageOriginale, Pos.CENTER);
+    	            
+    	            // Créer et ajouter le panneau zoomable pour l'image originale
+    	            panneauZoomOriginale = creerPanneauImageZoomable(vueImageOriginale);
+    	            grilleImages.getChildren().remove(panneauImageOriginale);
+    	            grilleImages.add(panneauZoomOriginale, 0, 1);
+    	            
+    	        } catch (Exception ex) {
+    	            ex.printStackTrace();
+    	            // Afficher un message d'erreur
+    	            afficherAlerte(stage, "Erreur lors du chargement de l'image : " + ex.getMessage());
+    	        }
     	    }
     	});
 
         // Action pour bruiter l'image
-        boutonBruiter.setOnAction(e -> {
-            if (imageOriginale.getImage() != null) {
-                // Bruitage de l'image
-                double sigma = sigmaSlider.getValue();
-                imgBruitee = BruiteurImage.noising(imgOriginale, sigma);
-                
-                // Affichage de l'image bruitée
-                Image noisedImageFX = convertirImgEnImage(imgBruitee);
-                imageBruitee.setImage(noisedImageFX);
-                mettreAJourStatutPanel(panneauImageBruitee, "");
-                
-                // Réinitialiser les panneaux suivants
-                reinitialiserPanneau(panneauImageDebruitee);
-                reinitialiserPanneauStatistiques();
-            } else {
-                afficherAlerte(stage, "Aucune image originale n'a été chargée.");
-            }
-        });
+    	boutonBruiter.setOnAction(e -> {
+    	    if (vueImageOriginale.getImage() != null) {
+    	        try {
+    	            // Bruitage de l'image
+    	            double sigma = sigmaSlider.getValue();
+    	            imgBruitee = BruiteurImage.noising(imgOriginale, sigma);
+    	            
+    	            // Affichage de l'image bruitée
+    	            Image noisedImageFX = convertirImgEnImage(imgBruitee);
+    	            vueImageBruitee.setImage(noisedImageFX);
+    	            
+    	            // Récupérer la grille d'images
+    	            GridPane grilleImages = (GridPane)((BorderPane)((StackPane)stage.getScene().getRoot())
+    	                .getChildren().get(0)).getCenter();
+    	            
+    	            // Supprimer l'ancien panneau zoomable s'il existe
+    	            grilleImages.getChildren().remove(panneauZoomBruitee);
+    	            
+    	            // Créer un nouveau panneau zoomable pour l'image bruitée
+    	            panneauZoomBruitee = creerPanneauImageZoomable(vueImageBruitee);
+    	            
+    	            // Ajouter le nouveau panneau zoomable à la grille
+    	            grilleImages.add(panneauZoomBruitee, 0, 2);
+    	            
+    	            // Réinitialiser les panneaux suivants
+    	            reinitialiserPanneau(panneauImageDebruitee);
+    	            reinitialiserPanneauStatistiques();
+    	            
+    	        } catch (Exception ex) {
+    	            ex.printStackTrace();
+    	            afficherAlerte(stage, "Erreur lors du bruitage de l'image : " + ex.getMessage());
+    	        }
+    	    } else {
+    	        afficherAlerte(stage, "Aucune image originale n'a été chargée.");
+    	    }
+    	});
         
         // Action pour débruiter l'image
-        boutonDebruiter.setOnAction(e -> {
-            if (imageBruitee.getImage() != null) {
-                // Afficher la barre de progression
-                progressBar.setVisible(true);
-                progressLabel.setVisible(true);
-                progressBar.setProgress(-1);
+    	boutonDebruiter.setOnAction(e -> {
+    	    if (vueImageBruitee.getImage() != null) {
+    	        // Afficher la barre de progression
+    	        progressBar.setVisible(true);
+    	        progressLabel.setVisible(true);
+    	        progressBar.setProgress(-1);
 
-                Task<Void> task = new Task<>() {
-                    @Override
-                    protected Void call() {
-                        try {
-                            // Récupération des paramètres
-                            String typeSeuil = ((RadioButton) tgTypeSeuillage.getSelectedToggle()).getText();
-                            String fonctionSeuillage = ((RadioButton) tgFonctionSeuillage.getSelectedToggle()).getText();
-                            boolean modeLocal = "Local".equals(choixMode.getValue());
-                            int taillePatch = getPatchSize(modeLocal);
+    	        Task<Void> task = new Task<>() {
+    	            @Override
+    	            protected Void call() {
+    	                try {
+    	                    // Récupération des paramètres
+    	                    String typeSeuil = ((RadioButton) tgTypeSeuillage.getSelectedToggle()).getText();
+    	                    String fonctionSeuillage = ((RadioButton) tgFonctionSeuillage.getSelectedToggle()).getText();
+    	                    boolean modeLocal = "Local".equals(choixMode.getValue());
+    	                    int taillePatch = getPatchSize(modeLocal);
 
-                            DebruiteurImage debruiteur = new DebruiteurImage();
-                            imgDebruitee = debruiteur.imageDen(
-                                imgBruitee, 
-                                typeSeuil, 
-                                fonctionSeuillage, 
-                                sigmaActuel, 
-                                taillePatch, 
-                                modeLocal
-                            );
-                        } catch (Exception e) {
-                            Platform.runLater(() -> afficherAlerte(stage, "Erreur lors du débruitage: " + e.getMessage()));
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
+    	                    DebruiteurImage debruiteur = new DebruiteurImage();
+    	                    imgDebruitee = debruiteur.imageDen(
+    	                        imgBruitee, 
+    	                        typeSeuil, 
+    	                        fonctionSeuillage, 
+    	                        sigmaActuel, 
+    	                        taillePatch, 
+    	                        modeLocal
+    	                    );
+    	                } catch (Exception ex) {
+    	                    ex.printStackTrace();
+    	                    Platform.runLater(() -> afficherAlerte(stage, "Erreur lors du débruitage: " + ex.getMessage()));
+    	                }
+    	                return null;
+    	            }
 
-                    @Override
-                    protected void succeeded() {
-                        Platform.runLater(() -> {
-                            Image imageFXDebruite = convertirImgEnImage(imgDebruitee);
-                            imageDebruitee.setImage(imageFXDebruite);
-                            mettreAJourStatutPanel(panneauImageDebruitee, "");
-                            mettreAJourPanneauStatistiques();
+    	            @Override
+    	            protected void succeeded() {
+    	                Platform.runLater(() -> {
+    	                    try {
+    	                        Image imageFXDebruite = convertirImgEnImage(imgDebruitee);
+    	                        vueImageDebruitee.setImage(imageFXDebruite);
+    	                        
+    	                        // Récupérer la grille d'images
+    	                        GridPane grilleImages = (GridPane)((BorderPane)((StackPane)stage.getScene().getRoot())
+    	                            .getChildren().get(0)).getCenter();
+    	                        
+    	                        // Supprimer l'ancien panneau zoomable s'il existe
+    	                        grilleImages.getChildren().remove(panneauZoomDebruitee);
+    	                        
+    	                        // Créer un nouveau panneau zoomable pour l'image débruitée
+    	                        panneauZoomDebruitee = creerPanneauImageZoomable(vueImageDebruitee);
+    	                        
+    	                        // Ajouter le nouveau panneau zoomable à la grille
+    	                        grilleImages.add(panneauZoomDebruitee, 1, 1);
+    	                        
+    	                        mettreAJourPanneauStatistiques();
+    	                        
+    	                        progressBar.setVisible(false);
+    	                        progressLabel.setVisible(false);
+    	                    } catch (Exception ex) {
+    	                        ex.printStackTrace();
+    	                        afficherAlerte(stage, "Erreur lors de l'affichage de l'image débruitée : " + ex.getMessage());
+    	                    }
+    	                });
+    	            }
 
-                            progressBar.setVisible(false);
-                            progressLabel.setVisible(false);
-                        });
-                    }
+    	            @Override
+    	            protected void failed() {
+    	                Platform.runLater(() -> {
+    	                    progressBar.setVisible(false);
+    	                    progressLabel.setVisible(false);
+    	                    afficherAlerte(stage, "Le débruitage a échoué.");
+    	                });
+    	            }
+    	        };
 
-                    @Override
-                    protected void failed() {
-                        Platform.runLater(() -> {
-                            progressBar.setVisible(false);
-                            progressLabel.setVisible(false);
-                            afficherAlerte(stage, "Le débruitage a échoué.");
-                        });
-                    }
-                };
-
-                // Lancer le thread
-                new Thread(task).start();
-            } else {
-                afficherAlerte(stage, "Veuillez d'abord bruiter l'image originale.");
-            }
-        });
+    	        // Lancer le thread
+    	        new Thread(task).start();
+    	    } else {
+    	        afficherAlerte(stage, "Veuillez d'abord bruiter l'image originale.");
+    	    }
+    	});
 
     }
     
@@ -637,24 +748,7 @@ public class GUI extends Application {
             return 21; 
         }
     }
-    
-    /**
-     * @brief Met à jour l'affichage du panneau avec un message de statut.
-     * @author Alexis
-     * @param panel Le panneau StackPane à mettre à jour.
-     * @param success Indique si l'opération a réussi.
-     */
-    private void mettreAJourStatutPanel(StackPane panel, String status) {
-        panel.getChildren().removeIf(node ->
-            node instanceof Rectangle ||
-            (node instanceof Label && (
-                ((Label) node).getText().contains("Aucune") ||
-                ((Label) node).getText().contains("Image") ||
-                ((Label) node).getText().contains("En attente...")
-            ))
-        );
-    }
-    
+
     /**
      * @brief Réinitialise un panneau d'image à son état initial.
      * @author Alexis
@@ -693,7 +787,7 @@ public class GUI extends Application {
         StackPane.setMargin(statusLabel, new Insets(0, 0, 5, 0));
         panel.getChildren().add(statusLabel);
 
-        // Cacher le slider s’il existe
+        // Cacher le slider s'il existe
         if (zoomSlider != null) {
             zoomSlider.setVisible(false);
         }
@@ -908,6 +1002,70 @@ public class GUI extends Application {
         }
 
         return imageFx;
+    }
+
+    /**
+     * @brief Crée un panneau zoomable contenant une image.
+     * @param imageView L'objet ImageView à afficher et à rendre zoomable.
+     * @return Un ScrollPane contenant l'image avec les fonctionnalités de zoom et déplacement.
+     */
+    private ScrollPane creerPanneauImageZoomable(ImageView imageView) {
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+
+        // Créer un conteneur pour l'image qui permettra le déplacement
+        StackPane imageContainer = new StackPane(imageView);
+        imageContainer.setStyle("-fx-background-color: #1E1E1E;");
+        
+        ScrollPane scroll = new ScrollPane(imageContainer);
+        scroll.setPannable(true);
+        scroll.setStyle("-fx-background: #1E1E1E; -fx-background-color: #1E1E1E;");
+        scroll.setFitToWidth(false);
+        scroll.setFitToHeight(false);
+        
+        // Création d'une échelle pour le zoom
+        Scale scaleTransform = new Scale(1, 1);
+        imageView.getTransforms().add(scaleTransform);
+
+        // Zoom avec Ctrl + molette
+        scroll.setOnScroll(event -> {
+            if (event.isControlDown()) {
+                event.consume();
+                
+                double zoomFactor = event.getDeltaY() > 0 ? 1.1 : 1 / 1.1;
+                double oldScale = scaleTransform.getX();
+                double newScale = oldScale * zoomFactor;
+                
+                // Limiter le zoom entre 0.1x et 20x
+                if (newScale < 0.1) newScale = 0.1;
+                if (newScale > 20) newScale = 20;
+                
+                scaleTransform.setX(newScale);
+                scaleTransform.setY(newScale);
+                
+                // Ajuster la taille du conteneur pour permettre le déplacement
+                imageContainer.setMinWidth(imageView.getFitWidth() * newScale);
+                imageContainer.setMinHeight(imageView.getFitHeight() * newScale);
+            }
+        });
+        
+        // Ajouter des informations de zoom en bas du panneau
+        Label zoomInfo = new Label("Zoom: 100%");
+        zoomInfo.setStyle("-fx-text-fill: white; -fx-background-color: rgba(0,0,0,0.5); -fx-padding: 5px;");
+        
+        // Mettre à jour l'information de zoom quand le facteur change
+        scaleTransform.xProperty().addListener((obs, oldVal, newVal) -> {
+            int zoomPercent = (int) (newVal.doubleValue() * 100);
+            zoomInfo.setText("Zoom: " + zoomPercent + "%");
+        });
+        
+        StackPane.setAlignment(zoomInfo, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(zoomInfo, new Insets(0, 10, 10, 0));
+        
+        StackPane stackPane = new StackPane(scroll, zoomInfo);
+        stackPane.setStyle("-fx-background-color: #1E1E1E; -fx-padding: 10px;");
+        
+        return scroll;
     }
 
     /**
