@@ -1006,6 +1006,7 @@ public class GUI extends Application {
 
     /**
      * @brief Crée un panneau zoomable contenant une image.
+     * @author Emma
      * @param imageView L'objet ImageView à afficher et à rendre zoomable.
      * @return Un ScrollPane contenant l'image avec les fonctionnalités de zoom et déplacement.
      */
