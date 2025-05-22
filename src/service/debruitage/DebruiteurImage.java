@@ -18,8 +18,6 @@ import model.patch.ResultatPatch;
 import model.patch.ResultatPatch.PairePatchPosition;
 import model.patch.ResultatVecteur;
 import service.acp.ProcesseurACP;
-import service.bruit.BruiteurImage;
-import service.evaluation.EvaluationQualite;
 import service.patch.GestionnairePatchs;
 import service.seuillage.ProcesseurSeuillage;
 
@@ -31,11 +29,9 @@ import service.seuillage.ProcesseurSeuillage;
  */
 public class DebruiteurImage {
 
-	private BruiteurImage bruiteurImage;
 	private GestionnairePatchs gestionnairePatchs;
 	private ProcesseurACP processeurACP;
 	private ProcesseurSeuillage processeurSeuillage;
-	private EvaluationQualite evaluationQualite;
 	private final static int TAILLE_FENETRE_DEFAUT = 250;
 
 	/**
@@ -43,12 +39,9 @@ public class DebruiteurImage {
 	 * @author Paul
 	 */
 	public DebruiteurImage() {
-		this.bruiteurImage = new BruiteurImage();
 		this.gestionnairePatchs = new GestionnairePatchs();
 		this.processeurACP = new ProcesseurACP();
 		this.processeurSeuillage = new ProcesseurSeuillage();
-		this.evaluationQualite = new EvaluationQualite();
-
 	}
 
 	/**
