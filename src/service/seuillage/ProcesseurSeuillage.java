@@ -116,10 +116,10 @@ public class ProcesseurSeuillage {
 
         if (typeSeuil.equalsIgnoreCase("VisuShrink")) {
             lambdaGlobal = seuilV(xB, sigma);
-            System.out.println("💠 Seuillage VisuShrink: λ = " + String.format("%.4f", lambdaGlobal));
+//            System.out.println("💠 Seuillage VisuShrink: λ = " + String.format("%.4f", lambdaGlobal));
         } else if (typeSeuil.equalsIgnoreCase("BayesShrink")) {
             isBayes = true; // on utilisera seuilB(alpha_i, sigma) dans la boucle
-            System.out.println("💠 Seuillage BayesShrink adaptatif par vecteur");
+//            System.out.println("💠 Seuillage BayesShrink adaptatif par vecteur");
         } else {
             throw new IllegalArgumentException("Type de seuil non reconnu : " + typeSeuil);
         }
