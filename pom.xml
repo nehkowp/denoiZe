@@ -48,7 +48,7 @@
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src/css</directory>
+				<directory>src/resources</directory>
 			</resource>
 		</resources>
 
