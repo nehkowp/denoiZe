@@ -119,17 +119,6 @@ public class GestionnairePatchs {
         return extractPatchsAvecRecouvrement(Xs, s, 2);
     }
 
-    /**
-     * @brief Extrait des patchs avec un recouvrement par défaut de 50%.
-     * @author Emma
-     * @param Xs Image source.
-     * @param s Taille des patchs.
-     * @return ResultatPatch contenant les patchs extraits.
-     */
-    public ResultatPatch extractPatchs(Img Xs, int s) {
-        // Utiliser un recouvrement de 2 (50%) par défaut
-        return extractPatchsAvecRecouvrement(Xs, s, 2);
-    }
 
     /**
      * @brief Reconstruit une image à partir d'un ensemble de patchs.
