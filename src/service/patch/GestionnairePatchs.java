@@ -358,54 +358,32 @@ public class GestionnairePatchs {
 	 * @param vecteursReconstruits ResultatVecteur à transformer.
 	 * @return ResultatPatch correspondant.
 	 */
-	public ResultatPatch transformerVecteursEnResultatPatch(ResultatVecteur vecteursReconstruits, boolean estRGB) {
+	public ResultatPatch transformerVecteursEnResultatPatch(ResultatVecteur vecteursReconstruits) {
 
 		ResultatPatch resultatPatch = new ResultatPatch();
 
-		int taillePatch;
-		if (estRGB) {
-			taillePatch = (int) Math.sqrt(vecteursReconstruits.getVecteurs().get(0).taille() / 3);
-		} else {
-			taillePatch = (int) Math.sqrt(vecteursReconstruits.getVecteurs().get(0).taille());
-		}
+		int taillePatch = (int) Math.sqrt(vecteursReconstruits.getVecteurs().get(0).taille());
 
 		try {
 			for (int k = 0; k < vecteursReconstruits.taille(); k++) {
 				double[] valeurs = vecteursReconstruits.getVecteurs().get(k).getValeurs();
 				Position position = vecteursReconstruits.getPositions().get(k);
 
+				
 				Pixel[][] patchPixels = new Pixel[taillePatch][taillePatch];
 
-				if (estRGB) {
-					// Traitement pour les images RGB
-					for (int i = 0; i < taillePatch; i++) {
-						for (int j = 0; j < taillePatch; j++) {
-							int baseIndex = (i * taillePatch + j) * 3;
-
-							// Récupérer les trois composantes RGB
-							int r = (int) Math.min(255, Math.max(0, Math.round(valeurs[baseIndex])));
-							int g = (int) Math.min(255, Math.max(0, Math.round(valeurs[baseIndex + 1])));
-							int b = (int) Math.min(255, Math.max(0, Math.round(valeurs[baseIndex + 2])));
-
-							// Créer un pixel RGB
-							patchPixels[i][j] = new Pixel(r, g, b);
-						}
-					}
-				} else {
-					// Traitement pour les images en niveaux de gris
-					for (int i = 0; i < taillePatch; i++) {
-						for (int j = 0; j < taillePatch; j++) {
-							int index = i * taillePatch + j;
-							int valeur = (int) Math.min(255, Math.max(0, Math.round(valeurs[index])));
-							patchPixels[i][j] = new Pixel(valeur);
-						}
+				for (int i = 0; i < taillePatch; i++) {
+					for (int j = 0; j < taillePatch; j++) {
+						int index = i * taillePatch + j;
+						int valeur = (int) Math.min(255, Math.max(0, Math.round(valeurs[index])));
+						patchPixels[i][j] = new Pixel(valeur);
 					}
 				}
 
 				Patch patch = new Patch(patchPixels);
 				resultatPatch.ajouterPatch(patch, position);
-			}
 
+			}
 			return resultatPatch;
 
 		} catch (Exception e) {
