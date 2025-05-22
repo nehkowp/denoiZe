@@ -81,9 +81,7 @@ public class GestionnairePatchs {
 	        Patch patch = extrairePatch(imgPixels, h - s, w - s, s);
 	        resPatch.ajouterPatch(patch, new Position(h - s, w - s));
 	    }
-	    
 	   
-	    
 	    return resPatch;
 	}
 
@@ -106,18 +104,6 @@ public class GestionnairePatchs {
 	    return new Patch(patchPixels);
 	}
 
-	// Méthode pour vérifier la couverture spatiale
-
-	private void ajouterPatch(ResultatPatch resPatch, Pixel[][] imgPixels, int i, int j, int s) {
-		    Pixel[][] patchPixels = new Pixel[s][s];
-		    for (int x = 0; x < s; x++) {
-		        for (int y = 0; y < s; y++) {
-		            patchPixels[x][y] = imgPixels[i + x][j + y];
-		        }
-		    }
-		    Patch patch = new Patch(patchPixels);
-		    resPatch.ajouterPatch(patch, new Position(i, j));
-		}
     /**
      * @brief Extrait des patchs avec un recouvrement par défaut de 50%.
      * @author Emma
