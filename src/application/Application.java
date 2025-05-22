@@ -167,7 +167,6 @@ public class Application {
          Img x0 = new Img("data/x0/" + imageName);
 
          DebruiteurImage dImg = new DebruiteurImage();
-         EvaluationQualite eval = new EvaluationQualite();
 
          // Niveau de bruit sigma
          double sigma = 20.0;

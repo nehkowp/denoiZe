@@ -14,6 +14,7 @@ package exception;
  * @extends RuntimeException
  * Il s'agit d'une exception non vérifiée.
  */
+@SuppressWarnings("serial")
 public class MatriceException extends RuntimeException {
 	
     /**
