@@ -16,8 +16,7 @@ import model.patch.ResultatVecteur;
 
 /**
  * @class GestionnairePatchs
- * @brief Gère l'extraction, la transformation et la reconstruction des patchs
- * d'une image.
+ * @brief Gère l'extraction, la transformation et la reconstruction des patchs d'une image.
  * @author Paul & Alexis & Emma
  */
 public class GestionnairePatchs {
@@ -88,8 +87,7 @@ public class GestionnairePatchs {
     }
 
     /**
-     * @brief Méthode auxiliaire privée pour extraire un patch de taille s à
-     * partir d'une position.
+     * @brief Méthode auxiliaire privée pour extraire un patch de taille s à partir d'une position.
      * @author Paul & Alexis
      * @param imgPixels Matrice de pixels de l'image.
      * @param i Coordonnée verticale du patch.
@@ -277,8 +275,7 @@ public class GestionnairePatchs {
      * @brief Découpe une image en fenêtres selon les paramètres spécifiés.
      * @author Paul & Alexis
      * @param x Image à découper.
-     * @param pF Paramètres définissant la taille et le chevauchement des
-     * fenêtres.
+     * @param pF Paramètres définissant la taille et le chevauchement des fenêtres.
      * @return Liste des fenêtres extraites.
      */
     public List<Fenetre> decoupageImage(Img x, ParametresFenetre pF) {

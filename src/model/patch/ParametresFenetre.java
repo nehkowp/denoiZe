@@ -30,42 +30,54 @@ public class ParametresFenetre {
      * @author Paul
      * @return Chevauchement en X (en pixels).
      */
-    public int getChevauchementCombineX() { return chevauchementCombineX; }
+    public int getChevauchementCombineX() { 
+    	return chevauchementCombineX; 
+    }
 
     /**
      * @brief Récupère le chevauchement vertical.
      * @author Paul
      * @return Chevauchement en Y (en pixels).
      */
-    public int getChevauchementCombineY() { return chevauchementCombineY; }
+    public int getChevauchementCombineY() { 
+    	return chevauchementCombineY; 
+    }
 
     /**
      * @brief Récupère le nombre de fenêtres selon l'axe horizontal.
      * @author Paul
      * @return Nombre de fenêtres sur l'axe X.
      */
-    public int getNombreFenetresX() { return nombreFenetresX; }
+    public int getNombreFenetresX() { 
+    	return nombreFenetresX; 
+    }
 
     /**
      * @brief Récupère le nombre de fenêtres selon l'axe vertical.
      * @author Paul
      * @return Nombre de fenêtres sur l'axe Y.
      */
-    public int getNombreFenetresY() { return nombreFenetresY; }
+    public int getNombreFenetresY() { 
+    	return nombreFenetresY; 
+    }
 
     /**
      * @brief Récupère le nombre total de fenêtres calculé.
      * @author Emma
      * @return Nombre total de fenêtres.
      */
-    public int getNombreFenetresTotal() { return nombreFenetresTotal; }
+    public int getNombreFenetresTotal() { 
+    	return nombreFenetresTotal; 
+    }
 
     /**
      * @brief Récupère la taille des fenêtres utilisée dans le calcul.
      * @author Paul
      * @return Taille d'une fenêtre (en pixels).
      */
-    public int getTailleFenetreCalculee() { return tailleFenetreCalculee; }
+    public int getTailleFenetreCalculee() { 
+    	return tailleFenetreCalculee; 
+    }
 
     /**
      * @brief Calcule les paramètres nécessaires pour découper une image en fenêtres régulières.

@@ -52,7 +52,6 @@ public class BruiteurImage {
             }	
         }
         
-
         return new Img(xB_pixels,x0.isEstRGB());
     }
 }
