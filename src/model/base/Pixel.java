@@ -14,11 +14,8 @@ public class Pixel {
 
     //Valeur numérique associée au pixel
     private double[] valeurs;
-    
 	//true si l'image le pixel en couleur , false si byte_gray 
     private boolean estRGB;
-    
-    
     //Nombre de fois que ce pixel est chevauché
     private int nbChevauchement;
 
@@ -52,28 +49,15 @@ public class Pixel {
         this.nbChevauchement = 0;
     }
     
-    
-    
     /**
      * @brief Constructeur du pixel avec une valeur initiale pour RGB
      * @author Paul
-     * @param r Valeur numérique du pixel du rouge.
-     * @param g Valeur numérique du pixel du vert.
-     * @param b Valeur numérique du pixel du bleu.
+     * @param rgb les valeurs du pixel RGB.
      */
-    
     public Pixel(double[] rgb) {
-        this.valeurs = new double[3];
-    	this.estRGB = true;
-        this.valeurs[0] = rgb[0] ;
-        this.valeurs[1] = rgb[1] ;
-        this.valeurs[2] = rgb[2] ;
-        this.estRGB = true;
-        this.nbChevauchement = 0;
+    	this(rgb[0],rgb[1],rgb[2]);
     }
     
-    
-
     /**
      * @brief Récupère les valeurs du pixel RGB.
      * @author Paul
@@ -97,11 +81,10 @@ public class Pixel {
      * @author Paul
      * @return Valeur numérique du pixel.
      */
-    public double getValeur(int k ) {
+    public double getValeur(int k) {
         return valeurs[k];
     }
 
-    
     /**
      * @brief Modifie la valeur du pixel.
      * @author Paul
@@ -111,14 +94,11 @@ public class Pixel {
         this.valeurs[0] = valeur;
     }
     
-    
-
     /**
      * @brief Modifie la valeur du pixel RGB pour les doubles.
      * @author Paul
      * @param valeur Nouvelle valeur numérique à affecter.
      */
-   
     public void setValeurs(double[] valeurs) {
         this.valeurs[0] = valeurs[0];
         this.valeurs[1] = valeurs[1];
@@ -130,14 +110,12 @@ public class Pixel {
      * @author Paul
      * @param valeur Nouvelle valeur numérique à affecter.
      */
-   
     public void setValeurs(int[] valeurs) {
         this.valeurs[0] = valeurs[0];
         this.valeurs[1] = valeurs[1];
         this.valeurs[2] = valeurs[2];
     }
     
-
     /**
      * @brief Modifie le nombre de chevauchements du pixel.
      * @author Paul
@@ -156,8 +134,12 @@ public class Pixel {
         return nbChevauchement;
     }
     
+    /**
+	 * @brief Vérifie si l'image est au format RGB.
+	 * @author Paul
+	 * @return true si l'image est en couleur, false si elle est en niveaux de gris.
+	 */
     public boolean estRGB() {
     	return this.estRGB;
     }
-
 }

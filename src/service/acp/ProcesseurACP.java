@@ -121,13 +121,13 @@ public class ProcesseurACP {
         }
         
         // Tri par ordre décroissant des valeurs propres
-        pairs.sort((a, b) -> -Double.compare((double)a.first, (double)b.first));
+        pairs.sort((a, b) -> -Double.compare((double)a.premier, (double)b.premier));
         // Réorganisation des données
         double[] sortedEigenValues = new double[s2];
         for (int i = 0; i < s2; i++) {
             Pair pair = pairs.get(i);
-            int originalIndex = (int)pair.second;
-            sortedEigenValues[i] = (double)pair.first;
+            int originalIndex = (int)pair.deuxieme;
+            sortedEigenValues[i] = (double)pair.premier;
             
             // Copie du vecteur propre dans l'ordre trié
             for (int j = 0; j < s2; j++) {
@@ -139,62 +139,63 @@ public class ProcesseurACP {
         return new ResultatACP(sortedEigenValues, vecteursPropres, mV);
     }
 
-    /**
-     * @brief Projette les vecteurs centrés sur les vecteurs propres pour obtenir les coefficients projetés.
-     * @author Lucas
-     * @param U RésultatVecteur contenant les vecteurs propres.
-     * @param Vc RésultatVecteur contenant les vecteurs centrés.
-     * @return Liste des vecteurs alpha correspondant aux coefficients projetés.
-     */
-   public ResultatVecteur proj(ResultatVecteur U, ResultatVecteur Vc) {
-    int s2 = Vc.getVecteurs().get(0).taille();
-    int M = Vc.taille();
-    
-    double[][] uData = new double[s2][s2];
-    double[][] vcData = new double[M][s2];
-    
-    for (int i = 0; i < s2; i++) {
-        Vecteur ui = U.getVecteurs().get(i);
-        for (int j = 0; j < s2; j++) {
-            uData[j][i] = ui.getValeur(j);
-        }
-    }
-    
-    for (int i = 0; i < M; i++) {
-        Vecteur vci = Vc.getVecteurs().get(i);
-        for (int j = 0; j < s2; j++) {
-            vcData[i][j] = vci.getValeur(j);
-        }
-    }
-    
-    RealMatrix uMatrix = new Array2DRowRealMatrix(uData);
-    RealMatrix vcMatrix = new Array2DRowRealMatrix(vcData);
-    
-    RealMatrix projections = vcMatrix.multiply(uMatrix);
-    
-    ResultatVecteur alpha = new ResultatVecteur();
-    for (int k = 0; k < M; k++) {
-        Vecteur alpha_k = new Vecteur(s2);
-        for (int i = 0; i < s2; i++) {
-            alpha_k.setValeur(i, projections.getEntry(k, i));
-        }
-        alpha.ajouterVecteur(alpha_k, Vc.getPositions().get(k));
-    }
-    
-    return alpha;
-}
+	/**
+	* @brief Projette les vecteurs centrés sur les vecteurs propres pour obtenir les coefficients projetés.
+	* @author Lucas
+	* @param U RésultatVecteur contenant les vecteurs propres.
+	* @param Vc RésultatVecteur contenant les vecteurs centrés.
+	* @return Liste des vecteurs alpha correspondant aux coefficients projetés.
+	*/
+	public ResultatVecteur proj(ResultatVecteur U, ResultatVecteur Vc) {
+		int s2 = Vc.getVecteurs().get(0).taille();
+	    int M = Vc.taille();
+	    
+	    double[][] uData = new double[s2][s2];
+	    double[][] vcData = new double[M][s2];
+	    
+	    for (int i = 0; i < s2; i++) {
+	        Vecteur ui = U.getVecteurs().get(i);
+	        for (int j = 0; j < s2; j++) {
+	            uData[j][i] = ui.getValeur(j);
+	        }
+	    }
+	    
+	    for (int i = 0; i < M; i++) {
+	        Vecteur vci = Vc.getVecteurs().get(i);
+	        for (int j = 0; j < s2; j++) {
+	            vcData[i][j] = vci.getValeur(j);
+	        }
+	    }
+	    
+	    RealMatrix uMatrix = new Array2DRowRealMatrix(uData);
+	    RealMatrix vcMatrix = new Array2DRowRealMatrix(vcData);
+	    
+	    RealMatrix projections = vcMatrix.multiply(uMatrix);
+	    
+	    ResultatVecteur alpha = new ResultatVecteur();
+	    for (int k = 0; k < M; k++) {
+	        Vecteur alpha_k = new Vecteur(s2);
+	        for (int i = 0; i < s2; i++) {
+	            alpha_k.setValeur(i, projections.getEntry(k, i));
+	        }
+	        alpha.ajouterVecteur(alpha_k, Vc.getPositions().get(k));
+	    }
+	    
+	    return alpha;
+	}
+	
     /**
      * @class Pair
      * @brief Classe utilitaire pour le tri des valeurs propres
      * @author Lucas 
      */
     private class Pair {
-        public Object first;
-        public Object second;
+        private Object premier;
+        private Object deuxieme;
         
-        public Pair(Object first, Object second) {
-            this.first = first;
-            this.second = second;
+        public Pair(Object premier, Object deuxieme) {
+            this.premier = premier;
+            this.deuxieme = deuxieme;
         }
     }
     

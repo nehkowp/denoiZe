@@ -26,7 +26,6 @@ public class ResultatVecteur {
 
     /**
      * @brief Constructeur par défaut. 
-     * Initialise les listes de vecteurs et positions vides.
      * @author Emma
      */
     public ResultatVecteur() {

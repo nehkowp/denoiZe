@@ -7,7 +7,6 @@ package model.base;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -15,8 +14,7 @@ import javax.imageio.ImageIO;
 /**
  * @class Img
  * @author Paul & Alexis
- * @brief Représentation d'une image en niveaux de gris sous forme de matrice de
- *        pixels.
+ * @brief Représentation d'une image en niveaux de gris sous forme de matrice de pixels.
  */
 public class Img {
 
@@ -190,15 +188,21 @@ public class Img {
 
 	}
 
+	/**
+	 * @brief Vérifie si l'image est au format RGB.
+	 * @author Paul
+	 * @return true si l'image est en couleur, false si elle est en niveaux de gris.
+	 */
 	public boolean isEstRGB() {
 		return estRGB;
 	}
 	
 	/**
-	 * @brief Charge une image en mode RGB.
+	 * @brief Charge les pixels d'une image RGB dans une matrice de pixels.
+	 * @author Paul
+	 * @param image L'image RGB à charger, sous forme de BufferedImage.
 	 */
 	private void chargerImageRGB(BufferedImage image) {
-	    // Utiliser getRGB() qui fonctionne pour tous les types d'images
 	    for (int i = 0; i < hauteur; i++) {
 	        for (int j = 0; j < largeur; j++) {
 	            int rgb = image.getRGB(j, i);
@@ -214,7 +218,9 @@ public class Img {
 	}
 
 	/**
-	 * @brief Charge une image en mode niveaux de gris.
+	 * @brief Charge une image en niveaux de gris dans une matrice de pixels.
+	 * @author Paul
+	 * @param image L'image couleur à convertir et charger, sous forme de BufferedImage.
 	 */
 	private void chargerImageGrayscale(BufferedImage image) {
 	    for (int i = 0; i < hauteur; i++) {
@@ -235,7 +241,12 @@ public class Img {
 	}
 	
 	/**
-	 * @brief Détermine si une image doit être traitée comme RGB ou niveaux de gris.
+	 * @brief Détermine si une image est en couleur RGB ou en niveaux de gris.
+	 * @author Paul
+	 * @param image L'image à analyser.
+	 * @param colorModel Le modèle de couleur de l'image.
+	 * @param numComponents Le nombre de composantes (canaux) dans le modèle de couleur.
+	 * @return true si l'image est considérée comme RGB, false si elle est en niveaux de gris.
 	 */
 	private boolean determinerSiRGB(BufferedImage image, ColorModel colorModel, int numComponents) {
 	    // Images explicitement en niveaux de gris
@@ -259,7 +270,10 @@ public class Img {
 	}
 	
 	/**
-	 * @brief Convertit le type d'image en chaîne lisible pour le débogage.
+	 * @brief Retourne une représentation textuelle du type d'image BufferedImage.
+	 * @author Paul
+	 * @param type Le type d'image selon les constantes définies dans BufferedImage.
+	 * @return Une chaîne représentant le nom du type d'image, ou "UNKNOWN(x)" si non reconnu.
 	 */
 	private String getImageTypeString(int type) {
 	    return switch (type) {
@@ -280,8 +294,4 @@ public class Img {
 	        default -> "UNKNOWN(" + type + ")";
 	    };
 	}
-	
-	
-	
-
 }
