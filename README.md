@@ -50,7 +50,7 @@ denoiZe/
 
 ## Utilisation
 
-DenoiZe propose un pipeline complet de traitement d'image qui:
+DenoiZe:
 
 1. **Prend** une image originale (non bruitée)
 2. **Applique** un bruit gaussien à cette image
@@ -63,7 +63,7 @@ DenoiZe propose un pipeline complet de traitement d'image qui:
 
 Les dossiers `data/xB/` (images bruitées) et `data/xR/` (images débruitées) seront créés automatiquement.
 
-### Mode console interactif (sans arguments)
+### Mode GUI (sans arguments)
 
 Double-cliquez sur le fichier JAR ou exécutez :
 
@@ -78,7 +78,7 @@ L'application vous guidera à travers les étapes suivantes :
 3. Exécution du processus
 4. Affichage des résultats d'évaluation
 
-### Mode ligne de commande (avec arguments)
+### Mode CLI (avec arguments)
 
 ```bash
 java -jar denoize.jar [options]
@@ -86,16 +86,17 @@ java -jar denoize.jar [options]
 
 Options disponibles :
 
-| Option                  | Format court    | Description                                                        | Statut                        |
-| ----------------------- | --------------- | ------------------------------------------------------------------ | ----------------------------- |
-| `--image <nom>`         | `-i <nom>`      | Nom de l'image (dans data/x0/)                                     | **Obligatoire**               |
-| `--global`              | `-g`            | Utilise la méthode de débruitage globale                           | _Facultatif_                  |
-| `--local`               | `-l`            | Utilise la méthode de débruitage locale                            | _Facultatif_ (défaut)         |
-| `--threshold <type>`    | `-t <type>`     | Type de seuillage: 'hard' ou 'soft'                                | _Facultatif_ (défaut: 'hard') |
-| `--shrink <type>`       | `-s <type>`     | Type de seuillage adaptatif: 'v' (VisuShrink) ou 'b' (BayesShrink) | _Facultatif_ (défaut: 'v')    |
-| `--sigma <valeur>`      | `-sig <valeur>` | Écart-type du bruit                                                | _Facultatif_ (défaut: 20.0)   |
-| `--patch-size <taille>` | `-p <taille>`   | Taille des patchs (entier impair)                                  | _Facultatif_ (défaut: 7)      |
-| `--help`                | `-h`            | Affiche l'aide de la commande                                      | _Facultatif_                  |
+| Option                    | Format court    | Description                                                        | Statut                        |
+| ------------------------- | --------------- | ------------------------------------------------------------------ | ----------------------------- |
+| `--image <nom>`           | `-i <nom>`      | Nom de l'image (dans data/x0/)                                     | **Obligatoire**               |
+| `--global`                | `-g`            | Utilise la méthode de débruitage globale                           | _Facultatif_                  |
+| `--local`                 | `-l`            | Utilise la méthode de débruitage locale                            | _Facultatif_ (défaut)         |
+| `--threshold <type>`      | `-t <type>`     | Type de seuillage: 'hard' ou 'soft'                                | _Facultatif_ (défaut: 'hard') |
+| `--shrink <type>`         | `-s <type>`     | Type de seuillage adaptatif: 'v' (VisuShrink) ou 'b' (BayesShrink) | _Facultatif_ (défaut: 'v')    |
+| `--sigma <valeur>`        | `-sig <valeur>` | Écart-type du bruit                                                | _Facultatif_ (défaut: 20.0)   |
+| `--patch-size <taille>`   | `-p <taille>`   | Taille des patchs (entier impair)                                  | _Facultatif_ (défaut: 7)      |
+| `--fenetre-size <taille>` | `-f <taille>`   | Taille des fenêtres locales (50-1000, mode local seulement)        | _Facultatif_ (défaut: 250)    |
+| `--help`                  | `-h`            | Affiche l'aide de la commande                                      | _Facultatif_                  |
 
 ### Exemples d'utilisation
 
@@ -112,8 +113,14 @@ Options disponibles :
    ```
 
 3. Paramètres personnalisés pour le bruit et les patchs :
+
    ```bash
    java -jar denoize.jar -i lena_gray.png -sig 30 -p 9 -s b
+   ```
+
+4. Méthode locale avec taille de fenêtre personnalisée :
+   ```bash
+   java -jar denoize.jar -i lena_gray.png -l -f 150 -p 5
    ```
 
 ## Méthodes de débruitage
@@ -123,12 +130,17 @@ Options disponibles :
 - Analyse l'image entière avec une approche globale par ACP
 - Moins gourmande en calculs
 - Meilleure préservation des structures globales de l'image
+- **Note**: La taille de fenêtre n'est pas utilisée en mode global
 
 ### Méthode locale
 
-- Analyse des patches locaux dans l'image
+- Analyse des patches locaux dans l'image en la découpant en fenêtres
 - Plus précise pour préserver les détails
 - Plus gourmande en calculs
+- **Taille de fenêtre**: Contrôle la taille des fenêtres locales (entre 50 et 1000 pixels)
+  - Petites fenêtres (50-150) : Plus de détails locaux, mais plus de calculs
+  - Fenêtres moyennes (150-400) : Bon compromis entre détails et performance
+  - Grandes fenêtres (400-1000) : Moins de calculs, mais analyse moins fine
 
 ## Types de seuillage
 
@@ -182,6 +194,10 @@ Créez le dossier `data/x0/` à la racine du projet et placez-y au moins une ima
 ### Problème de chemin lors de l'exécution du JAR
 
 Assurez-vous d'exécuter le JAR depuis la racine du projet, où se trouvent les dossiers `data` et `src`. En d'autres termes, le JAR et le dossier `data` doivent être au même niveau.
+
+### Erreur de taille de fenêtre
+
+En mode local, la taille de fenêtre doit être comprise entre 50 et 1000 pixels. Si l'erreur persiste, vérifiez que votre image est suffisamment grande par rapport à la taille de fenêtre choisie.
 
 ## Membres du Groupe 7 - ING1 CY-Tech - 2024-2025
 

@@ -29,10 +29,13 @@ import service.seuillage.ProcesseurSeuillage;
  */
 public class DebruiteurImage {
 
+	private final static int TAILLE_FENETRE_MIN = 50;
+	private final static int TAILLE_FENETRE_MAX = 1000;
+	
+	
 	private GestionnairePatchs gestionnairePatchs;
 	private ProcesseurACP processeurACP;
 	private ProcesseurSeuillage processeurSeuillage;
-	private final static int TAILLE_FENETRE_DEFAUT = 250;
 
 	/**
 	 * @brief Constructeur initialisant les composants nécessaires au débruitage.
@@ -139,13 +142,14 @@ public class DebruiteurImage {
 	 * @param taillePatch       Taille des patchs pour l'analyse.
 	 * @return Image débruitée après traitement local par fenêtres.
 	 */
-	private Img debruiterLocal(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch) {
+	private Img debruiterLocal(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch,
+			int tailleFenetre) {
 
 		System.out.println("🧩 MODE LOCAL - Traitement par fenêtres");
 		System.out.println("⏳ Étape 1/5 : Calcul des paramètres de fenêtrage...");
 		// Calcul des paramètres de fenêtrage
 		ParametresFenetre pF = ParametresFenetre.calculerParametresFenetre(xB.getLargeur(), xB.getHauteur(),
-				TAILLE_FENETRE_DEFAUT);
+				tailleFenetre);
 
 		System.out.println("\n ⚙️  Paramètres de fenêtrage: ⚙️ ");
 		System.out.println("  Dimensions de l'image: " + xB.getLargeur() + "×" + xB.getHauteur());
@@ -264,102 +268,103 @@ public class DebruiteurImage {
 		return new Img(xRPixels, xB.isEstRGB());
 	}
 
-	
 	/**
-	 * @brief Effectue le débruitage d'une image RGB en traitant chaque canal séparément.
+	 * @brief Effectue le débruitage d'une image RGB en traitant chaque canal
+	 *        séparément.
 	 * @author Paul
-	 * @param xB Image RGB bruitée
-	 * @param typeSeuil Type de seuillage
+	 * @param xB                Image RGB bruitée
+	 * @param typeSeuil         Type de seuillage
 	 * @param fonctionSeuillage Fonction de seuillage
-	 * @param sigma Écart-type du bruit
-	 * @param taillePatch Taille des patchs
-	 * @param modeLocal Mode de traitement (local ou global)
+	 * @param sigma             Écart-type du bruit
+	 * @param taillePatch       Taille des patchs
+	 * @param modeLocal         Mode de traitement (local ou global)
 	 * @return Image RGB débruitée
 	 */
-	private Img debruiterRGB(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch, boolean modeLocal) {
-	    System.out.println("🌈 DÉBRUITAGE RGB - Traitement par canaux séparés");
-	    
-	    // Séparer les canaux RGB
-	    System.out.println("⏳ Séparation des canaux RGB...");
-	    Img canalR = extraireCanal(xB, 0); // Canal Rouge
-	    Img canalG = extraireCanal(xB, 1); // Canal Vert  
-	    Img canalB = extraireCanal(xB, 2); // Canal Bleu
-	    System.out.println("✅ Séparation réussie");
-	    
-	    // Débruiter chaque canal indépendamment
-	    System.out.println("🔴 Débruitage du canal Rouge...");
-	    Img canalR_debruite = modeLocal ? 
-	        debruiterLocal(canalR, typeSeuil, fonctionSeuillage, sigma, taillePatch) :
-	        debruiterGlobal(canalR, typeSeuil, fonctionSeuillage, sigma, taillePatch);
-	    
-	    System.out.println("🟢 Débruitage du canal Vert...");
-	    Img canalG_debruite = modeLocal ? 
-	        debruiterLocal(canalG, typeSeuil, fonctionSeuillage, sigma, taillePatch) :
-	        debruiterGlobal(canalG, typeSeuil, fonctionSeuillage, sigma, taillePatch);
-	    
-	    System.out.println("🔵 Débruitage du canal Bleu...");
-	    Img canalB_debruite = modeLocal ? 
-	        debruiterLocal(canalB, typeSeuil, fonctionSeuillage, sigma, taillePatch) :
-	        debruiterGlobal(canalB, typeSeuil, fonctionSeuillage, sigma, taillePatch);
-	    
-	    // Recombiner les canaux
-	    System.out.println("⏳ Recombinaison des canaux RGB...");
-	    Img imageRecombinee = combinerCanaux(canalR_debruite, canalG_debruite, canalB_debruite);
-	    System.out.println("✅ Recombinaison réussie");
-	    
-	    System.out.println("🎉 DÉBRUITAGE RGB TERMINÉ AVEC SUCCÈS 🎉");
-	    return imageRecombinee;
+	private Img debruiterRGB(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch,
+			int tailleFenetre, boolean modeLocal) {
+		System.out.println("🌈 DÉBRUITAGE RGB - Traitement par canaux séparés");
+
+		// Séparer les canaux RGB
+		System.out.println("⏳ Séparation des canaux RGB...");
+		Img canalR = extraireCanal(xB, 0); // Canal Rouge
+		Img canalG = extraireCanal(xB, 1); // Canal Vert
+		Img canalB = extraireCanal(xB, 2); // Canal Bleu
+		System.out.println("✅ Séparation réussie");
+
+		// Débruiter chaque canal indépendamment
+		System.out.println("🔴 Débruitage du canal Rouge...");
+		Img canalR_debruite = modeLocal
+				? debruiterLocal(canalR, typeSeuil, fonctionSeuillage, sigma, taillePatch, tailleFenetre)
+				: debruiterGlobal(canalR, typeSeuil, fonctionSeuillage, sigma, taillePatch);
+
+		System.out.println("🟢 Débruitage du canal Vert...");
+		Img canalG_debruite = modeLocal
+				? debruiterLocal(canalG, typeSeuil, fonctionSeuillage, sigma, taillePatch, tailleFenetre)
+				: debruiterGlobal(canalG, typeSeuil, fonctionSeuillage, sigma, taillePatch);
+
+		System.out.println("🔵 Débruitage du canal Bleu...");
+		Img canalB_debruite = modeLocal
+				? debruiterLocal(canalB, typeSeuil, fonctionSeuillage, sigma, taillePatch, tailleFenetre)
+				: debruiterGlobal(canalB, typeSeuil, fonctionSeuillage, sigma, taillePatch);
+
+		// Recombiner les canaux
+		System.out.println("⏳ Recombinaison des canaux RGB...");
+		Img imageRecombinee = combinerCanaux(canalR_debruite, canalG_debruite, canalB_debruite);
+		System.out.println("✅ Recombinaison réussie");
+
+		System.out.println("🎉 DÉBRUITAGE RGB TERMINÉ AVEC SUCCÈS 🎉");
+		return imageRecombinee;
 	}
-	
-	
+
 	/**
-	 * @brief Extrait un canal spécifique d'une image RGB et le convertit en image niveaux de gris.
+	 * @brief Extrait un canal spécifique d'une image RGB et le convertit en image
+	 *        niveaux de gris.
 	 * @author Paul
 	 * @param imageRGB Image RGB source
-	 * @param canal Index du canal (0=Rouge, 1=Vert, 2=Bleu)
+	 * @param canal    Index du canal (0=Rouge, 1=Vert, 2=Bleu)
 	 * @return Image en niveaux de gris correspondant au canal
 	 */
 	private Img extraireCanal(Img imageRGB, int canal) {
-	    int hauteur = imageRGB.getHauteur();
-	    int largeur = imageRGB.getLargeur();
-	    Pixel[][] pixelsCanal = new Pixel[hauteur][largeur];
-	    
-	    for (int i = 0; i < hauteur; i++) {
-	        for (int j = 0; j < largeur; j++) {
-	            double valeurCanal = imageRGB.getPixel(i, j).getValeur(canal);
-	            pixelsCanal[i][j] = new Pixel(valeurCanal);
-	        }
-	    }
-	    
-	    return new Img(pixelsCanal, false); // false = niveaux de gris
+		int hauteur = imageRGB.getHauteur();
+		int largeur = imageRGB.getLargeur();
+		Pixel[][] pixelsCanal = new Pixel[hauteur][largeur];
+
+		for (int i = 0; i < hauteur; i++) {
+			for (int j = 0; j < largeur; j++) {
+				double valeurCanal = imageRGB.getPixel(i, j).getValeur(canal);
+				pixelsCanal[i][j] = new Pixel(valeurCanal);
+			}
+		}
+
+		return new Img(pixelsCanal, false); // false = niveaux de gris
 	}
 
 	/**
 	 * @brief Combine trois canaux en niveaux de gris en une image RGB.
 	 * @author Paul
 	 * @param canalR Canal rouge (image niveaux de gris)
-	 * @param canalG Canal vert (image niveaux de gris) 
+	 * @param canalG Canal vert (image niveaux de gris)
 	 * @param canalB Canal bleu (image niveaux de gris)
 	 * @return Image RGB combinée
 	 */
 	private Img combinerCanaux(Img canalR, Img canalG, Img canalB) {
-	    int hauteur = canalR.getHauteur();
-	    int largeur = canalR.getLargeur();
-	    Pixel[][] pixelsRGB = new Pixel[hauteur][largeur];
-	    
-	    for (int i = 0; i < hauteur; i++) {
-	        for (int j = 0; j < largeur; j++) {
-	            double r = canalR.getPixel(i, j).getValeur();
-	            double g = canalG.getPixel(i, j).getValeur();
-	            double b = canalB.getPixel(i, j).getValeur();
-	            
-	            pixelsRGB[i][j] = new Pixel(r, g, b);
-	        }
-	    }
-	    
-	    return new Img(pixelsRGB, true); // true = RGB
+		int hauteur = canalR.getHauteur();
+		int largeur = canalR.getLargeur();
+		Pixel[][] pixelsRGB = new Pixel[hauteur][largeur];
+
+		for (int i = 0; i < hauteur; i++) {
+			for (int j = 0; j < largeur; j++) {
+				double r = canalR.getPixel(i, j).getValeur();
+				double g = canalG.getPixel(i, j).getValeur();
+				double b = canalB.getPixel(i, j).getValeur();
+
+				pixelsRGB[i][j] = new Pixel(r, g, b);
+			}
+		}
+
+		return new Img(pixelsRGB, true); // true = RGB
 	}
-	
+
 	/**
 	 * @brief Méthode principale pour débruiter une image via ACP + seuillage.
 	 * @author Paul & Emma
@@ -372,8 +377,16 @@ public class DebruiteurImage {
 	 *                          sinon global.
 	 * @return Image débruitée.
 	 */
-	public Img imageDen(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch,
+	public Img imageDen(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch, int tailleFenetre,
 			boolean modeLocal) {
+		
+		
+		if (modeLocal && (tailleFenetre > xB.getHauteur() || tailleFenetre > xB.getLargeur())) {
+		    throw new IllegalArgumentException("La taille de fenêtre doit être inférieur à " + 
+		        xB.getLargeur() + " et " + xB.getHauteur() + " pixels");
+		}
+		
+		
 		System.out.println("\n🔍 DÉMARRAGE DU DÉBRUITAGE D'IMAGE 🔍");
 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 		System.out.println("🛠️  Mode: " + (modeLocal ? "LOCAL" : "GLOBAL"));
@@ -383,15 +396,14 @@ public class DebruiteurImage {
 		System.out.println("🛠️  Taille des patchs: " + taillePatch + "×" + taillePatch);
 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-		  if (xB.isEstRGB()) {
-			  	System.out.println("DEBUG RGB CHOSI");
-		        return debruiterRGB(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch, modeLocal);
-		    } else {
-		        return modeLocal ? 
-		            debruiterLocal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch) :
-		            debruiterGlobal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch);
-		    }
-		  
+		if (xB.isEstRGB()) {
+			System.out.println("DEBUG RGB CHOSI");
+			return debruiterRGB(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch, tailleFenetre, modeLocal);
+		} else {
+			return modeLocal ? debruiterLocal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch, tailleFenetre)
+			        : debruiterGlobal(xB, typeSeuil, fonctionSeuillage, sigma, taillePatch);
+		}
+
 	}
 
 }

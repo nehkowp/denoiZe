@@ -51,7 +51,8 @@ import service.evaluation.EvaluationQualite;
 
 /**
  * @class GUI
- * @brief Interface graphique principale de l'application de traitement d'images.
+ * @brief Interface graphique principale de l'application de traitement
+ *        d'images.
  * @author Emma & Alexis
  */
 public class GUI extends Application {
@@ -87,6 +88,7 @@ public class GUI extends Application {
 	private ToggleGroup tgFonctionSeuillage;
 	private ToggleGroup tgPatchLocal;
 	private ToggleGroup tgPatchGlobal;
+	private TextField textFieldFenetre;
 	private double sigmaActuel = 10.0;
 
 	// Barre de progression
@@ -132,7 +134,8 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée la grille d'affichage principale pour les images et les statistiques.
+	 * @brief Crée la grille d'affichage principale pour les images et les
+	 *        statistiques.
 	 * @author Alexis & Emma
 	 * @return La grille configurée prête à être ajoutée à la scène principale.
 	 */
@@ -141,7 +144,7 @@ public class GUI extends Application {
 		grille.setHgap(15);
 		grille.setVgap(15);
 		grille.setAlignment(Pos.CENTER);
-		
+
 		// Barre de progression
 		progressLabel = new Label("Débruitage en cours...");
 		progressLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
@@ -202,93 +205,98 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Configure une vue d'image avec des dimensions, un lissage et un positionnement adaptés à l'affichage.
+	 * @brief Configure une vue d'image avec des dimensions, un lissage et un
+	 *        positionnement adaptés à l'affichage.
 	 * @author Alexis
 	 * @param imageView L'objet ImageView à configurer.
 	 */
 	private void configureImageView(ImageView imageView) {
-	    imageView.setFitWidth(700); // Au lieu de 550
-	    imageView.setFitHeight(450); // Au lieu de 350
-	    imageView.setPreserveRatio(true);
-	    imageView.setSmooth(true);
-	    imageView.setCache(true);
+		imageView.setFitWidth(700); // Au lieu de 550
+		imageView.setFitHeight(450); // Au lieu de 350
+		imageView.setPreserveRatio(true);
+		imageView.setSmooth(true);
+		imageView.setCache(true);
 
-	    StackPane.setAlignment(imageView, Pos.CENTER);
-	    StackPane.setMargin(imageView, new Insets(30, 10, 10, 10));
+		StackPane.setAlignment(imageView, Pos.CENTER);
+		StackPane.setMargin(imageView, new Insets(30, 10, 10, 10));
 	}
 
 	/**
-	 * @brief Crée un panneau d'image stylisé avec un titre, un espace pour l'image et un message de statut.
+	 * @brief Crée un panneau d'image stylisé avec un titre, un espace pour l'image
+	 *        et un message de statut.
 	 * @author Alexis
 	 * @param titre Le titre à afficher en haut du panneau.
 	 * @return Un StackPane prêt à afficher une image.
 	 */
 	private StackPane creerImagePane(String title) {
-	    StackPane pane = new StackPane();
-	    pane.setStyle("-fx-background-color: #1E1E1E; -fx-background-radius: 15px;");
-	    pane.setPrefSize(700, 450); // Au lieu de 550, 350
-	    pane.setMinSize(700, 450);   // Au lieu de 550, 350
+		StackPane pane = new StackPane();
+		pane.setStyle("-fx-background-color: #1E1E1E; -fx-background-radius: 15px;");
+		pane.setPrefSize(700, 450); // Au lieu de 550, 350
+		pane.setMinSize(700, 450); // Au lieu de 550, 350
 
-	    // Label en haut du panneau
-	    Label titleLabel = new Label(title);
-	    titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
-	    titleLabel.setPadding(new Insets(10, 0, 0, 0));
+		// Label en haut du panneau
+		Label titleLabel = new Label(title);
+		titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+		titleLabel.setPadding(new Insets(10, 0, 0, 0));
 
-	    // Ajouter le label à la pile
-	    pane.getChildren().add(titleLabel);
-	    StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
+		// Ajouter le label à la pile
+		pane.getChildren().add(titleLabel);
+		StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
 
-	    // Rectangle pour les images non chargées (agrandir aussi)
-	    Rectangle rectangle = new Rectangle(350, 300); // Au lieu de 250, 250
-	    rectangle.setFill(Color.web("#2A2A2A"));
-	    rectangle.setArcWidth(20);
-	    rectangle.setArcHeight(20);
-	    pane.getChildren().add(rectangle);
+		// Rectangle pour les images non chargées (agrandir aussi)
+		Rectangle rectangle = new Rectangle(350, 300); // Au lieu de 250, 250
+		rectangle.setFill(Color.web("#2A2A2A"));
+		rectangle.setArcWidth(20);
+		rectangle.setArcHeight(20);
+		pane.getChildren().add(rectangle);
 
-	    // Message de statut
-	    Label statusLabel = new Label("Aucune image chargée");
-	    statusLabel.setStyle("-fx-text-fill: #AAAAAA; -fx-font-size: 14px;");
-	    pane.getChildren().add(statusLabel);
+		// Message de statut
+		Label statusLabel = new Label("Aucune image chargée");
+		statusLabel.setStyle("-fx-text-fill: #AAAAAA; -fx-font-size: 14px;");
+		pane.getChildren().add(statusLabel);
 
-	    return pane;
+		return pane;
 	}
 
 	/**
-	 * @brief Crée un panneau pour l'affichage des statistiques de qualité après le débruitage.
+	 * @brief Crée un panneau pour l'affichage des statistiques de qualité après le
+	 *        débruitage.
 	 * @author Alexis & Emma
 	 * @return Un StackPane prêt à afficher les statistiques de qualité.
 	 */
 	private StackPane creerPanneauStatistiques() {
-	    StackPane pane = new StackPane();
-	    pane.setStyle("-fx-background-color: #1E1E1E; -fx-background-radius: 15px;");
-	    pane.setPrefSize(700, 450); // Au lieu de 550, 350
-	    pane.setMinSize(700, 450);   // Au lieu de 550, 350
+		StackPane pane = new StackPane();
+		pane.setStyle("-fx-background-color: #1E1E1E; -fx-background-radius: 15px;");
+		pane.setPrefSize(700, 450); // Au lieu de 550, 350
+		pane.setMinSize(700, 450); // Au lieu de 550, 350
 
-	    // Le reste du code reste identique...
-	    Label titleLabel = new Label("Analyse de la Qualité");
-	    titleLabel.setStyle("-fx-text-fill: #00bcd4; -fx-font-size: 16px; -fx-font-weight: bold;");
-	    titleLabel.setPadding(new Insets(10, 0, 0, 0));
+		// Le reste du code reste identique...
+		Label titleLabel = new Label("Analyse de la Qualité");
+		titleLabel.setStyle("-fx-text-fill: #00bcd4; -fx-font-size: 16px; -fx-font-weight: bold;");
+		titleLabel.setPadding(new Insets(10, 0, 0, 0));
 
-	    VBox contenuStats = new VBox(10);
-	    contenuStats.setAlignment(Pos.CENTER);
-	    contenuStats.setPadding(new Insets(40, 20, 20, 20));
+		VBox contenuStats = new VBox(10);
+		contenuStats.setAlignment(Pos.CENTER);
+		contenuStats.setPadding(new Insets(40, 20, 20, 20));
 
-	    Text texteAttente = new Text("Les statistiques apparaîtront ici après débruitage");
-	    texteAttente.setFill(Color.LIGHTGRAY);
-	    texteAttente.setFont(Font.font("System", FontWeight.NORMAL, 14));
+		Text texteAttente = new Text("Les statistiques apparaîtront ici après débruitage");
+		texteAttente.setFill(Color.LIGHTGRAY);
+		texteAttente.setFont(Font.font("System", FontWeight.NORMAL, 14));
 
-	    contenuStats.getChildren().add(texteAttente);
+		contenuStats.getChildren().add(texteAttente);
 
-	    pane.getChildren().addAll(titleLabel, contenuStats);
-	    StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
+		pane.getChildren().addAll(titleLabel, contenuStats);
+		StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
 
-	    return pane;
+		return pane;
 	}
 
 	/**
-	 * @brief Crée le panneau latéral contenant les paramètres et actions de débruitage.
+	 * @brief Crée le panneau latéral contenant les paramètres et actions de
+	 *        débruitage.
 	 * @author Alexis
-	 * @param stage La fenêtre principale JavaFX, utilisée pour certaines actions comme l'import d'image.
+	 * @param stage La fenêtre principale JavaFX, utilisée pour certaines actions
+	 *              comme l'import d'image.
 	 * @return Un VBox prêt à être intégré à l'interface.
 	 */
 	private VBox creerParamPane(Stage stage) {
@@ -337,7 +345,8 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée la section contenant les paramètres de débruitage ajustables par l'utilisateur.
+	 * @brief Crée la section contenant les paramètres de débruitage ajustables par
+	 *        l'utilisateur.
 	 * @author Alexis
 	 * @return Un VBox contenant tous les éléments de paramétrage.
 	 */
@@ -421,7 +430,8 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Met à jour dynamiquement les paramètres affichés selon le mode de débruitage sélectionné.
+	 * @brief Met à jour dynamiquement les paramètres affichés selon le mode de
+	 *        débruitage sélectionné.
 	 * @author Alexis
 	 */
 	private void mettreAJourWidgetsSelonMode() {
@@ -449,12 +459,12 @@ public class GUI extends Application {
 			Label labelFenetre = new Label("Taille de la fenêtre:");
 			labelFenetre.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
 
-			TextField tfFenetre = new TextField("250");
-			tfFenetre.setPromptText("Taille de la fenêtre...");
-			tfFenetre.getStyleClass().add("text-field-custom");
-			tfFenetre.setPrefWidth(100);
+			textFieldFenetre = new TextField("250");
+			textFieldFenetre.setPromptText("Taille de la fenêtre...");
+			textFieldFenetre.getStyleClass().add("text-field-custom");
+			textFieldFenetre.setPrefWidth(100);
 
-			HBox fenetreBox = new HBox(10, tfFenetre);
+			HBox fenetreBox = new HBox(10, textFieldFenetre);
 			fenetreBox.setAlignment(Pos.CENTER_LEFT);
 
 			widgetsBox.getChildren().addAll(labelPatchs, patchOptionsBox, labelFenetre, fenetreBox);
@@ -471,6 +481,8 @@ public class GUI extends Application {
 			rb23.setToggleGroup(tgPatchGlobal);
 			rb21.setSelected(true);
 			styleRadioButtons(rb17, rb21, rb23);
+
+			textFieldFenetre = null;
 
 			HBox patchOptionsBox = new HBox(15, rb17, rb21, rb23);
 			patchOptionsBox.setAlignment(Pos.CENTER_LEFT);
@@ -491,12 +503,17 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Configure les actions des boutons d'ajout d'image, de bruitage et de débruitage.
+	 * @brief Configure les actions des boutons d'ajout d'image, de bruitage et de
+	 *        débruitage.
 	 * @author Alexis & Emma
-	 * @param boutonAjouterImage Bouton pour sélectionner et charger une nouvelle image.
-	 * @param boutonBruiter      Bouton pour appliquer du bruit sur l'image originale.
-	 * @param boutonDebruiter    Bouton pour lancer le débruitage de l'image bruitée.
-	 * @param stage              La fenêtre principale de l'application, utilisée pour les dialogues et alertes.
+	 * @param boutonAjouterImage Bouton pour sélectionner et charger une nouvelle
+	 *                           image.
+	 * @param boutonBruiter      Bouton pour appliquer du bruit sur l'image
+	 *                           originale.
+	 * @param boutonDebruiter    Bouton pour lancer le débruitage de l'image
+	 *                           bruitée.
+	 * @param stage              La fenêtre principale de l'application, utilisée
+	 *                           pour les dialogues et alertes.
 	 */
 	private void configurerActionsDesBoutons(Button boutonAjouterImage, Button boutonBruiter, Button boutonDebruiter,
 			Stage stage) {
@@ -634,10 +651,14 @@ public class GUI extends Application {
 									.getText();
 							boolean modeLocal = "Local".equals(choixMode.getValue());
 							int taillePatch = getPatchSize(modeLocal);
-
+							int tailleFenetre = 250;
+							if (modeLocal) {
+								tailleFenetre = getFenetreSize(stage);
+							}
+							
 							DebruiteurImage debruiteur = new DebruiteurImage();
 							imgDebruitee = debruiteur.imageDen(imgBruitee, typeSeuil, fonctionSeuillage, sigmaActuel,
-									taillePatch, modeLocal);
+									taillePatch, tailleFenetre, modeLocal);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 							Platform.runLater(
@@ -695,6 +716,33 @@ public class GUI extends Application {
 			}
 		});
 
+	}
+
+	/**
+	 * @brief Récupère la taille de la fenêtre saisie par l'utilisateur en mode
+	 *        local.
+	 * @author Emma
+	 * @return La taille de la fenêtre, ou 250 par défaut si invalide ou en mode
+	 *         global.
+	 */
+	private int getFenetreSize(Stage stage) {
+		if (textFieldFenetre != null && !textFieldFenetre.getText().trim().isEmpty()) {
+			try {
+				int taille = Integer.parseInt(textFieldFenetre.getText().trim());
+				if (taille >= 50 && taille <= 1000) {
+					return taille;
+				} else {
+					afficherAlerte(stage,
+							"Taille de fenêtre incorrecte (Taille recommandé selon la taille de l'image : 50-1000), utilisation de la valeur par défaut 250");
+					return 250;
+				}
+			} catch (NumberFormatException e) {
+				afficherAlerte(stage, "Taille de fenêtre invalide, utilisation de la valeur par défaut 250");
+				return 250;
+			}
+		}
+		// Valeur par défaut
+		return 250;
 	}
 
 	/**
@@ -923,63 +971,64 @@ public class GUI extends Application {
 		boutonOK.setOnAction(event -> racine.getChildren().remove(superpositionAlerte));
 	}
 
-
 	/**
-	 * @brief Convertit une Image JavaFX en objet Img avec détection automatique RGB/Grayscale.
+	 * @brief Convertit une Image JavaFX en objet Img avec détection automatique
+	 *        RGB/Grayscale.
 	 * @author Alexis & Paul
 	 * @param imageFx L'Image JavaFX à convertir.
 	 * @return Un objet Img (RGB ou niveaux de gris selon le contenu).
 	 */
 	public static Img convertirImageEnImg(Image imageFx) {
-	    int largeur = (int) imageFx.getWidth();
-	    int hauteur = (int) imageFx.getHeight();
-	    PixelReader lecteurPixels = imageFx.getPixelReader();
+		int largeur = (int) imageFx.getWidth();
+		int hauteur = (int) imageFx.getHeight();
+		PixelReader lecteurPixels = imageFx.getPixelReader();
 
-	    // Détection automatique si l'image est en couleur ou niveaux de gris
-	    boolean estRGB = detecterSiImageEstRGB(imageFx, lecteurPixels, largeur, hauteur);
-	    
-	    Pixel[][] pixels = new Pixel[hauteur][largeur];
+		// Détection automatique si l'image est en couleur ou niveaux de gris
+		boolean estRGB = detecterSiImageEstRGB(imageFx, lecteurPixels, largeur, hauteur);
 
-	    if (estRGB) {
-	        // Traitement pour image RGB
-	        System.out.println("DEBUG: Conversion JavaFX → Img en mode RGB");
-	        for (int y = 0; y < hauteur; y++) {
-	            for (int x = 0; x < largeur; x++) {
-	                Color couleur = lecteurPixels.getColor(x, y);
-	                
-	                // Récupérer les composantes RGB et les convertir en échelle 0-255
-	                double r = couleur.getRed() * 255.0;
-	                double g = couleur.getGreen() * 255.0;
-	                double b = couleur.getBlue() * 255.0;
-	                
-	                // Limiter les valeurs entre 0 et 255
-	                r = Math.max(0, Math.min(255, r));
-	                g = Math.max(0, Math.min(255, g));
-	                b = Math.max(0, Math.min(255, b));
-	                
-	                pixels[y][x] = new Pixel(r, g, b);
-	            }
-	        }
-	    } else {
-	        // Traitement pour image en niveaux de gris
-	        System.out.println("DEBUG: Conversion JavaFX → Img en mode niveaux de gris");
-	        for (int y = 0; y < hauteur; y++) {
-	            for (int x = 0; x < largeur; x++) {
-	                Color couleur = lecteurPixels.getColor(x, y);
-	                
-	                // Calcul du niveau de gris avec pondération RGB classique
-	                double niveauGris = 0.299 * couleur.getRed() + 0.587 * couleur.getGreen() + 0.114 * couleur.getBlue();
-	                
-	                // Conversion en échelle 0-255
-	                niveauGris *= 255.0;
-	                niveauGris = Math.max(0, Math.min(255, niveauGris));
-	                
-	                pixels[y][x] = new Pixel(niveauGris);
-	            }
-	        }
-	    }
+		Pixel[][] pixels = new Pixel[hauteur][largeur];
 
-	    return new Img(pixels, estRGB);
+		if (estRGB) {
+			// Traitement pour image RGB
+			System.out.println("DEBUG: Conversion JavaFX → Img en mode RGB");
+			for (int y = 0; y < hauteur; y++) {
+				for (int x = 0; x < largeur; x++) {
+					Color couleur = lecteurPixels.getColor(x, y);
+
+					// Récupérer les composantes RGB et les convertir en échelle 0-255
+					double r = couleur.getRed() * 255.0;
+					double g = couleur.getGreen() * 255.0;
+					double b = couleur.getBlue() * 255.0;
+
+					// Limiter les valeurs entre 0 et 255
+					r = Math.max(0, Math.min(255, r));
+					g = Math.max(0, Math.min(255, g));
+					b = Math.max(0, Math.min(255, b));
+
+					pixels[y][x] = new Pixel(r, g, b);
+				}
+			}
+		} else {
+			// Traitement pour image en niveaux de gris
+			System.out.println("DEBUG: Conversion JavaFX → Img en mode niveaux de gris");
+			for (int y = 0; y < hauteur; y++) {
+				for (int x = 0; x < largeur; x++) {
+					Color couleur = lecteurPixels.getColor(x, y);
+
+					// Calcul du niveau de gris avec pondération RGB classique
+					double niveauGris = 0.299 * couleur.getRed() + 0.587 * couleur.getGreen()
+							+ 0.114 * couleur.getBlue();
+
+					// Conversion en échelle 0-255
+					niveauGris *= 255.0;
+					niveauGris = Math.max(0, Math.min(255, niveauGris));
+
+					pixels[y][x] = new Pixel(niveauGris);
+				}
+			}
+		}
+
+		return new Img(pixels, estRGB);
 	}
 
 	/**
@@ -987,40 +1036,42 @@ public class GUI extends Application {
 	 * @param imageFx L'image JavaFX
 	 * @author Paul
 	 * @param lecteurPixels Le lecteur de pixels
-	 * @param largeur Largeur de l'image
-	 * @param hauteur Hauteur de l'image
+	 * @param largeur       Largeur de l'image
+	 * @param hauteur       Hauteur de l'image
 	 * @return true si l'image est en couleur, false si en niveaux de gris
 	 */
 	private static boolean detecterSiImageEstRGB(Image imageFx, PixelReader lecteurPixels, int largeur, int hauteur) {
-	    // Échantillonner quelques pixels pour détecter la couleur
-	    int echantillons = Math.min(100, largeur * hauteur); // Maximum 100 pixels
-	    int pasX = Math.max(1, largeur / 10);
-	    int pasY = Math.max(1, hauteur / 10);
-	    
-	    for (int y = 0; y < hauteur; y += pasY) {
-	        for (int x = 0; x < largeur; x += pasX) {
-	            Color couleur = lecteurPixels.getColor(x, y);
-	            
-	            // Si les composantes RGB diffèrent significativement, c'est une image couleur
-	            double tolerance = 0.01; // Tolérance pour les erreurs d'arrondi
-	            if (Math.abs(couleur.getRed() - couleur.getGreen()) > tolerance || 
-	                Math.abs(couleur.getRed() - couleur.getBlue()) > tolerance || 
-	                Math.abs(couleur.getGreen() - couleur.getBlue()) > tolerance) {
-	                return true;
-	            }
-	            
-	            echantillons--;
-	            if (echantillons <= 0) break;
-	        }
-	        if (echantillons <= 0) break;
-	    }
-	    
-	    return false; // Aucune couleur détectée, c'est du niveaux de gris
+		// Échantillonner quelques pixels pour détecter la couleur
+		int echantillons = Math.min(100, largeur * hauteur); // Maximum 100 pixels
+		int pasX = Math.max(1, largeur / 10);
+		int pasY = Math.max(1, hauteur / 10);
+
+		for (int y = 0; y < hauteur; y += pasY) {
+			for (int x = 0; x < largeur; x += pasX) {
+				Color couleur = lecteurPixels.getColor(x, y);
+
+				// Si les composantes RGB diffèrent significativement, c'est une image couleur
+				double tolerance = 0.01; // Tolérance pour les erreurs d'arrondi
+				if (Math.abs(couleur.getRed() - couleur.getGreen()) > tolerance
+						|| Math.abs(couleur.getRed() - couleur.getBlue()) > tolerance
+						|| Math.abs(couleur.getGreen() - couleur.getBlue()) > tolerance) {
+					return true;
+				}
+
+				echantillons--;
+				if (echantillons <= 0)
+					break;
+			}
+			if (echantillons <= 0)
+				break;
+		}
+
+		return false; // Aucune couleur détectée, c'est du niveaux de gris
 	}
-	
 
 	/**
-	 * @brief Convertit un objet Img en Image JavaFX (compatible RGB et niveaux de gris).
+	 * @brief Convertit un objet Img en Image JavaFX (compatible RGB et niveaux de
+	 *        gris).
 	 * @author Alexis & Paul
 	 * @param img L'objet Img à convertir.
 	 * @return Une Image JavaFX représentant l'image.
@@ -1076,7 +1127,8 @@ public class GUI extends Application {
 	 * @brief Crée un panneau zoomable contenant une image.
 	 * @author Emma
 	 * @param imageView L'objet ImageView à afficher et à rendre zoomable.
-	 * @return Un ScrollPane contenant l'image avec les fonctionnalités de zoom et déplacement.
+	 * @return Un ScrollPane contenant l'image avec les fonctionnalités de zoom et
+	 *         déplacement.
 	 */
 	private ScrollPane creerPanneauImageZoomable(ImageView imageView) {
 		imageView.setPreserveRatio(true);
@@ -1137,14 +1189,5 @@ public class GUI extends Application {
 		stackPane.setStyle("-fx-background-color: #1E1E1E; -fx-padding: 10px;");
 
 		return scroll;
-	}
-
-	/**
-	 * @brief Méthode principale pour lancer l'application.
-	 * @author Alexis
-	 * @param args Arguments de la ligne de commande.
-	 */
-	public static void main(String[] args) {
-		launch(args);
 	}
 }
