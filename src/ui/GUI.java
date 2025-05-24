@@ -107,7 +107,7 @@ public class GUI extends Application {
 		BorderPane mainLayout = new BorderPane();
 
 		mainLayout.setStyle("-fx-background-color: #121212;");
-		mainLayout.setPrefSize(1600, 1000); // Au lieu de 1400, 900
+		mainLayout.setPrefSize(1600, 1000);
 
 		// Grille 2x2 pour les 4 panneaux
 		GridPane grilleImages = creerGridPane();
@@ -208,8 +208,8 @@ public class GUI extends Application {
 	 * @param imageView L'objet ImageView à configurer.
 	 */
 	private void configureImageView(ImageView imageView) {
-		imageView.setFitWidth(700); // Au lieu de 550
-		imageView.setFitHeight(450); // Au lieu de 350
+		imageView.setFitWidth(700); 
+		imageView.setFitHeight(450); 
 		imageView.setPreserveRatio(true);
 		imageView.setSmooth(true);
 		imageView.setCache(true);
@@ -227,8 +227,8 @@ public class GUI extends Application {
 	private StackPane creerImagePane(String title) {
 		StackPane pane = new StackPane();
 		pane.setStyle("-fx-background-color: #1E1E1E; -fx-background-radius: 15px;");
-		pane.setPrefSize(700, 450); // Au lieu de 550, 350
-		pane.setMinSize(700, 450); // Au lieu de 550, 350
+		pane.setPrefSize(700, 450);
+		pane.setMinSize(700, 450);
 
 		// Label en haut du panneau
 		Label titleLabel = new Label(title);
@@ -239,8 +239,8 @@ public class GUI extends Application {
 		pane.getChildren().add(titleLabel);
 		StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
 
-		// Rectangle pour les images non chargées (agrandir aussi)
-		Rectangle rectangle = new Rectangle(350, 300); // Au lieu de 250, 250
+		// Rectangle pour les images non chargées 
+		Rectangle rectangle = new Rectangle(350, 300); 
 		rectangle.setFill(Color.web("#2A2A2A"));
 		rectangle.setArcWidth(20);
 		rectangle.setArcHeight(20);
@@ -574,7 +574,24 @@ public class GUI extends Application {
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					// Afficher un message d'erreur
+					// Réinitialiser la grille même en cas d'erreur
+					GridPane grilleImages = (GridPane) ((BorderPane) ((StackPane) stage.getScene().getRoot())
+							.getChildren().get(0)).getCenter();
+					grilleImages.getChildren().clear();
+					reinitialiserPanneau(panneauImageOriginale);
+					reinitialiserPanneau(panneauImageBruitee);
+					reinitialiserPanneau(panneauImageDebruitee);
+					reinitialiserPanneauStatistiques();
+					// Utiliser les instances globales de progressBar et progressLabel
+					progressBar.setVisible(false);
+					progressLabel.setVisible(false);
+					VBox progressBox = new VBox(5, progressLabel, progressBar);
+					progressBox.setAlignment(Pos.CENTER);
+					grilleImages.add(progressBox, 0, 0, 2, 1);
+					grilleImages.add(panneauImageOriginale, 0, 1);
+					grilleImages.add(panneauImageBruitee, 0, 2);
+					grilleImages.add(panneauImageDebruitee, 1, 1);
+					grilleImages.add(panneauStatistiques, 1, 2);
 					afficherAlerte(stage, "Erreur lors du chargement de l'image : " + ex.getMessage());
 				}
 			}
@@ -596,7 +613,7 @@ public class GUI extends Application {
 					GridPane grilleImages = (GridPane) ((BorderPane) ((StackPane) stage.getScene().getRoot())
 							.getChildren().get(0)).getCenter();
 
-					// Supprimer l'ancien panneau zoomable s'il existe
+					// Supprimer explicitement le panneau zoomable bruité s'il existe
 					grilleImages.getChildren().remove(panneauZoomBruitee);
 
 					// Créer un nouveau panneau zoomable pour l'image bruitée
@@ -611,6 +628,25 @@ public class GUI extends Application {
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
+					// Supprimer explicitement le panneau zoomable bruité s'il existe
+					GridPane grilleImages = (GridPane) ((BorderPane) ((StackPane) stage.getScene().getRoot())
+							.getChildren().get(0)).getCenter();
+					grilleImages.getChildren().remove(panneauZoomBruitee);
+					grilleImages.getChildren().clear();
+					reinitialiserPanneau(panneauImageOriginale);
+					reinitialiserPanneau(panneauImageBruitee);
+					reinitialiserPanneau(panneauImageDebruitee);
+					reinitialiserPanneauStatistiques();
+					// Utiliser les instances globales de progressBar et progressLabel
+					progressBar.setVisible(false);
+					progressLabel.setVisible(false);
+					VBox progressBox = new VBox(5, progressLabel, progressBar);
+					progressBox.setAlignment(Pos.CENTER);
+					grilleImages.add(progressBox, 0, 0, 2, 1);
+					grilleImages.add(panneauImageOriginale, 0, 1);
+					grilleImages.add(panneauImageBruitee, 0, 2);
+					grilleImages.add(panneauImageDebruitee, 1, 1);
+					grilleImages.add(panneauStatistiques, 1, 2);
 					afficherAlerte(stage, "Erreur lors du bruitage de l'image : " + ex.getMessage());
 				}
 			} else {
@@ -678,8 +714,23 @@ public class GUI extends Application {
 								progressLabel.setVisible(false);
 							} catch (Exception ex) {
 								ex.printStackTrace();
-								afficherAlerte(stage,
-										"Erreur lors de l'affichage de l'image débruitée : " + ex.getMessage());
+								// Réinitialiser la grille même en cas d'erreur
+								GridPane grilleImages = (GridPane) ((BorderPane) ((StackPane) stage.getScene().getRoot())
+										.getChildren().get(0)).getCenter();
+								grilleImages.getChildren().clear();
+								reinitialiserPanneau(panneauImageOriginale);
+								reinitialiserPanneau(panneauImageBruitee);
+								reinitialiserPanneau(panneauImageDebruitee);
+								reinitialiserPanneauStatistiques();
+								// Utiliser les instances globales de progressBar et progressLabel
+								VBox progressBox = new VBox(5, progressLabel, progressBar);
+								progressBox.setAlignment(Pos.CENTER);
+								grilleImages.add(progressBox, 0, 0, 2, 1);
+								grilleImages.add(panneauImageOriginale, 0, 1);
+								grilleImages.add(panneauImageBruitee, 0, 2);
+								grilleImages.add(panneauImageDebruitee, 1, 1);
+								grilleImages.add(panneauStatistiques, 1, 2);
+								afficherAlerte(stage, "Erreur lors de l'affichage de l'image débruitée : " + ex.getMessage());
 							}
 						});
 					}
@@ -689,6 +740,22 @@ public class GUI extends Application {
 						Platform.runLater(() -> {
 							progressBar.setVisible(false);
 							progressLabel.setVisible(false);
+							// Réinitialiser la grille même en cas d'erreur
+							GridPane grilleImages = (GridPane) ((BorderPane) ((StackPane) stage.getScene().getRoot())
+									.getChildren().get(0)).getCenter();
+							grilleImages.getChildren().clear();
+							reinitialiserPanneau(panneauImageOriginale);
+							reinitialiserPanneau(panneauImageBruitee);
+							reinitialiserPanneau(panneauImageDebruitee);
+							reinitialiserPanneauStatistiques();
+							// Utiliser les instances globales de progressBar et progressLabel
+							VBox progressBox = new VBox(5, progressLabel, progressBar);
+							progressBox.setAlignment(Pos.CENTER);
+							grilleImages.add(progressBox, 0, 0, 2, 1);
+							grilleImages.add(panneauImageOriginale, 0, 1);
+							grilleImages.add(panneauImageBruitee, 0, 2);
+							grilleImages.add(panneauImageDebruitee, 1, 1);
+							grilleImages.add(panneauStatistiques, 1, 2);
 							afficherAlerte(stage, "Le débruitage a échoué.");
 						});
 					}
@@ -970,7 +1037,6 @@ public class GUI extends Application {
 
 		if (estRGB) {
 			// Traitement pour image RGB
-			System.out.println("DEBUG: Conversion JavaFX → Img en mode RGB");
 			for (int y = 0; y < hauteur; y++) {
 				for (int x = 0; x < largeur; x++) {
 					Color couleur = lecteurPixels.getColor(x, y);
@@ -990,7 +1056,6 @@ public class GUI extends Application {
 			}
 		} else {
 			// Traitement pour image en niveaux de gris
-			System.out.println("DEBUG: Conversion JavaFX → Img en mode niveaux de gris");
 			for (int y = 0; y < hauteur; y++) {
 				for (int x = 0; x < largeur; x++) {
 					Color couleur = lecteurPixels.getColor(x, y);
@@ -1063,7 +1128,6 @@ public class GUI extends Application {
 
 		if (img.isEstRGB()) {
 			// Traitement pour image RGB
-			System.out.println("DEBUG: Conversion Img → JavaFX en mode RGB");
 			for (int y = 0; y < hauteur; y++) {
 				for (int x = 0; x < largeur; x++) {
 					Pixel pixel = img.getPixel(y, x);
@@ -1084,7 +1148,6 @@ public class GUI extends Application {
 			}
 		} else {
 			// Traitement pour image en niveaux de gris
-			System.out.println("DEBUG: Conversion Img → JavaFX en mode niveaux de gris");
 			for (int y = 0; y < hauteur; y++) {
 				for (int x = 0; x < largeur; x++) {
 					Pixel pixel = img.getPixel(y, x);
