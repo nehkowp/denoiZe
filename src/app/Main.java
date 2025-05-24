@@ -1,3 +1,7 @@
+/**
+ * @file Main.java
+ * @brief Classe principale qui détermine le mode d'exécution de l'application (graphique ou console).
+ */
 package app;
 
 import java.io.IOException;
@@ -10,6 +14,11 @@ import javafx.application.Application;
  */
 public class Main {
 
+    /**
+     * @brief Méthode principale exécutée au lancement du programme.
+     * @author Paul
+     * @param args Arguments passés en ligne de commande.
+     */
     public static void main(String[] args) {
         System.setProperty("javafx.platform.tracing", "false");
         

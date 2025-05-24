@@ -51,9 +51,8 @@ import service.evaluation.EvaluationQualite;
 
 /**
  * @class GUI
- * @brief Interface graphique principale de l'application de traitement
- *        d'images.
- * @author Emma & Alexis
+ * @brief Interface graphique principale de l'application de traitement d'images.
+ * @author Emma & Alexis & Paul
  */
 public class GUI extends Application {
 	// Images
@@ -134,8 +133,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée la grille d'affichage principale pour les images et les
-	 *        statistiques.
+	 * @brief Crée la grille d'affichage principale pour les images et les statistiques.
 	 * @author Alexis & Emma
 	 * @return La grille configurée prête à être ajoutée à la scène principale.
 	 */
@@ -205,8 +203,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Configure une vue d'image avec des dimensions, un lissage et un
-	 *        positionnement adaptés à l'affichage.
+	 * @brief Configure une vue d'image avec des dimensions, un lissage et un positionnement adaptés à l'affichage.
 	 * @author Alexis
 	 * @param imageView L'objet ImageView à configurer.
 	 */
@@ -222,8 +219,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée un panneau d'image stylisé avec un titre, un espace pour l'image
-	 *        et un message de statut.
+	 * @brief Crée un panneau d'image stylisé avec un titre, un espace pour l'image et un message de statut.
 	 * @author Alexis
 	 * @param titre Le titre à afficher en haut du panneau.
 	 * @return Un StackPane prêt à afficher une image.
@@ -259,8 +255,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée un panneau pour l'affichage des statistiques de qualité après le
-	 *        débruitage.
+	 * @brief Crée un panneau pour l'affichage des statistiques de qualité après le débruitage.
 	 * @author Alexis & Emma
 	 * @return Un StackPane prêt à afficher les statistiques de qualité.
 	 */
@@ -292,11 +287,9 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée le panneau latéral contenant les paramètres et actions de
-	 *        débruitage.
+	 * @brief Crée le panneau latéral contenant les paramètres et actions de débruitage.
 	 * @author Alexis
-	 * @param stage La fenêtre principale JavaFX, utilisée pour certaines actions
-	 *              comme l'import d'image.
+	 * @param stage La fenêtre principale JavaFX, utilisée pour certaines actions comme l'import d'image.
 	 * @return Un VBox prêt à être intégré à l'interface.
 	 */
 	private VBox creerParamPane(Stage stage) {
@@ -345,8 +338,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Crée la section contenant les paramètres de débruitage ajustables par
-	 *        l'utilisateur.
+	 * @brief Crée la section contenant les paramètres de débruitage ajustables par l'utilisateur.
 	 * @author Alexis
 	 * @return Un VBox contenant tous les éléments de paramétrage.
 	 */
@@ -430,8 +422,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Met à jour dynamiquement les paramètres affichés selon le mode de
-	 *        débruitage sélectionné.
+	 * @brief Met à jour dynamiquement les paramètres affichés selon le mode de débruitage sélectionné.
 	 * @author Alexis
 	 */
 	private void mettreAJourWidgetsSelonMode() {
@@ -503,21 +494,15 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Configure les actions des boutons d'ajout d'image, de bruitage et de
-	 *        débruitage.
+	 * @brief Configure les actions des boutons d'ajout d'image, de bruitage et de débruitage.
 	 * @author Alexis & Emma
-	 * @param boutonAjouterImage Bouton pour sélectionner et charger une nouvelle
-	 *                           image.
-	 * @param boutonBruiter      Bouton pour appliquer du bruit sur l'image
-	 *                           originale.
-	 * @param boutonDebruiter    Bouton pour lancer le débruitage de l'image
-	 *                           bruitée.
-	 * @param stage              La fenêtre principale de l'application, utilisée
-	 *                           pour les dialogues et alertes.
+	 * @param boutonAjouterImage Bouton pour sélectionner et charger une nouvelle image.
+	 * @param boutonBruiter      Bouton pour appliquer du bruit sur l'image originale.
+	 * @param boutonDebruiter    Bouton pour lancer le débruitage de l'image bruitée.
+	 * @param stage              La fenêtre principale de l'application, utilisée pour les dialogues et alertes.
 	 */
-	private void configurerActionsDesBoutons(Button boutonAjouterImage, Button boutonBruiter, Button boutonDebruiter,
-			Stage stage) {
-		// Action pour ajouter une image (corrigée)
+	private void configurerActionsDesBoutons(Button boutonAjouterImage, Button boutonBruiter, Button boutonDebruiter, Stage stage) {
+		// Action pour ajouter une image 
 		boutonAjouterImage.setOnAction(e -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Choisir une image");
@@ -719,11 +704,9 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Récupère la taille de la fenêtre saisie par l'utilisateur en mode
-	 *        local.
+	 * @brief Récupère la taille de la fenêtre saisie par l'utilisateur en mode local.
 	 * @author Emma
-	 * @return La taille de la fenêtre, ou 250 par défaut si invalide ou en mode
-	 *         global.
+	 * @return La taille de la fenêtre, ou 250 par défaut si invalide ou en mode global.
 	 */
 	private int getFenetreSize(Stage stage) {
 		if (textFieldFenetre != null && !textFieldFenetre.getText().trim().isEmpty()) {
@@ -924,8 +907,7 @@ public class GUI extends Application {
 	 * @param message Le message à afficher dans l'alerte.
 	 */
 	private void afficherAlerte(Stage fenetre, String message) {
-		// Vérification que la fenêtre et sa scène existent, et que la racine est un
-		// StackPane
+		// Vérification que la fenêtre et sa scène existent, et que la racine est un StackPane
 		if (fenetre == null || fenetre.getScene() == null || !(fenetre.getScene().getRoot() instanceof StackPane)) {
 			System.err.println("Erreur : impossible d'afficher l'alerte (scène ou racine invalide).");
 			return;
@@ -966,14 +948,12 @@ public class GUI extends Application {
 		StackPane racine = (StackPane) fenetre.getScene().getRoot();
 		racine.getChildren().add(superpositionAlerte);
 
-		// Définir l'action du bouton OK : retirer la superposition et donc fermer
-		// l'alerte
+		// Définir l'action du bouton OK : retirer la superposition et donc fermer l'alerte
 		boutonOK.setOnAction(event -> racine.getChildren().remove(superpositionAlerte));
 	}
 
 	/**
-	 * @brief Convertit une Image JavaFX en objet Img avec détection automatique
-	 *        RGB/Grayscale.
+	 * @brief Convertit une Image JavaFX en objet Img avec détection automatique RGB/Grayscale.
 	 * @author Alexis & Paul
 	 * @param imageFx L'Image JavaFX à convertir.
 	 * @return Un objet Img (RGB ou niveaux de gris selon le contenu).
@@ -1070,8 +1050,7 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * @brief Convertit un objet Img en Image JavaFX (compatible RGB et niveaux de
-	 *        gris).
+	 * @brief Convertit un objet Img en Image JavaFX (compatible RGB et niveaux de gris).
 	 * @author Alexis & Paul
 	 * @param img L'objet Img à convertir.
 	 * @return Une Image JavaFX représentant l'image.
@@ -1127,8 +1106,7 @@ public class GUI extends Application {
 	 * @brief Crée un panneau zoomable contenant une image.
 	 * @author Emma
 	 * @param imageView L'objet ImageView à afficher et à rendre zoomable.
-	 * @return Un ScrollPane contenant l'image avec les fonctionnalités de zoom et
-	 *         déplacement.
+	 * @return Un ScrollPane contenant l'image avec les fonctionnalités de zoom et déplacement.
 	 */
 	private ScrollPane creerPanneauImageZoomable(ImageView imageView) {
 		imageView.setPreserveRatio(true);
