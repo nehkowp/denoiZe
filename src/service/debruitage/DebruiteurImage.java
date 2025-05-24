@@ -23,18 +23,16 @@ import service.seuillage.ProcesseurSeuillage;
 
 /**
  * @class DebruiteurImage
- * @brief Implémente le débruitage d'images par analyse en composantes
- *        principales et seuillage.
+ * @brief Implémente le débruitage d'images par analyse en composantes principales et seuillage.
  * @author Paul & Emma
  */
 public class DebruiteurImage {
 
-	private final static int TAILLE_FENETRE_MIN = 50;
-	private final static int TAILLE_FENETRE_MAX = 1000;
-	
-	
+	//Gestionnaire des patchs utilisés pour le traitement de l'image.
 	private GestionnairePatchs gestionnairePatchs;
+	//Processeur chargé d'appliquer l'Analyse en Composantes Principales (ACP)
 	private ProcesseurACP processeurACP;
+	//Processeur appliquant le seuillage aux composantes issues de l'ACP.
 	private ProcesseurSeuillage processeurSeuillage;
 
 	/**
@@ -269,8 +267,7 @@ public class DebruiteurImage {
 	}
 
 	/**
-	 * @brief Effectue le débruitage d'une image RGB en traitant chaque canal
-	 *        séparément.
+	 * @brief Effectue le débruitage d'une image RGB en traitant chaque canal séparément.
 	 * @author Paul
 	 * @param xB                Image RGB bruitée
 	 * @param typeSeuil         Type de seuillage
@@ -317,8 +314,7 @@ public class DebruiteurImage {
 	}
 
 	/**
-	 * @brief Extrait un canal spécifique d'une image RGB et le convertit en image
-	 *        niveaux de gris.
+	 * @brief Extrait un canal spécifique d'une image RGB et le convertit en imageniveaux de gris.
 	 * @author Paul
 	 * @param imageRGB Image RGB source
 	 * @param canal    Index du canal (0=Rouge, 1=Vert, 2=Bleu)
@@ -380,12 +376,10 @@ public class DebruiteurImage {
 	public Img imageDen(Img xB, String typeSeuil, String fonctionSeuillage, double sigma, int taillePatch, int tailleFenetre,
 			boolean modeLocal) {
 		
-		
 		if (modeLocal && (tailleFenetre > xB.getHauteur() || tailleFenetre > xB.getLargeur())) {
 		    throw new IllegalArgumentException("La taille de fenêtre doit être inférieur à " + 
 		        xB.getLargeur() + " et " + xB.getHauteur() + " pixels");
 		}
-		
 		
 		System.out.println("\n🔍 DÉMARRAGE DU DÉBRUITAGE D'IMAGE 🔍");
 		System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

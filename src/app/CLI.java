@@ -7,9 +7,6 @@ package app;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import model.base.Img;
 import service.bruit.BruiteurImage;
 import service.debruitage.DebruiteurImage;
@@ -17,8 +14,7 @@ import service.evaluation.EvaluationQualite;
 
 /**
  * @class Application
- * @brief Classe principale pour le traitement d'images bruitées et leur
- *        débruitage.
+ * @brief Classe principale pour le traitement d'images bruitées et leur débruitage.
  * @author Paul & Emma
  */
 public class CLI {
@@ -28,9 +24,7 @@ public class CLI {
 	private final static int TAILLE_FENETRE_MAX = 1000;
 	
 	/**
-	 * @brief Méthode principale qui détermine le mode d'exécution en fonction des
-	 *        arguments. Sans arguments, lance le mode console interactif. Avec
-	 *        arguments, traite la commande en ligne.
+	 * @brief Méthode principale qui traite la commande en ligne.
 	 * @author Paul
 	 * @param args Arguments de la ligne de commande
 	 * @throws IOException
@@ -317,6 +311,9 @@ public class CLI {
 		System.out.println();
 		System.out.println("Sans arguments, le mode console interactif sera lancé.");
 	}
+
+	
+///////////////////////////////////////////////////////METHODE POUR LE MODE CONSOLE DU LIVRABLE 2///////////////////////////////////////////////////////
 
 	/**
 	 * @brief Lance l'application en mode console interactif.
