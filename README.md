@@ -78,6 +78,8 @@ L'application vous guidera à travers les étapes suivantes :
 3. Exécution du processus
 4. Affichage des résultats d'évaluation
 
+Il est aussi possible de zoomer sur chacune des images avec "Control + molette".
+
 ### Mode CLI (avec arguments)
 
 ```bash
