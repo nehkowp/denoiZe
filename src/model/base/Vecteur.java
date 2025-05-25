@@ -172,4 +172,41 @@ public class Vecteur {
             throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
         }
     }
+    
+    /**
+     * @brief Calcule la distance eucliedienne entre deux vecteurs.
+     * @author Bastien
+     * @param autre Le vecteur dont on calcule la distance avec.
+     * @return la valeur de la distance entre les deux vecteurs.
+     * @throw VecteurException Si les deux vecteurs ne sont pas de même taille.
+     */
+    
+    public double distanceEuclidienne(Vecteur autre) {
+    	if (this.taille() != autre.taille()) {
+    		throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
+    	}
+    	else {
+    		double somme = 0 ;
+    		for (int i = 0; i<this.taille();i++) {
+    			double diff = this.getValeur(i) - autre.getValeur(i);
+    			somme += diff * diff;
+    		}
+    		return Math.sqrt(somme);
+    	}
+    }
+    
+    /**
+     * @brief Copie d'un vecteur.
+     * @author Bastien
+     * @return La copie du vecteur.
+     */
+    
+    public Vecteur copie() {
+    	Vecteur copie = new Vecteur(this.taille());
+    	for ( int i = 0; i< this.taille(); i++) {
+    		copie.setValeur(i, this.getValeur(i));
+    	}
+    	return copie;
+    }
 }
+
