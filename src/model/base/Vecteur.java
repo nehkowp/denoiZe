@@ -11,7 +11,7 @@ import exception.VecteurException;
 /**
  * @class Vecteur
  * @brief Représente un vecteur et fournit des opérations de base.
- * @author Emma
+ * @author Emma & Bastien
  */
 public class Vecteur {
 
@@ -180,7 +180,6 @@ public class Vecteur {
      * @return la valeur de la distance entre les deux vecteurs.
      * @throw VecteurException Si les deux vecteurs ne sont pas de même taille.
      */
-    
     public double distanceEuclidienne(Vecteur autre) {
     	if (this.taille() != autre.taille()) {
     		throw new VecteurException("Les deux vecteurs ne sont pas de taille éguale");
@@ -200,7 +199,6 @@ public class Vecteur {
      * @author Bastien
      * @return La copie du vecteur.
      */
-    
     public Vecteur copie() {
     	Vecteur copie = new Vecteur(this.taille());
     	for ( int i = 0; i< this.taille(); i++) {
