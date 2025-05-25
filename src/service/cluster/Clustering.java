@@ -1,16 +1,21 @@
+/**
+ * @file Clustering.java
+ * @brief Classe implementant la methode de clustering.
+ */
 package service.cluster;
 
 import model.base.Vecteur;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 /**
  * @class Cultering
  * @brief implemente la methode de clustering
  * @author Bastien
  */
 public class Clustering {
+	
 	/**
      * @brief applique l'algorithme des kmeans à une liste de vecteurs.
      * @author Bastien
@@ -19,7 +24,6 @@ public class Clustering {
      * @return tableau de int où chaque cellule indique le numero du cluster auquel le vecteur de cette position appartient.
      * @throw VecteurException Si les deux vecteurs ne sont pas de même taille.
      */
-	
 	public static int[] kmeansClustering(List<Vecteur> V, int K) {
 		int maxIter = 100;
 		Random random = new Random();
