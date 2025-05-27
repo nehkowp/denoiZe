@@ -185,9 +185,14 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
 
 ## Exemples pratiques
 
-Image bruitée
-
-![Aperçu](data/xB/30/lena_gray.png)
+| Image bruitée                     | Image débruitée                    |
+|----------------------------------|-----------------------------------|
+| ![](data/xB/30/lena_gray.png)    | ![](data/xR/lena_gray_local_hard_v.png)  |
+|----------------------------------|-----------------------------------|
+| ![](images/image_bruitee.png)    | ![](images/image_debruitee.png)   |
+|----------------------------------|-----------------------------------|
+| ![](images/image_bruitee.png)    | ![](images/image_debruitee.png)   |
+|----------------------------------|-----------------------------------|
 
 ## Résolution des problèmes courants
 
