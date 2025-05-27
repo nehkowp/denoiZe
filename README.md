@@ -191,19 +191,19 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
     <th>Image débruitée</th>
   </tr>
   <tr>
-    <td><img src="data/xB/30/lena_gray.png" alt="Lena bruitée" width="200"/></td>
+    <td><img src="data/xB/30/lena_gray.png" alt="Lena bruitée" width="300"/></td>
     <td><img src="data/xR/lena_gray_local_hard_v.png" alt="Lena débruitée" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="data/xB/20/harrypotter_gray.png" alt="Harry bruitée" width="200"/></td>
+    <td><img src="data/xB/20/harrypotter_gray.png" alt="Harry bruitée" width="300"/></td>
     <td><img src="data/xR/harrypotter_local_hard_v.png" alt="Harry débruitée" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="data/xB/10/wemby_gray.png" alt="Wemby bruitée" width="200"/></td>
+    <td><img src="data/xB/10/wemby_gray.png" alt="Wemby bruitée" width="300"/></td>
     <td><img src="data/xR/wemby_gray_local_hard_v.png" alt="Wemby débruitée" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="data/xB/moto.jpeg" alt="Moto bruitée" width="200"/></td>
+    <td><img src="data/xB/moto.jpeg" alt="Moto bruitée" width="300"/></td>
     <td><img src="data/xR/moto_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
   </tr>
 </table>
