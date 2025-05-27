@@ -183,6 +183,17 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
 - Plus la valeur est élevée, meilleure est la qualité
 - Valeurs typiques : >30 dB (bon), >40 dB (excellent)
 
+## Exemples pratiques
+
+| Image bruitée                     | Image débruitée                    |
+|----------------------------------|-----------------------------------|
+| ![](data/xB/30/lena_gray.png)    | ![](data/xR/lena_gray_local_hard_v.png)  |
+|----------------------------------|-----------------------------------|
+| ![](images/image_bruitee.png)    | ![](images/image_debruitee.png)   |
+|----------------------------------|-----------------------------------|
+| ![](images/image_bruitee.png)    | ![](images/image_debruitee.png)   |
+|----------------------------------|-----------------------------------|
+
 ## Résolution des problèmes courants
 
 ### Erreur "L'image n'existe pas dans le dossier data/x0"
