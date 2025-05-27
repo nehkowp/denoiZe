@@ -189,10 +189,12 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
 |----------------------------------|-----------------------------------|
 | ![](data/xB/30/lena_gray.png)    | ![](data/xR/lena_gray_local_hard_v.png)  |
 |----------------------------------|-----------------------------------|
-| ![](images/image_bruitee.png)    | ![](images/image_debruitee.png)   |
+| ![](data/xB/20/harrypotter_gray.png)    | ![](data/xR/harrypotter_local_hard_v.png)   |
 |----------------------------------|-----------------------------------|
-| ![](images/image_bruitee.png)    | ![](images/image_debruitee.png)   |
+| ![](data/xB/10/wemby_gray.png)    | ![](data/xR/wemby_gray_local_hard_v.png)   |
 |----------------------------------|-----------------------------------|
+| ![](data/xB/moto.jpeg)    | ![](data/xR/moto_local_hard_v.jpeg)   |
+|----------------------------------------------------------------------|
 
 ## Résolution des problèmes courants
 
