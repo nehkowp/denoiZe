@@ -207,8 +207,8 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
     <td><img src="data/xR/moto_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
   </tr>
    <tr>
-    <td><img src="data/xB/30/mbappe_gray" alt="Moto bruitée" width="300"/></td>
-    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Moto débruitée" width="300"/></td>
+    <td><img src="data/xB/30/mbappe_gray.jpg" alt="Mbappe bruitée" width="300"/></td>
+    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Mbappe débruitée" width="300"/></td>
    </tr>
 </table>
 
