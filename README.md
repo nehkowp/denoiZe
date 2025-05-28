@@ -185,9 +185,11 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
 
 ## Exemples pratiques
 
+### Images avec bruit σ = 30
+
 <table>
   <tr>
-    <th>Image bruitée</th>
+    <th>Image bruitée (σ=30)</th>
     <th>Image débruitée</th>
   </tr>
   <tr>
@@ -195,23 +197,267 @@ Le programme calcule deux métriques pour évaluer la qualité du débruitage :
     <td><img src="data/xR/lena_gray_local_hard_v.png" alt="Lena débruitée" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="data/xB/20/harrypotter_gray.png" alt="Harry bruitée" width="300"/></td>
-    <td><img src="data/xR/harrypotter_gray_local_hard_v.png" alt="Harry débruitée" width="300"/></td>
+    <td><img src="data/xB/30/mbappe_gray.jpg" alt="Mbappe bruitée" width="300"/></td>
+    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Mbappe débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/harrypotter_gray.png" alt="Harry Potter bruitée" width="300"/></td>
+    <td><img src="data/xR/harrypotter_gray_local_hard_v.png" alt="Harry Potter débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/wemby_gray.png" alt="Wemby bruitée" width="300"/></td>
+    <td><img src="data/xR/wemby_gray_local_hard_v.png" alt="Wemby débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/ali_gray.jpg" alt="Ali bruitée" width="300"/></td>
+    <td><img src="data/xR/ali_gray_local_hard_v.jpg" alt="Ali débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/crocodilo_gray.jpg" alt="Crocodilo bruitée" width="300"/></td>
+    <td><img src="data/xR/crocodilo_gray_local_hard_v.jpg" alt="Crocodilo débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/darkvador_gray.jpg" alt="Dark Vador bruitée" width="300"/></td>
+    <td><img src="data/xR/darkvador_gray_local_hard_v.jpg" alt="Dark Vador débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/gekko_gray.jpg" alt="Gekko bruitée" width="300"/></td>
+    <td><img src="data/xR/gekko_gray_local_hard_v.jpg" alt="Gekko débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/leclerc_gray.png" alt="Leclerc bruitée" width="300"/></td>
+    <td><img src="data/xR/leclerc_gray_local_hard_v.png" alt="Leclerc débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/moto_gray.jpeg" alt="Moto bruitée" width="300"/></td>
+    <td><img src="data/xR/moto_gray_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/nyancat_gray.png" alt="Nyan Cat bruitée" width="300"/></td>
+    <td><img src="data/xR/nyancat_gray_local_hard_v.png" alt="Nyan Cat débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/30/steve_gray.jpg" alt="Steve bruitée" width="300"/></td>
+    <td><img src="data/xR/steve_gray_local_hard_v.jpg" alt="Steve débruitée" width="300"/></td>
+  </tr>
+</table>
+
+### Images avec bruit σ = 20
+
+<table>
+  <tr>
+    <th>Image bruitée (σ=20)</th>
+    <th>Image débruitée</th>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/lena_gray.png" alt="Lena bruitée" width="300"/></td>
+    <td><img src="data/xR/lena_gray_local_hard_v.png" alt="Lena débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/mbappe_gray.jpg" alt="Mbappe bruitée" width="300"/></td>
+    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Mbappe débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/harrypotter_gray.png" alt="Harry Potter bruitée" width="300"/></td>
+    <td><img src="data/xR/harrypotter_gray_local_hard_v.png" alt="Harry Potter débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/wemby_gray.png" alt="Wemby bruitée" width="300"/></td>
+    <td><img src="data/xR/wemby_gray_local_hard_v.png" alt="Wemby débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/ali_gray.jpg" alt="Ali bruitée" width="300"/></td>
+    <td><img src="data/xR/ali_gray_local_hard_v.jpg" alt="Ali débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/crocodilo_gray.jpg" alt="Crocodilo bruitée" width="300"/></td>
+    <td><img src="data/xR/crocodilo_gray_local_hard_v.jpg" alt="Crocodilo débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/darkvador_gray.jpg" alt="Dark Vador bruitée" width="300"/></td>
+    <td><img src="data/xR/darkvador_gray_local_hard_v.jpg" alt="Dark Vador débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/gekko_gray.jpg" alt="Gekko bruitée" width="300"/></td>
+    <td><img src="data/xR/gekko_gray_local_hard_v.jpg" alt="Gekko débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/leclerc_gray.png" alt="Leclerc bruitée" width="300"/></td>
+    <td><img src="data/xR/leclerc_gray_local_hard_v.png" alt="Leclerc débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/moto_gray.jpeg" alt="Moto bruitée" width="300"/></td>
+    <td><img src="data/xR/moto_gray_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/nyancat_gray.png" alt="Nyan Cat bruitée" width="300"/></td>
+    <td><img src="data/xR/nyancat_gray_local_hard_v.png" alt="Nyan Cat débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/20/steve_gray.jpg" alt="Steve bruitée" width="300"/></td>
+    <td><img src="data/xR/steve_gray_local_hard_v.jpg" alt="Steve débruitée" width="300"/></td>
+  </tr>
+</table>
+
+### Images avec bruit σ = 10
+
+<table>
+  <tr>
+    <th>Image bruitée (σ=10)</th>
+    <th>Image débruitée</th>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/lena_gray.png" alt="Lena bruitée" width="300"/></td>
+    <td><img src="data/xR/lena_gray_local_hard_v.png" alt="Lena débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/mbappe_gray.jpg" alt="Mbappe bruitée" width="300"/></td>
+    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Mbappe débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/harrypotter_gray.png" alt="Harry Potter bruitée" width="300"/></td>
+    <td><img src="data/xR/harrypotter_gray_local_hard_v.png" alt="Harry Potter débruitée" width="300"/></td>
   </tr>
   <tr>
     <td><img src="data/xB/10/wemby_gray.png" alt="Wemby bruitée" width="300"/></td>
     <td><img src="data/xR/wemby_gray_local_hard_v.png" alt="Wemby débruitée" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="data/xB/moto.jpeg" alt="Moto bruitée" width="300"/></td>
-    <td><img src="data/xR/moto_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
+    <td><img src="data/xB/10/ali_gray.jpg" alt="Ali bruitée" width="300"/></td>
+    <td><img src="data/xR/ali_gray_local_hard_v.jpg" alt="Ali débruitée" width="300"/></td>
   </tr>
-   <tr>
-    <td><img src="data/xB/30/mbappe_gray.jpg" alt="Mbappe bruitée" width="300"/></td>
-    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Mbappe débruitée" width="300"/></td>
-   </tr>
+  <tr>
+    <td><img src="data/xB/10/crocodilo_gray.jpg" alt="Crocodilo bruitée" width="300"/></td>
+    <td><img src="data/xR/crocodilo_gray_local_hard_v.jpg" alt="Crocodilo débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/darkvador_gray.jpg" alt="Dark Vador bruitée" width="300"/></td>
+    <td><img src="data/xR/darkvador_gray_local_hard_v.jpg" alt="Dark Vador débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/gekko_gray.jpg" alt="Gekko bruitée" width="300"/></td>
+    <td><img src="data/xR/gekko_gray_local_hard_v.jpg" alt="Gekko débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/leclerc_gray.png" alt="Leclerc bruitée" width="300"/></td>
+    <td><img src="data/xR/leclerc_gray_local_hard_v.png" alt="Leclerc débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/moto_gray.jpeg" alt="Moto bruitée" width="300"/></td>
+    <td><img src="data/xR/moto_gray_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/nyancat_gray.png" alt="Nyan Cat bruitée" width="300"/></td>
+    <td><img src="data/xR/nyancat_gray_local_hard_v.png" alt="Nyan Cat débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/10/steve_gray.jpg" alt="Steve bruitée" width="300"/></td>
+    <td><img src="data/xR/steve_gray_local_hard_v.jpg" alt="Steve débruitée" width="300"/></td>
+  </tr>
 </table>
 
+### Autres Images
+
+<table>
+  <tr>
+    <th>Image bruitée</th>
+    <th>Image débruitée</th>
+  </tr>
+  <tr>
+    <td><img src="data/xB/lena_gray.png" alt="Lena bruitée" width="300"/></td>
+    <td><img src="data/xR/lena_gray_local_hard_v.png" alt="Lena débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/lena.png" alt="Lena couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/lena_local_hard_v.png" alt="Lena couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/Lenna.png" alt="Lenna bruitée" width="300"/></td>
+    <td><img src="data/xR/Lenna_local_hard_v.png" alt="Lenna débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/mbappe_gray.jpg" alt="Mbappe bruitée" width="300"/></td>
+    <td><img src="data/xR/mbappe_gray_local_hard_v.jpg" alt="Mbappe débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/mbappe.jpg" alt="Mbappe couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/mbappe_local_hard_v.jpg" alt="Mbappe couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/harrypotter_gray.png" alt="Harry Potter bruitée" width="300"/></td>
+    <td><img src="data/xR/harrypotter_gray_local_hard_v.png" alt="Harry Potter débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/harrypotter.png" alt="Harry Potter couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/harrypotter_local_hard_v.png" alt="Harry Potter couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/wemby_gray.png" alt="Wemby bruitée" width="300"/></td>
+    <td><img src="data/xR/wemby_gray_local_hard_v.png" alt="Wemby débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/ali_gray.jpg" alt="Ali bruitée" width="300"/></td>
+    <td><img src="data/xR/ali_gray_local_hard_v.jpg" alt="Ali débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/ali.jpg" alt="Ali couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/ali_local_hard_v.jpg" alt="Ali couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/crocodilo_gray.jpg" alt="Crocodilo bruitée" width="300"/></td>
+    <td><img src="data/xR/crocodilo_gray_local_hard_v.jpg" alt="Crocodilo débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/crocodilo.jpg" alt="Crocodilo couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/crocodilo_local_hard_v.jpg" alt="Crocodilo couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/darkvador_gray.jpg" alt="Dark Vador bruitée" width="300"/></td>
+    <td><img src="data/xR/darkvador_gray_local_hard_v.jpg" alt="Dark Vador débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/darkvador.jpg" alt="Dark Vador couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/darkvador_local_hard_v.jpg" alt="Dark Vador couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/gekko_gray.jpg" alt="Gekko bruitée" width="300"/></td>
+    <td><img src="data/xR/gekko_gray_local_hard_v.jpg" alt="Gekko débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/gekko.jpg" alt="Gekko couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/gekko_local_hard_v.jpg" alt="Gekko couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/leclerc_gray.png" alt="Leclerc bruitée" width="300"/></td>
+    <td><img src="data/xR/leclerc_gray_local_hard_v.png" alt="Leclerc débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/moto_gray.jpeg" alt="Moto bruitée" width="300"/></td>
+    <td><img src="data/xR/moto_gray_local_hard_v.jpeg" alt="Moto débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/moto.jpeg" alt="Moto couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/moto_local_hard_v.jpeg" alt="Moto couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/nyancat_gray.png" alt="Nyan Cat bruitée" width="300"/></td>
+    <td><img src="data/xR/nyancat_gray_local_hard_v.png" alt="Nyan Cat débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/nyancat.png" alt="Nyan Cat couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/nyancat_local_hard_v.png" alt="Nyan Cat couleur débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/steve_gray.jpg" alt="Steve bruitée" width="300"/></td>
+    <td><img src="data/xR/steve_gray_local_hard_v.jpg" alt="Steve débruitée" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="data/xB/steve.jpg" alt="Steve couleur bruitée" width="300"/></td>
+    <td><img src="data/xR/steve_local_hard_v.jpg" alt="Steve couleur débruitée" width="300"/></td>
+  </tr>
+</table>
+
+> **Note :** Toutes les images débruitées utilisent la méthode locale avec seuillage dur et VisuShrink (`local_hard_v`).
 
 ## Résolution des problèmes courants
 
